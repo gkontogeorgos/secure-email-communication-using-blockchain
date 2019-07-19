@@ -1,0 +1,477 @@
+/* Globals */
+
+a, a:focus, a:hover {
+    color: #fff;
+}
+
+html, body {
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    color: rgb(7, 30, 37);
+    text-align: center;
+}
+
+/* Buttons */
+
+.btn {
+    font-family: 'Lato', Sans-Serif;
+    padding: 0.5625rem 2.5rem;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.75rem;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn-lg {
+    font-size: 1.5rem;
+    padding: 0.4875rem 3.0375rem;
+    line-height: 2.5rem;
+}
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: none;
+}
+
+.btn-primary {
+    color: #fff;
+    border: 1px solid #2C96FF;
+    background-color: #2C96FF;
+    border-radius: 10px;
+    font-size: 13pt;
+    margin: 5px;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    color: #fff;
+    border: 1px solid #1a6ec0;
+    background-color: #053e77;
+}
+
+.btn-default{
+    color: #fff;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(161, 161, 161);
+    border-radius: 10px;
+    font-size: 13pt;
+    margin: 5px;
+}
+
+.btn-default:hover{
+    color: black;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(133, 130, 130);
+}
+
+.email_address {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.landing-heading {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 400;
+}
+
+#background {
+    width: 100%;
+    height: 100%;
+    position: static;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+    /* Ensure div tag stays behind content; -999 might work, too. */
+}
+
+.pubpairkey{
+    text-align: center;
+}
+
+.pubpairemail{
+    text-align: center;
+}
+
+.stretch {
+    width: 100%;
+    height: 100%;
+}
+
+.textarea {
+    text-align: center;
+}
+
+.verification-message{
+    color: red;
+    font-size: 12pt;
+}
+
+/* ALERTS */
+
+.alert {
+    padding: 20px;
+    color: rgb(255, 0, 0);
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.alert.success {
+    background-color: #4CAF50;
+}
+
+.alert.info {
+    background-color: #2196F3;
+}
+
+.alert.warning {
+    background-color: #ff9800;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: rgb(6, 4, 29);
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+/*Tabs */
+
+/* Style the buttons that are used to open the tab content */
+
+.tab button {
+    background-color: inherit;
+    top: 15px;
+    border: 4px 2px;
+    outline: none;
+    cursor: pointer;
+    padding: 16px 16px;
+    transition: 0.3s;
+}
+
+.button {
+    max-width: 100%;
+    max-height: 4em;
+    font-size: 1em;
+    margin: auto;
+    display: inline-block;
+    padding: 1em;
+    color: #000;
+    transition: color 0.3s linear;
+    border-color: #000;
+    border-width: 2px;
+}
+
+.button-small:hover {
+    color: white;
+    border: 2px solid white;
+    background-color: black;
+}
+
+.button-small {
+    max-width: 100%;
+    max-height: 4em;
+    font-size: 0.8em;
+    margin: auto;
+    display: inline-block;
+    padding: 0.5em;
+    color: #000;
+    transition: color 0.3s linear;
+    border-color: #000;
+    border-width: 2px;
+}
+
+.button:hover {
+    color: white;
+    border: 2px solid white;
+    background-color: black;
+}
+
+.forms {
+    display: flex;
+    margin-top: 5em;
+}
+
+
+.sideNav {
+    background-color: yellow;
+    width: 600px;
+    height: 680px;
+    float: left;
+    padding: 5px;
+}
+
+.footer {
+    background-color: blue;
+    width: 1920px;
+    height: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+}
+
+.input-status {
+    width: 100%;
+    height: 70px;
+    border-radius: 6px;
+}
+
+input {
+    text-align: left;
+}
+
+.new-status {
+    text-align: center;
+}
+
+.topic {
+    text-align: left;
+}
+
+.my_input {
+    height: 22px;
+    width: 22px;
+    background-color: #2196F3;
+}
+
+.validfield {
+    background-color: rgb(6, 180, 0);
+    padding: 20px;
+    float: left;
+    position: relative;
+    color: white;
+}
+
+.invalidfield {
+    background-color: rgb(206, 7, 7);
+    padding: 20px;
+    float: left;
+    position: relative;
+    color: white;
+}
+
+/* Statuses */
+
+.statuses {
+    background-color: rgb(204, 204, 204);
+    padding: 20px;
+    position: relative;
+}
+
+
+.status {
+    color: white;
+    background-color: green;
+    margin: 5px;
+    padding: 0;
+    text-align: center;
+    left: 620px;
+    width: 650px;
+    position: relative;
+    border-radius: 6px;
+    display: block;
+    float: center;
+    list-style-type: none;
+}
+
+.status:hover {
+    color: black;
+    background-color: rgb(66, 197, 147);
+}
+
+
+.mypair{
+    color: white;
+    background-color: rgb(103, 114, 103);
+    margin: 5px;
+    padding: 0;
+    text-align: center;
+    left: 620px;
+    width: 650px;
+    position: relative;
+    border-radius: 6px;
+    display: block;
+    float: center;
+    list-style-type: none;
+}
+.mypair:hover {
+    color: black;
+    background-color: rgb(179, 179, 179);
+}
+
+/* Labels */
+
+label {
+    text-align: left;
+    color: black;
+    font-weight: bold;
+    padding: 8px;
+    text-transform: none;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+/* Style the tab content */
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 5px solid rgb(255, 255, 255);
+    text-align: center;
+}
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: rgb(235, 33, 33);
+    color: white;
+}
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+    background-color: rgb(17, 245, 207);
+}
+
+.tablinks {
+    font-size: 15pt;
+}
+
+/* Buttons */
+
+.table-header-group {
+    text-align: center;
+}
+
+.btn-block{
+    color: #fff;
+    border: 1px solid rgb(44, 135, 255);
+    background-color: rgb(2, 21, 128);
+    border-radius: 10px;
+    font-size: 13pt;
+    margin: 5px;
+}
+
+.btn-block:hover{
+    color: black;
+    border: 1px solid rgb(44, 135, 255);
+    background-color: rgb(125, 125, 197);
+}
+
+.btn-res {
+    color: #fff;
+    border: 1px solid rgb(2, 4, 22);
+    background-color: rgb(1, 16, 31);
+    font-size: 12pt;
+    float: center;
+}
+
+/* Avatar */
+
+.avatar {
+    width: 75px;
+    height: 75px;
+}
+
+.avatar-section {
+    position: absolute;
+    top: 0px;
+    right: 50px;
+}
+
+.username {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 18px;
+}
+
+/* Scaffolding */
+
+.site-wrapper {
+    display: table;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+}
+
+.site-wrapper-inner {
+    display: table-cell;
+    vertical-align: middle;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    height:100%;
+}
+
+.panel-authed {
+    padding: 0 0 0 0;
+}
+
+.report {
+    color: rgb(12, 49, 211);
+}
+
+.passlength {
+    color: red;
+}
+
+.isvalid {
+    color: green;
+}
+
+.isnotvalid {
+    color: red;
+}
+
+.btn-st {
+    color: rgb(255, 255, 255);
+    background-color: red;
+    position: relative;
+    text-align: center;
+    padding: 10px;
+    font-size: 12pt;
+}
+
+.list-group-item {
+    color: #fff;
+    border: 1px solid #2C96FF;
+    background-color: #2C96FF;
+    font-size: 12pt;
+    height: 50px;
+}
+
+/* Home button */
+
+.btn-home-hello {
+    position: absolute;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    top: 15px;
+    left: 15px;
+    padding: 3px 20px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
+}

@@ -93,14 +93,6 @@ html, body {
     /* Ensure div tag stays behind content; -999 might work, too. */
 }
 
-.pubpairkey{
-    text-align: center;
-}
-
-.pubpairemail{
-    text-align: center;
-}
-
 .stretch {
     width: 100%;
     height: 100%;
@@ -270,25 +262,17 @@ input {
 
 /* Statuses */
 
-.statuses {
-    background-color: rgb(204, 204, 204);
-    padding: 20px;
-    position: relative;
-}
-
-
 .status {
     color: white;
     background-color: green;
     margin: 5px;
     padding: 0;
     text-align: center;
-    left: 620px;
     width: 650px;
-    position: relative;
+    margin-right: auto;
+    margin-left: auto;
     border-radius: 6px;
     display: block;
-    float: center;
     list-style-type: none;
 }
 
@@ -304,14 +288,14 @@ input {
     margin: 5px;
     padding: 0;
     text-align: center;
-    left: 620px;
     width: 650px;
-    position: relative;
+    margin-right: auto;
+    margin-left: auto;
     border-radius: 6px;
     display: block;
-    float: center;
     list-style-type: none;
 }
+
 .mypair:hover {
     color: black;
     background-color: rgb(179, 179, 179);

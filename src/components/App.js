@@ -4,7 +4,7 @@ import Home from './Home';
 import { Col } from 'react-bootstrap';
 import { Switch, Route } from 'react-router-dom'
 import Signin from './Signin';
-import Manager from './Manager';
+import Validation from './Validation';
 import EmailForm from './EmailForm';
 import {
   UserSession,
@@ -43,8 +43,7 @@ class App extends Component {
                 path='/:username?'
                 render={
                   routeProps =>
-                    <Manager
-                    gun={this.gun}
+                    <Validation
                       userSession={userSession}
                       handleSignOut={this.handleSignOut}
                       {...routeProps}
@@ -55,7 +54,6 @@ class App extends Component {
             </Switch>
           }
           <EmailForm
-            gun={this.gun}
             userSession={userSession}
             handleSignOut={this.handleSignOut}
 

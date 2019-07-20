@@ -93,12 +93,6 @@ class Home extends Component {
     return pair;
   }
 
-  getPairItem([pair]) {
-    return (<ListGroupItem key={pair.id} id={pair.id} onClick={this.itemClick.bind(this)}>
-      {pair.email_address}
-    </ListGroupItem>)
-  }
-
   deletePair(e, id) {
 
     var index = this.state.pairs.findIndex(e => e.id == id);

@@ -7,7 +7,7 @@
   "dependencies": {
     "blockstack": "^19.2.1",
     "bootstrap": "^3.3.7",
-    "express": "^4.15.2",
+    "express": "^4.17.1",
     "gun": "^0.7.9",
     "lodash": "^4.17.4",
     "oauth2-client-js": "^0.0.15",

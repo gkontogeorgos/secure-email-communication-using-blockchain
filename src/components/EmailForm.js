@@ -1,11 +1,5 @@
 import React, { Component } from "react";
 
-import {
-    Person,
-    lookupProfile,
-} from "blockstack";
-
-
 const avatarFallbackImage =
     "https://s3.amazonaws.com/onename/avatar-placeholder.png";
 let crypt = null
@@ -94,9 +88,7 @@ export default class Manager extends Component {
 
     render() {
 
-        const { handleSignOut } = this.props;
         const { person } = this.state;
-        const { username } = this.state;
         const { userSession } = this.props;
 
         return (

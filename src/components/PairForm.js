@@ -29,7 +29,7 @@ class NoteForm extends Component {
     this.setState({
       email_address: event.target.value
     });
-    
+
   }
 
   handleNewPKeyChange(event) {
@@ -43,12 +43,10 @@ class NoteForm extends Component {
     this.props.dbValidatedData(this.state);
   }
 
-
-
-
   readFile() {
     var input = document.getElementById("fileinput");
     input.addEventListener("change", loadFile, false);
+
 
     function loadFile() {
       var file, reader;
@@ -61,7 +59,7 @@ class NoteForm extends Component {
       if (!input.files) {
         alert("This browser doesn't seem to support the `files` property of file inputs.");
       } else if (!input.files[0]) {
-
+        return;
       } else {
         file = input.files[0];
         reader = new FileReader();
@@ -70,11 +68,19 @@ class NoteForm extends Component {
       }
 
       function receivedText() {
-        document.getElementById("public_key").value = reader.result;
+        if (!(reader.result.startsWith("-----BEGIN PUBLIC KEY-----")) &&
+          !(reader.result.endsWith("-----END PUBLIC KEY-----"))) {
+
+          alert("Invalid public key... Please enter a valid public key!")
+
+        } else {
+          document.getElementById("pubgenkey").value = reader.result;
+
+        }
       }
     }
-
   }
+
   render() {
 
     return (
@@ -85,9 +91,8 @@ class NoteForm extends Component {
             <ControlLabel>Email address:</ControlLabel>
             <br></br>
             <input
-              type="email" id="email_address" name="email" className ="pubpairemail"
+              type="email" id="email_address" name="email" className="pubpairemail"
               rows="2" cols="5"
-              type="public_key"
               placeholder="Enter your email_address..."
               value={this.state.email_address}
               onChange={this.handleNewEmailChange.bind(this)} disabled />
@@ -96,11 +101,11 @@ class NoteForm extends Component {
           <FormGroup>
             <ControlLabel>Public_key:</ControlLabel>
             <br></br>
-            <textarea id="public_key" className ="pubpairkey"
-              rows="6" cols="78"
+            <textarea id="public_key" className="pubpairkey"
+              rows="6" cols="72"
               placeholder="Enter your public key..."
               value={this.state.public_key}
-              onChange={this.handleNewPKeyChange.bind(this) } disabled/>
+              onChange={this.handleNewPKeyChange.bind(this)} disabled />
           </FormGroup>
           <br></br>
           <FormGroup>
@@ -109,12 +114,19 @@ class NoteForm extends Component {
             <FormControl
               type="file" id="fileinput" accept="text/plain,.asc" size="40" onClick={e => this.readFile(e)} />
           </FormGroup>
-       
           <br></br>
-            <strong id="verification-message" className="verification-message"></strong>
+          This your generated/uploaded public key (Copy and paste it above):
+          <br></br>
+          <textarea id="pubgenkey" className="pubgenkey"
+            rows="6" cols="72"
+            placeholder="This your generated/uploaded public key..."
+            readOnly="readOnly" />
+          <br></br>
+          <br></br>
+          <strong id="verification-message" className="verification-message"></strong>
           <ButtonToolbar>
-            <Button bsStyle="primary" id= "save" onClick={this.saveBtnClick.bind(this)}>Save</Button>
-            <Button id= "cancel" onClick={this.resetState}>Cancel</Button>
+            <Button bsStyle="primary" id="save" onClick={this.saveBtnClick.bind(this)}>Save</Button>
+            <Button id="cancel" onClick={this.resetState}>Cancel</Button>
           </ButtonToolbar>
         </form>
       </Panel>

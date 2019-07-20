@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Gun from 'gun';
-import Home from './Home';
+import Validation from './Validation';
 import { Col } from 'react-bootstrap';
 import { Switch, Route } from 'react-router-dom'
 import Signin from './Signin';
-import Validation from './Validation';
+import Generate from './Generate';
 import EmailForm from './EmailForm';
 import {
   UserSession,
@@ -43,7 +43,7 @@ class App extends Component {
                 path='/:username?'
                 render={
                   routeProps =>
-                    <Validation
+                    <Generate
                       userSession={userSession}
                       handleSignOut={this.handleSignOut}
                       {...routeProps}
@@ -58,7 +58,7 @@ class App extends Component {
             handleSignOut={this.handleSignOut}
 
           />
-          <Home gun={this.gun} />
+          <Validation gun={this.gun} />
 
         </div>
       </div>

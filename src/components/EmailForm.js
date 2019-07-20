@@ -58,7 +58,7 @@ export default class Manager extends Component {
     encryptedMsg() {
         var crypt = new JSEncrypt();
         var Msg = document.getElementById('message').value
-        var my_pkey = document.getElementById("pubkey").value
+        var my_pkey = document.getElementById("pub-p-key").value
         crypt.setKey(my_pkey)
         document.getElementById("crypted").value = crypt.encrypt(Msg);
 
@@ -100,15 +100,15 @@ export default class Manager extends Component {
 
 
 
-                    <br></br><label htmlFor="email">To:</label>
+                    <br></br><label htmlFor="email">To:</label><br></br>
                     <input type="email" id="recepient_email" name="email" placeholder="Enter your email" onChange={(e) => { this.handleChangeEmail(e) }} />
 
 
-                    <br></br><label htmlFor="email">CC:</label>
+                    <br></br><label htmlFor="email">CC:</label><br></br>
                     <input type="email" id="owner_email" name="email" placeholder="Enter your email" onChange={(e) => { this.handleChangeEmail(e) }} />
 
 
-                    <br></br><label htmlFor="email">Topic:</label>
+                    <br></br><label htmlFor="email">Topic:</label><br></br>
                     <textarea type="topic" id="topic" name="Topic" placeholder="Topic..."></textarea>
 
                     <br></br><label htmlFor="email">Message:</label><br></br>

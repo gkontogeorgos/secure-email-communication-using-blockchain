@@ -1,21 +1,24 @@
-import React, { Component } from "react";
-
+import React, { Component } from 'react';
+import { Panel, Button, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
+import Gun from 'gun';
+import _ from 'lodash';
 import {
   Person,
-  lookupProfile,
-} from "blockstack";
+  UserSession,
+  AppConfig
+} from 'blockstack';
+import PairForm from './PairForm';
 
+const newPair = { id: '', email_address: '', public_key: '' };
+const appConfig = new AppConfig(['store_write', 'publish_data'])
+const userSession = new UserSession({ appConfig: appConfig })
 
-const avatarFallbackImage =
-  "https://s3.amazonaws.com/onename/avatar-placeholder.png";
-let crypt = null
-let privateKey = null
-let publickey = null
+class Validation extends Component {
 
-
-export default class Manager extends Component {
-  constructor(props) {
-    super(props);
+  constructor({ gun }) {
+    super()
+    this.gun = gun;
+    this.pairsRef = gun.get('pairs');
 
     this.state = {
       person: {
@@ -31,108 +34,213 @@ export default class Manager extends Component {
       pubkeystored: "",
       statuses: [],
       statusIndex: 0,
-      isLoading: false
+      isLoading: false,
+      pairs: [],
+      currentId: ''
     };
   }
 
-
-  componentDidMount() {
-    this.fetchData()
-  }
-
   componentWillMount() {
-    const { userSession } = this.props;
+
+    let pairs = this.state.pairs;
+    const self = this;
+    this.gun.get('pairs').on((n) => {
+      var idList = _.reduce(n['_']['>'], function (result, value, key) {
+        if (self.state.currentId === '') {
+          self.setState({ currentId: key });
+        }
+
+        let data = { id: key, date: value };
+        self.gun.get(key).on((note, key) => {
+          const merged = _.merge(data, _.pick(note, ['email_address', 'public_key']));
+          const index = _.findIndex(pairs, (o) => { return o.id === key });
+          if (index >= 0) {
+            pairs[index] = merged;
+          } else {
+            pairs.push(merged);
+          }
+          self.setState({ pairs });
+        })
+      }, []);
+    })
+  }
+  componentDidMount() {
+
+    if (userSession.isSignInPending()) {
+      userSession.handlePendingSignIn();
+      return this.fetchData();
+    }
+
+    if (userSession.isUserSignedIn()) {
+      return this.fetchData();
+    }
+
+  }
+  newPairBtnClick() {
+    this.setState({ currentId: '' });
+    document.getElementById("public_key").disabled=false;
+    document.getElementById("email_address").disabled=false;
+  }
+
+  itemClick(event) {
+    document.getElementById("public_key").disabled=true;
+    document.getElementById("email_address").disabled=true;
+    this.setState({ currentId: event.target.id });
+  }
+
+  getCurrentPair() {
+    const index = _.findIndex(this.state.pairs, (o) => { return o.id === this.state.currentId });
+    const pair = this.state.pairs[index] || newPair;
+    return pair;
+  }
+
+  deletePair(e, id) {
+
+    var index = this.state.pairs.findIndex(e => e.id == id);
+    let newPairs = []
+    newPairs = this.state.pairs.slice()
+    newPairs.splice(index, 1)
+
     this.setState({
-      person: new Person(userSession.loadUserData().profile),
-      username: userSession.loadUserData().username
-    });
+      pairs: newPairs
+    })
+
+
   }
 
+  dbValidatedData(data) {
+
+    var email = document.getElementById('email_address').value
+    var pkey = document.getElementById('public_key').value
+    var Msg = document.getElementById('message').value
+    var decryptedMsg = document.getElementById('decrypted').value
+    var email = document.getElementById("email_address").value
+    const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    var result = pattern.test(email);
+    String.prototype.trim = function () {
+      return this.replace(/^\s+|\s+$/g, "");
+    }
+    if (email.trim() == '') {
+      alert("You must enter your email address...");
+    }
+    if (pkey.trim() == '') {
+      alert("You must enter your public key...");
+    }
+    if (!(pkey.startsWith("-----BEGIN PUBLIC KEY-----")) &&
+      !(pkey.endsWith("-----END PUBLIC KEY-----")) ||
+      ((pkey.endsWith(".asc")))) {
+
+      alert("Invalid public key... Please enter a valid public key!")
+
+    }
+
+    if (result == false) {
+      alert("Wrong email address...")
+      this.setState({
+        emailError: true
+      })
+    }
 
 
-  key_size() {
-    //Change the key size value for new keys
-    $(".change-key-size").each(function (index, value) {
-      var el = $(value);
-      var keySize = el.attr('value');
-      el.click(function (e) {
-        var button = $('#key-size');
-        button.attr('value', keySize);
-        button.html(keySize + ' bit <span className="caret"></span>');
-        e.preventDefault();
-      });
-    });
-  }
+    if ((pkey.trim() != '') && (email.trim() != '') &&
+      ((pkey.startsWith("-----BEGIN PUBLIC KEY-----")) &&
+        (pkey.endsWith("-----END PUBLIC KEY-----"))) && (result == true) && (Msg == '')) {
+          alert("The pair of public key/email needs to be validated. Please send an encrypted email to another user for the validation process. Do you want to continue ?");
+          $('#verification-message').text("Awaiting validation... Press 'Confirm' when you are ready...");
+          $('#save').text('Confirm')
+          document.getElementById("email_address").disabled = true;
+          document.getElementById("public_key").disabled = true;
+          
+        document.getElementById('cancel').onclick = function () {
+          $('#save').text('Save')
+          document.getElementById("email_address").disabled = true;
+          document.getElementById("public_key").disabled = true;
+          $('#verification-message').text("");
+        }
+        }
+    else if ((pkey.trim() != '') && (email.trim() != '') &&
+    ((pkey.startsWith("-----BEGIN PUBLIC KEY-----")) &&
+      (pkey.endsWith("-----END PUBLIC KEY-----"))) && (result == true) && (decryptedMsg == Msg)){
+        $('#isvalid').text('Pair is validated! ' + 'Email: ' + email + ' is valid and added successfully to the database.');
+       
+        document.getElementById('cancel').onclick = function () {
+          $('#save').text('Save')
+          document.getElementById("email_address").disabled = true;
+          document.getElementById("public_key").disabled = true;
+          $('#verification-message').text("");
+        }
+        
 
-  generateKeypair() {
+          const pair = _.pick(data, ['email_address', 'public_key']);
+          if (data.id !== '') {
+            this.gun.get(data.id).put(pair);
+          } else {
+            this.pairsRef.set(this.gun.put(pair))
+          }
+          
+
+          $('#verification-message').text("");
+          $('#save').text('Save')
+      }
+        else if (decryptedMsg != Msg) {
+          $('#isnotvalid').text('Pair is not validated! ' + 'Email: ' + email + ' is not valid.');
+        }
     
-      var sKeySize = $('#key-size').attr('data-value');
-      var keySize = parseInt(sKeySize);
-      var crypt = new JSEncrypt({default_key_size: keySize});
-      var async = $('#async-ck').is(':checked');
-      var dt = new Date();
-      var time = -(dt.getTime());
-      var pass = document.getElementById("passphrase").value;
-      if (pass == "") {
-        $('#five-words').text('Passphrase must not be empty!');
-      }
-      else if (!(pass.split(" ").length > 4)) {
-        $('#five-words').text('Passphrase must have more than 4 words!');
-      }
-      else {
-        $('#five-words').text('');
-      if (async) {
-        $('#time-report').text('.');
-        var load = setInterval(function () {
-          var text = $('#time-report').text();
-          $('#time-report').text(text + '.');
-        }, 500);
-        crypt.getKey(function () {
-          clearInterval(load);
-          dt = new Date();
-          time += (dt.getTime());
-          $('#time-report').text('Generated in ' + time + ' ms');
-          $('#privkey').val(crypt.getPrivateKey());
-          $('#pubkey').val(crypt.getPublicKey());
+    
+  }
+
+  sendToYourDB() {
+
+    var email = document.getElementById("email_address").value
+    const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    var result = pattern.test(email);
+    String.prototype.trim = function () {
+      return this.replace(/^\s+|\s+$/g, "");
+    }
+    if (document.getElementById('email_address').value.trim() == '') {
+      alert("You must enter your email address...");
+    }
+    if (document.getElementById('public_key').value.trim() == '') {
+      alert("You must enter your public key...");
+    }
+    if (!(document.getElementById('public_key').value.startsWith("-----BEGIN PUBLIC KEY-----")) &&
+      !(document.getElementById('public_key').value.endsWith("-----END PUBLIC KEY-----")) ||
+      ((document.getElementById('public_key').value.endsWith(".asc")))) {
+
+      alert("Invalid public key... Please enter a valid public key!")
+
+    }
+
+    if (result == false) {
+      alert("Wrong email address...")
+      this.setState({
+        emailError: true
+      })
+    }
+
+
+    if ((document.getElementById('public_key').value.trim() != '') && (document.getElementById('email_address').value.trim() != '') &&
+      ((document.getElementById('public_key').value.startsWith("-----BEGIN PUBLIC KEY-----")) &&
+        (document.getElementById('public_key').value.endsWith("-----END PUBLIC KEY-----"))) && (result == true)) {
+
+      var retVal = confirm("The pair will be stored in YOUR temporary db. Are you OK with that?");
+      if (retVal == true) {
+
+        this.saveNewStatus(document.getElementById("email_address").value, document.getElementById("public_key").value);
+        this.setState({
+          emailError: false,
+          email: "",
+          pubkeystored: ""
         });
-        return;
+        alert("Refresh page and navigate to 'My pair' to see your new pair");
+
+
+
       }
-      crypt.getKey();
-      dt = new Date();
-      time += (dt.getTime());
-      $('#time-report').text('Generated in ' + time + ' ms');
-      $('#privkey').val(crypt.getPrivateKey());
-      $('#pubkey').val(crypt.getPublicKey());
-      }
-      document.getElementById("pubgenkey").value = document.getElementById("pubkey").value;
+    }
   }
-
-
-  sendMail() {
-    var link =
-      "mailto:" + escape(document.getElementById('recepient_email').value)
-      + "?cc=" + escape(document.getElementById('owner_email').value)
-      + "&subject=" + escape(document.getElementById('topic').value)
-      + "&body=" + escape(document.getElementById('crypted').value)
-    window.location.href = link;
-  }
-
-
-
-  clearContents() {
-    document.getElementById("message").value = '';
-    document.getElementById("crypted").value = '';
-    document.getElementById("decrypted").value = '';
-    document.getElementById("encryptxbox").checked = false;
-    document.getElementById("decryptxbox").checked = false;
-    $('#isvalid').text('')
-    $('#isnotvalid').text('')
-  }
-
-
-
   saveNewStatus(emailText, public_keyText) {
-    const { userSession } = this.props
+
     let statuses = []
     statuses = (this.state.statuses)
     /* let statuses = Array (this.state.statuses)*/
@@ -157,258 +265,65 @@ export default class Manager extends Component {
     //  console.log(customersData);
   }
 
-  deleteMyPair(e, id) {
+  fetchData() {
 
-    const { userSession } = this.props
-    var index = this.state.statuses.findIndex(e => e.id == id);
-    const options = { encrypt: false }
+    this.setState({ isLoading: true })
 
-    let newArray = []
-    newArray = this.state.statuses.slice()
-    newArray.splice(index, 1)
-    userSession.putFile('statuses.json', JSON.stringify(newArray), options)
-      .then(() => {
+    const options = { decrypt: false }
+    userSession.getFile('statuses.json', options)
+      .then((file) => {
+        var statuses = JSON.parse(file || '[]')
         this.setState({
-          statuses: newArray
+
+          statusIndex: statuses.length,
+          statuses: statuses,
         })
       })
+      .finally(() => {
+        this.setState({ isLoading: false })
+      })
+
   }
-
-  fetchData() {
-    const { userSession } = this.props
-    this.setState({ isLoading: true })
-    if (this.isLocal()) {
-      const options = { decrypt: false }
-      userSession.getFile('statuses.json', options)
-        .then((file) => {
-          var statuses = JSON.parse(file || '[]')
-          this.setState({
-            person: new Person(userSession.loadUserData().profile),
-            username: userSession.loadUserData().username,
-            statusIndex: statuses.length,
-            statuses: statuses,
-          })
-        })
-        .finally(() => {
-          this.setState({ isLoading: false })
-        })
-    } else {
-      const username = this.props.match.params.username
-
-      lookupProfile(username)
-        .then((profile) => {
-          this.setState({
-            person: new Person(profile),
-            username: username
-          })
-        })
-        .catch((error) => {
-          console.log('could not resolve profile')
-        })
-      const options = { username: username, decrypt: false }
-      userSession.getFile('statuses.json', options)
-        .then((file) => {
-          var statuses = JSON.parse(file || '[]')
-          this.setState({
-            statusIndex: statuses.length,
-            statuses: statuses
-          })
-        })
-        .catch((error) => {
-          console.log('could not fetch statuses')
-        })
-        .finally(() => {
-          this.setState({ isLoading: false })
-        })
-    }
-  }
-
-
-  chooseSecurityFeature(evt, securityFeature) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(securityFeature).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
-
-  isLocal() {
-    return this.props.match.params.username ? false : true;
-  }
-
 
   render() {
-    const { handleSignOut, userSession } = this.props;
+    this.getCurrentPair = this.getCurrentPair.bind(this);
     const { person } = this.state;
     const { username } = this.state;
-    
 
     return (
       !userSession.isSignInPending() && person ?
-        <div className="container">
+        <div id="DPK DB" className="tabcontent" >
 
-          <div id="topNav">
-            <h2>DPKS</h2><h2>This is a decentralized shared database of public keys/emails</h2>
+          <Col xs={4} >
+            <h2>DPK DB</h2>
 
-
-
-            <div className="avatar-section">
-              <img
-                src={
-                  person.avatarUrl()
-                    ? person.avatarUrl()
-                    : avatarFallbackImage
-                }
-                className="img-rounded avatar"
-                id="avatar-image"
-              /></div>
-            <div className="username">
-              <h1>
-                <span id="heading-name">
-                  {person.name() ? person.name() : "Nameless Person"}
-                </span>
-              </h1>
-              <span>{username}</span>
-              {(
-                <span>
-                  &nbsp; | &nbsp;
-                      <button
-                    className="btn btn-primary btn-lg"
-                    onClick={handleSignOut.bind(this)}
-                  >
-                    Logout
-                      </button>
-                </span>
-              )}
-            </div>
-
-            <div className="tab">
-              <button
-                className="tablinks"
-                onClick={e =>
-                  this.chooseSecurityFeature(e, "Generate Keys")
-                }
-              >
-                Generate Keys
-              </button>
-              <button
-                className="tablinks"
-                onClick={e => this.chooseSecurityFeature(e, "DPK DB")}
-              >
-                DPK DB
-              </button>
-              <button
-                className="tablinks"
-                onClick={e => this.chooseSecurityFeature(e, "Send an email (Validation Process)")}
-              >
-                Send an email (Validation Process)
-              </button>
-              <button
-                className="tablinks"
-                onClick={e => this.chooseSecurityFeature(e, "My pairs")}
-              >
-                My pairs
-              </button>
-            </div>
-
-          </div>
-
-          <div className="row">
-
-            <div className="col-md-offset-3 col-md-6">
-              <div className="col-md-12">
-
-
-
-
-
-                <div id="Generate Keys" className="tabcontent">
-
-                <br /><br />
-                    <div>
-                    Choose a passphrase:
-                    <input
-                      type="pass"
-                      name="passphrase"
-                      id="passphrase"
-                      autoComplete="on"
-                    />
-                    <br></br>
-                    <small id="five-words" className="passlength"></small>
-                    <div className="col-lg-2">
-                    <br></br>Key Size:
-                    <select
-                    id="key-size" type="button" data-value="2048" >
-                    <option className="change-key-size" data-value="512">512 bits </option>
-                      <option className="change-key-size" data-value="1024">1024 bits </option>
-                      <option className="change-key-size" data-value="2048">2048 bits (recommended)</option>
-                      <option className="change-key-size" data-value="4096">4096 bits </option>
-                    </select>
-                    
-                    <br></br>
-                    <label htmlFor="async-ck">Async
-                      <input id="async-ck" type="checkbox"></input> 
-                    </label>
-                    </div>
-
-                    <br />
-                    <br />
-                    <button
-                      className="btn btn-primary"
-                      value="Generate PGP Keys"
-                      id="generate"
-                      onClick={e => this.generateKeypair(e)}
-                    >
-                    Generate PGP Keys
-                    </button>
-                    <br></br>
-                    <span><i><small id="time-report"></small></i></span>
-
-                    </div>
-
-                    <br></br>
-                    <div className="block">
-                      <label htmlFor="pubkey">Public Key</label><br />
-                      <textarea id="pubkey" rows="15" cols="69"></textarea><br />
-
-                      <label htmlFor="privkey">Private Key</label><br />
-                      <textarea id="privkey" readOnly="readOnly" rows="15" cols="69"></textarea><br />
-
-                      <label htmlFor="pub-p-key">Other peer's public Key</label><br />
-                      <textarea id="pub-p-key" rows="15" cols="69"></textarea><br />
-
-
-                    </div>
-           
-                </div>
-
-
-
-                <div id="My pairs" className="tabcontent">
-                  <div className="col-sm-2 mypairs">
-
-                    {this.state.isLoading && <span>Loading...</span>}
-                    {Array.isArray(this.state.statuses) && this.state.statuses.map(status => (
-                      <li key={status.id} className="mypair">
-                        [<strong>email: </strong> {status.email_address}, <strong>public_key: </strong> {status.public_key}] <br>
-                        </br><button className="btn-st" onClick={e => this.deleteMyPair(e, status.id)}>Remove
+            Click a pair to see or edit its details:
+          {Array.isArray(this.state.pairs) && this.state.pairs.map(pair => (
+              <li key={pair.id} id={pair.id} onClick={this.itemClick.bind(this)} className="status">
+                [<strong>email: </strong>{pair.email_address}, <strong>public key:</strong> {pair.public_key}]
+              <br></br><button className="btn-st" onClick={e => this.deletePair(e, pair.id)}>Remove
                        </button>
-                      </li>
-                    ))}
-                  </div>
-                  </div>
+              </li>
+            ))}
+
+            <Button bsStyle="primary" block onClick={this.newPairBtnClick.bind(this)}>New Pair</Button>
+
+          </Col>
+          <Col xs={8}>
+            <PairForm pair = {this.getCurrentPair()} dbValidatedData={this.dbValidatedData.bind(this)} />
+          </Col>
+          <button
+            className="btn btn-primary btn-lg"
+            onClick={e => this.sendToYourDB(e)}
+
+          >Send pair to your temp db(My Pairs)
+            </button>
 
 
-              </div>
-            </div>
-          </div>
+
         </div> : null
     );
   }
 }
+
+export default Validation;

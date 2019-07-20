@@ -13,7 +13,7 @@ let privateKey = null
 let publickey = null
 
 
-export default class Manager extends Component {
+export default class Generate extends Component {
   constructor(props) {
     super(props);
 
@@ -65,24 +65,22 @@ export default class Manager extends Component {
   }
 
   generateKeypair() {
-    var sKeySize = $('#key-size').attr('value');
-    var keySize = parseInt(sKeySize);
-    var crypt = new JSEncrypt({ default_key_size: keySize });
-    var async = $('#async-ck').is(':checked');
-    var dt = new Date();
-    var time = -(dt.getTime());
-    privateKey = crypt.getPrivateKey();
-    var pass = document.getElementById("passphrase").value
-
-    if (pass == "") {
-      $('#five-words').text('Passphrase must not be empty!');
-    }
-    else if (!(pass.split(" ").length > 4)) {
-      $('#five-words').text('Passphrase must have more than 4 words!');
-    }
-    else {
-      $('#five-words').text('');
-
+    
+      var sKeySize = $('#key-size').attr('data-value');
+      var keySize = parseInt(sKeySize);
+      var crypt = new JSEncrypt({default_key_size: keySize});
+      var async = $('#async-ck').is(':checked');
+      var dt = new Date();
+      var time = -(dt.getTime());
+      var pass = document.getElementById("passphrase").value;
+      if (pass == "") {
+        $('#five-words').text('Passphrase must not be empty!');
+      }
+      else if (!(pass.split(" ").length > 4)) {
+        $('#five-words').text('Passphrase must have more than 4 words!');
+      }
+      else {
+        $('#five-words').text('');
       if (async) {
         $('#time-report').text('.');
         var load = setInterval(function () {
@@ -93,7 +91,7 @@ export default class Manager extends Component {
           clearInterval(load);
           dt = new Date();
           time += (dt.getTime());
-          $('#time-report').text('Generated in ' + time + ' ms.');
+          $('#time-report').text('Generated in ' + time + ' ms');
           $('#privkey').val(crypt.getPrivateKey());
           $('#pubkey').val(crypt.getPublicKey());
         });
@@ -102,11 +100,11 @@ export default class Manager extends Component {
       crypt.getKey();
       dt = new Date();
       time += (dt.getTime());
-      $('#time-report').text('Generated in ' + time + ' ms.');
+      $('#time-report').text('Generated in ' + time + ' ms');
       $('#privkey').val(crypt.getPrivateKey());
       $('#pubkey').val(crypt.getPublicKey());
-      document.getElementById("public_key").value = document.getElementById("pubkey").value
-    }
+      }
+      document.getElementById("pubgenkey").value = document.getElementById("pubkey").value;
   }
 
 
@@ -332,11 +330,9 @@ export default class Manager extends Component {
 
                 <div id="Generate Keys" className="tabcontent">
 
-                  
-                    <br />
-
-                    <br />
-                    Choose a passphrase:<br />
+                <br /><br />
+                    <div>
+                    Choose a passphrase:
                     <input
                       type="pass"
                       name="passphrase"
@@ -345,18 +341,22 @@ export default class Manager extends Component {
                     />
                     <br></br>
                     <small id="five-words" className="passlength"></small>
+                    <div className="col-lg-2">
                     <br></br>Key Size:
-                    <select defaultValue="2048"
-                      
-                      id="key-size"
-                    >
-                      <option className="change-key-size" value="512" onClick={e => this.key_size(e)}>512 bits </option>
-                      <option className="change-key-size" value="1024" onClick={e => this.key_size(e)}>1024 bits </option>
-                      <option className="change-key-size" value="2048" onClick={e => this.key_size(e)}>2048 bits (recommended)</option>
-                      <option className="change-key-size" value="4096" onClick={e => this.key_size(e)}>4096 bits </option>
+                    <select
+                    id="key-size" type="button" data-value="2048" >
+                    <option className="change-key-size" data-value="512">512 bits </option>
+                      <option className="change-key-size" data-value="1024">1024 bits </option>
+                      <option className="change-key-size" data-value="2048">2048 bits (recommended)</option>
+                      <option className="change-key-size" data-value="4096">4096 bits </option>
                     </select>
-                    <label htmlFor="async-ck"><input id="async-ck" type="checkbox"></input> Async</label>
-                    <br />
+                    
+                    <br></br>
+                    <label htmlFor="async-ck">Async
+                      <input id="async-ck" type="checkbox"></input> 
+                    </label>
+                    </div>
+
                     <br />
                     <br />
                     <button
@@ -365,20 +365,23 @@ export default class Manager extends Component {
                       id="generate"
                       onClick={e => this.generateKeypair(e)}
                     >
-                      Generate PGP Keys
-                      </button>
-                    <small id="time-report" className="report"></small>
+                    Generate PGP Keys
+                    </button>
+                    <br></br>
+                    <span><i><small id="time-report"></small></i></span>
 
+                    </div>
 
-
-                    <br />
+                    <br></br>
                     <div className="block">
                       <label htmlFor="pubkey">Public Key</label><br />
-                      <textarea id="pubkey" rows="15" cols="80"></textarea><br />
+                      <textarea id="pubkey" rows="15" cols="69"></textarea><br />
 
                       <label htmlFor="privkey">Private Key</label><br />
-                      <textarea id="privkey" readOnly="readOnly" rows="15" cols="80"></textarea><br />
+                      <textarea id="privkey" readOnly="readOnly" rows="15" cols="69"></textarea><br />
 
+                      <label htmlFor="pub-p-key">Other peer's public Key</label><br />
+                      <textarea id="pub-p-key" rows="15" cols="69"></textarea><br />
 
 
                     </div>

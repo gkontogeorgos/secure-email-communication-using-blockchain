@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Panel, ButtonToolbar, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-class NoteForm extends Component {
+class PairForm extends Component {
+
   componentWillMount() {
     this.resetState = this.resetState.bind(this);
     this.resetState();
@@ -84,9 +85,7 @@ class NoteForm extends Component {
   render() {
 
     return (
-
-      <Panel bsStyle="primary">
-        <form>
+        <div className="content-pair">
           <FormGroup>
             <ControlLabel>Email address:</ControlLabel>
             <br></br>
@@ -124,14 +123,14 @@ class NoteForm extends Component {
           <br></br>
           <br></br>
           <strong id="verification-message" className="verification-message"></strong>
-          <ButtonToolbar>
-            <Button bsStyle="primary" id="save" onClick={this.saveBtnClick.bind(this)}>Save</Button>
+          <br></br>
+            <Button className="btn-store" id="save" onClick={this.saveBtnClick.bind(this)}>Save</Button>
             <Button id="cancel" onClick={this.resetState}>Cancel</Button>
-          </ButtonToolbar>
-        </form>
-      </Panel>
+         
+        </div>
+      
     );
   }
 }
 
-export default NoteForm;
+export default PairForm;

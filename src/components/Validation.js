@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Panel, Button, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, Col} from 'react-bootstrap';
 import Gun from 'gun';
 import _ from 'lodash';
 import {
@@ -64,6 +64,7 @@ class Validation extends Component {
       }, []);
     })
   }
+
   componentDidMount() {
 
     if (userSession.isSignInPending()) {
@@ -78,13 +79,14 @@ class Validation extends Component {
   }
   newPairBtnClick() {
     this.setState({ currentId: '' });
-    document.getElementById("public_key").disabled=false;
-    document.getElementById("email_address").disabled=false;
+    document.getElementById("public_key").disabled = false;
+    document.getElementById("email_address").disabled = false;
+
   }
 
   itemClick(event) {
-    document.getElementById("public_key").disabled=true;
-    document.getElementById("email_address").disabled=true;
+    document.getElementById("public_key").disabled = true;
+    document.getElementById("email_address").disabled = true;
     this.setState({ currentId: event.target.id });
   }
 
@@ -95,7 +97,6 @@ class Validation extends Component {
   }
 
   deletePair(e, id) {
-
     var index = this.state.pairs.findIndex(e => e.id == id);
     let newPairs = []
     newPairs = this.state.pairs.slice()
@@ -104,89 +105,89 @@ class Validation extends Component {
     this.setState({
       pairs: newPairs
     })
-
-
   }
 
   dbValidatedData(data) {
-
     var email = document.getElementById('email_address').value
     var pkey = document.getElementById('public_key').value
     var Msg = document.getElementById('message').value
     var decryptedMsg = document.getElementById('decrypted').value
-    var email = document.getElementById("email_address").value
-    const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    const pattern = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
     var result = pattern.test(email);
+    var crypt = new JSEncrypt();
+    var cryptedMsg = document.getElementById('crypted').value
     String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, "");
     }
     if (email.trim() == '') {
       alert("You must enter your email address...");
     }
-    if (pkey.trim() == '') {
+    else if (result == false) {
+      alert("Wrong email address...");
+    }
+    else if (pkey.trim() == '') {
       alert("You must enter your public key...");
     }
-    if (!(pkey.startsWith("-----BEGIN PUBLIC KEY-----")) &&
-      !(pkey.endsWith("-----END PUBLIC KEY-----")) ||
-      ((pkey.endsWith(".asc")))) {
+    else if (!(pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
+      !(pkey.trim().endsWith("-----END PUBLIC KEY-----"))) {
 
       alert("Invalid public key... Please enter a valid public key!")
-
+     
     }
 
-    if (result == false) {
-      alert("Wrong email address...")
-      this.setState({
-        emailError: true
-      })
-    }
-
-
+    if (document.getElementById(''))
     if ((pkey.trim() != '') && (email.trim() != '') &&
-      ((pkey.startsWith("-----BEGIN PUBLIC KEY-----")) &&
-        (pkey.endsWith("-----END PUBLIC KEY-----"))) && (result == true) && (Msg == '')) {
-          alert("The pair of public key/email needs to be validated. Please send an encrypted email to another user for the validation process. Do you want to continue ?");
-          $('#verification-message').text("Awaiting validation... Press 'Confirm' when you are ready...");
-          $('#save').text('Confirm')
-          document.getElementById("email_address").disabled = true;
-          document.getElementById("public_key").disabled = true;
-          
+      ((pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
+        (pkey.trim().endsWith("-----END PUBLIC KEY-----"))) && (result == true) && (decryptedMsg == false)) {
+      var retVal = confirm("The pair of public key/email needs to be validated. After you receive an encrypted email from another user, you can decrypt it for the validation process. Do you want to continue ?");
+      if (retVal == true) {
+        $('#verification-message').text("Awaiting validation... Press 'Confirm' when you are ready...");
+        $('#save').text('Confirm')
+        document.getElementById("email_address").disabled = true;
+        document.getElementById("public_key").disabled = true;
+        document.getElementById("recepient_email").disabled = true;
+        document.getElementById("message").disabled = true;
+        document.getElementById("topic").disabled = true;
+        document.getElementById("encryptxbox").disabled = true;
+        document.getElementById("decryptxbox").disabled = false;
+        document.getElementById("decrypted").disabled = false;
         document.getElementById('cancel').onclick = function () {
           $('#save').text('Save')
           document.getElementById("email_address").disabled = true;
           document.getElementById("public_key").disabled = true;
           $('#verification-message').text("");
         }
-        }
-    else if ((pkey.trim() != '') && (email.trim() != '') &&
-    ((pkey.startsWith("-----BEGIN PUBLIC KEY-----")) &&
-      (pkey.endsWith("-----END PUBLIC KEY-----"))) && (result == true) && (decryptedMsg == Msg)){
-        $('#isvalid').text('Pair is validated! ' + 'Email: ' + email + ' is valid and added successfully to the database.');
-       
-        document.getElementById('cancel').onclick = function () {
-          $('#save').text('Save')
-          document.getElementById("email_address").disabled = true;
-          document.getElementById("public_key").disabled = true;
-          $('#verification-message').text("");
-        }
-        
-
-          const pair = _.pick(data, ['email_address', 'public_key']);
-          if (data.id !== '') {
-            this.gun.get(data.id).put(pair);
-          } else {
-            this.pairsRef.set(this.gun.put(pair))
-          }
-          
-
-          $('#verification-message').text("");
-          $('#save').text('Save')
       }
-        else if (decryptedMsg != Msg) {
-          $('#isnotvalid').text('Pair is not validated! ' + 'Email: ' + email + ' is not valid.');
-        }
-    
-    
+    }
+    else if ((pkey.trim() != '') && (email.trim() != '') &&
+      ((pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
+        (pkey.trim().endsWith("-----END PUBLIC KEY-----"))) && (result == true) && (decryptedMsg != false)) {
+      $('#isvalid').text('Pair is validated! ' + 'Email: ' + email + ' is valid and added successfully to the database.');
+
+      document.getElementById('cancel').onclick = function () {
+        $('#save').text('Save')
+        document.getElementById("email_address").disabled = true;
+        document.getElementById("public_key").disabled = true;
+        $('#verification-message').text("");
+      }
+
+
+      const pair = _.pick(data, ['email_address', 'public_key']);
+      if (data.id !== '') {
+        this.gun.get(data.id).put(pair);
+      } else {
+        this.pairsRef.set(this.gun.put(pair))
+      }
+
+
+      $('#verification-message').text("");
+      $('#save').text('Save')
+    }
+    else if (decryptedMsg != Msg) {
+      $('#isnotvalid').text('Pair is not validated! ' + 'Email: ' + email + ' is not valid.');
+    }
+
+
   }
 
   sendToYourDB() {
@@ -204,8 +205,7 @@ class Validation extends Component {
       alert("You must enter your public key...");
     }
     if (!(document.getElementById('public_key').value.startsWith("-----BEGIN PUBLIC KEY-----")) &&
-      !(document.getElementById('public_key').value.endsWith("-----END PUBLIC KEY-----")) ||
-      ((document.getElementById('public_key').value.endsWith(".asc")))) {
+      !(document.getElementById('public_key').value.endsWith("-----END PUBLIC KEY-----"))) {
 
       alert("Invalid public key... Please enter a valid public key!")
 
@@ -232,13 +232,10 @@ class Validation extends Component {
           email: "",
           pubkeystored: ""
         });
-        alert("Refresh page and navigate to 'My pair' to see your new pair");
-
-
-
       }
     }
   }
+
   saveNewStatus(emailText, public_keyText) {
 
     let statuses = []
@@ -282,18 +279,16 @@ class Validation extends Component {
       .finally(() => {
         this.setState({ isLoading: false })
       })
-
   }
 
   render() {
     this.getCurrentPair = this.getCurrentPair.bind(this);
     const { person } = this.state;
-    const { username } = this.state;
 
     return (
       !userSession.isSignInPending() && person ?
         <div id="DPK DB" className="tabcontent" >
-
+          <div className="content-pair">
           <Col xs={4} >
             <h2>DPK DB</h2>
 
@@ -310,7 +305,7 @@ class Validation extends Component {
 
           </Col>
           <Col xs={8}>
-            <PairForm pair = {this.getCurrentPair()} dbValidatedData={this.dbValidatedData.bind(this)} />
+            <PairForm pair={this.getCurrentPair()} dbValidatedData={this.dbValidatedData.bind(this)} />
           </Col>
           <button
             className="btn btn-primary btn-lg"
@@ -319,7 +314,7 @@ class Validation extends Component {
           >Send pair to your temp db(My Pairs)
             </button>
 
-
+            </div>
 
         </div> : null
     );

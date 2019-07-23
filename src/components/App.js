@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Gun from 'gun';
 import Validation from './Validation';
-import { Col } from 'react-bootstrap';
 import { Switch, Route } from 'react-router-dom'
 import Signin from './Signin';
-import Generate from './Generate';
+import MyPairsList from './MyPairsList';
 import EmailForm from './EmailForm';
+import GenerateKeys from './GenerateKeys';
 import {
   UserSession,
   AppConfig
@@ -43,7 +43,7 @@ class App extends Component {
                 path='/:username?'
                 render={
                   routeProps =>
-                    <Generate
+                    <MyPairsList
                       userSession={userSession}
                       handleSignOut={this.handleSignOut}
                       {...routeProps}
@@ -53,12 +53,28 @@ class App extends Component {
               />
             </Switch>
           }
-          <EmailForm
-            userSession={userSession}
-            handleSignOut={this.handleSignOut}
+          <GenerateKeys userSession={userSession}/>
+          <EmailForm userSession={userSession}/>
 
-          />
-          <Validation gun={this.gun} />
+          {!userSession.isUserSignedIn() ?
+            <Signin userSession={userSession} handleSignIn={this.handleSignIn} />
+            :
+            <Switch>
+              <Route
+                path='/:username?'
+                render={
+                  routeProps =>
+                    <Validation
+                      gun = {this.gun}
+                      userSession={userSession}
+                      handleSignOut={this.handleSignOut}
+                      {...routeProps}
+                    />
+                }
+
+              />
+            </Switch>
+          }
 
         </div>
       </div>

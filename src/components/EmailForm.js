@@ -7,7 +7,7 @@ let privateKey = null
 let publickey = null
 
 
-export default class Manager extends Component {
+class EmailForm extends Component {
     constructor(props) {
         super(props);
 
@@ -30,50 +30,85 @@ export default class Manager extends Component {
     }
 
 
-    handleChangeEmail(e) {
+    sendMail() {
+        var rec_email = document.getElementById('recepient_email').value;
+        var message = document.getElementById('message').value;
+        var encrypted_message = document.getElementById('crypted').value;
+        var email = rec_email.split(' ').join('')
+        const pattern = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
+        var result = pattern.test(email);
 
-        const target = e.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({
-            [name]: value
-        });
-
-        if (this.state.email === false) {
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g, "");
+        }
+        if (rec_email == '') {
+            alert("You must enter your email address...");
+        }
+        else if (result == false) {
+            alert("Wrong email address...")
             this.setState({
-                isDisabled: false
+                emailError: true
             })
         }
-    }
-
-    sendMail() {
-        var link =
-            "mailto:" + escape(document.getElementById('recepient_email').value)
-            + "?cc=" + escape(document.getElementById('owner_email').value)
-            + "&subject=" + escape(document.getElementById('topic').value)
-            + "&body=" + escape(document.getElementById('crypted').value)
-        window.location.href = link;
+        else if (message.trim() == '') {
+            alert("Message must not be empty...");
+        }
+        else if (encrypted_message.trim() == '') {
+            alert("Message must be encrypted with the other peer's public key, before it's sent to this peer...");
+        }
+        else {
+            var link =
+                "mailto:" + escape(document.getElementById('recepient_email').value)
+                + "?cc=" + escape('')
+                + "&subject=" + escape(document.getElementById('topic').value)
+                + "&body=" + escape(document.getElementById('crypted').value)
+            window.location.href = link;
+        }
     }
 
     encryptedMsg() {
         var crypt = new JSEncrypt();
-        var Msg = document.getElementById('message').value
-        var my_pkey = document.getElementById("pub-p-key").value
+        document.getElementById("encryptxbox").disabled = true;
+        var Msg = document.getElementById('message').value;
+        var my_pkey = document.getElementById("pubkey").value
         crypt.setKey(my_pkey)
         document.getElementById("crypted").value = crypt.encrypt(Msg);
-
+        if (crypt.encrypt(Msg) == false) {
+            if (my_pkey == '') {
+                alert("Encryption failed! Your public key is not defined.")
+            }
+            else if (!(my_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
+            !(my_pkey.trim().endsWith("-----END PUBLIC KEY-----")))  {
+                alert("Encryption failed! Your public key is invalid.");
+            }
+            document.getElementById("crypted").value = '';
+            document.getElementById("encryptxbox").disabled = false;
+            document.getElementById("encryptxbox").checked = false;
+        }else{
+        document.getElementById("decryptxbox").disabled = true;
+        document.getElementById("decryptxbox").checked = true;
+        document.getElementById("decrypted").disabled = true;
+        }
     }
 
     decryptedMsg() {
         var crypt = new JSEncrypt();
+        document.getElementById("decryptxbox").disabled = true;
         var cryptedMsg = document.getElementById('crypted').value
         var my_prkey = document.getElementById('privkey').value
         crypt.setKey(my_prkey)
         document.getElementById("decrypted").value = crypt.decrypt(cryptedMsg);
-
+        if (crypt.decrypt(cryptedMsg) == false) {
+            alert("Failed to decrypt the message. You need the matched private key of your public key to decrypt it.")
+            document.getElementById("decrypted").value = '';
+            document.getElementById("decryptxbox").disabled = false;
+            document.getElementById("decryptxbox").checked = false;
+        }
     }
 
-    clearContents() {
+    clearAll() {
+        document.getElementById("recepient_email").value = '';
+        document.getElementById("topic").value = '';
         document.getElementById("message").value = '';
         document.getElementById("message").value = '';
         document.getElementById("message").value = '';
@@ -82,6 +117,8 @@ export default class Manager extends Component {
         document.getElementById("decrypted").value = '';
         document.getElementById("encryptxbox").checked = false;
         document.getElementById("decryptxbox").checked = false;
+        document.getElementById("encryptxbox").disabled = false;
+        document.getElementById("decryptxbox").disabled = false;
         $('#isvalid').text('')
         $('#isnotvalid').text('')
     }
@@ -97,16 +134,8 @@ export default class Manager extends Component {
             !userSession.isSignInPending() && person ?
                 <div id="Send an email (Validation Process)" className="tabcontent">
 
-
-
-
                     <br></br><label htmlFor="email">To:</label><br></br>
-                    <input type="email" id="recepient_email" name="email" placeholder="Enter your email" onChange={(e) => { this.handleChangeEmail(e) }} />
-
-
-                    <br></br><label htmlFor="email">CC:</label><br></br>
-                    <input type="email" id="owner_email" name="email" placeholder="Enter your email" onChange={(e) => { this.handleChangeEmail(e) }} />
-
+                    <input type="email" id="recepient_email" name="email" placeholder="Enter your email..." />
 
                     <br></br><label htmlFor="email">Topic:</label><br></br>
                     <textarea type="topic" id="topic" name="Topic" placeholder="Topic..."></textarea>
@@ -121,25 +150,24 @@ export default class Manager extends Component {
                     <textarea id="crypted" name="crypted" placeholder="Enter your message here..." rows="10" cols="69"></textarea>
 
                     <br></br><label htmlFor="decrypted">Decrypt</label><br></br>
-                    <input type="checkbox" id="decryptxbox" className="my_input" onClick={e => this.decryptedMsg(e)}></input>
+                    <input type="checkbox" id="decryptxbox" className="my_input" onClick={e => this.decryptedMsg(e)} ></input>
 
                     <br></br><label htmlFor="decrypted">Decrypted Message:</label><br></br>
-                    <textarea id="decrypted" name="decrypted" placeholder="Enter your message here..." rows="10" cols="69"></textarea>
+                    <textarea id="decrypted" name="decrypted" placeholder="Enter your message here..." rows="10" cols="69" ></textarea>
                     <p>
-                        <button type="reset" className="btn-res" value="Reset" onClick={e => this.clearContents(e)}>RESET</button>
+                        <button type="reset" className="btn-res" value="Reset" onClick={e => this.clearAll(e)}>RESET</button>
                     </p>
                     <strong id="isvalid" className="isvalid"></strong>
                     <strong id="isnotvalid" className="isnotvalid"></strong>
                     <p>
                         <button
                             className="btn btn-primary btn-lg"
-                            onClick={e => this.sendanMail(e)}
+                            onClick={e => this.sendMail(e)}
                         >Send
                         </button>
                     </p>
                 </div> : null
         );
-
     }
-
 }
+export default EmailForm;

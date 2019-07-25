@@ -49,6 +49,8 @@ class MyPairsList extends Component {
   }
 
 
+  
+
   saveNewStatus(emailText, public_keyText) {
     const { userSession } = this.props
     let statuses = []
@@ -237,21 +239,25 @@ class MyPairsList extends Component {
 
           </div>
 
+
           <div className="row">
 
             <div className="col-md-offset-3 col-md-6">
               <div className="col-md-12">
 
-
+                
                 <div id="My pairs" className="tabcontent">
+                
                   <div className="col-sm-2 mypairs">
                     <h1>For Validation</h1>
-                    These pairs will be validated one by one, starting from the first one...
+                    <h2>These pairs will be validated one by one, starting from the first one...</h2>
+                    <br></br>
+                    <h4><strong className="remove-notice">If one of your pairs is already stored in the DPK DB, please, remove it from your list!</strong></h4>
                     {this.state.isLoading && <span>Loading...</span>}
                     {Array.isArray(this.state.statuses) && this.state.statuses.map(status => (
                       <li key={status.id} className="mypair">
                         <p>
-                        <strong>email: </strong> <small id="email-peer">{status.email_address}</small>, <br></br>
+                        <strong>email: </strong> <small id="email-peer">{status.email_address}</small> <br></br>
                         <strong>public_key: </strong> <small id="pkey-peer">{status.public_key}</small> <br>
                         </br><button className="btn-st" onClick={e => this.deleteMyPair(e, status.id)}>Remove
                        </button>
@@ -259,9 +265,10 @@ class MyPairsList extends Component {
                       </li>
                     ))}
                   </div>
+                  
                   </div>
 
-
+                 
                   
               </div>
             </div>

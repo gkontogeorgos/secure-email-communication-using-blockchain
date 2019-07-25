@@ -11,6 +11,13 @@ html, body {
     text-align: center;
 }
 
+
+#key-size {
+    font-weight: 600;
+    line-height: 1.5;
+    font-style: normal;
+  }
+  
 /* Buttons */
 
 .btn {
@@ -29,6 +36,7 @@ html, body {
     -ms-user-select: none;
     user-select: none;
 }
+
 
 .btn-lg {
     font-size: 1.5rem;
@@ -375,8 +383,12 @@ label {
     color: #fff;
     border: 1px solid rgb(2, 4, 22);
     background-color: rgb(1, 16, 31);
-    font-size: 12pt;
     float: center;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0.228em;
+  
 }
 
 /* Avatar */
@@ -429,6 +441,10 @@ label {
     color: red;
 }
 
+.remove-notice{
+    color: red;
+}
+
 .isvalid {
     color: green;
 }
@@ -458,6 +474,50 @@ label {
     display: inline-block;
     vertical-align:top;
 }
+
+.time-report{
+    color: red;
+}
+
+.change-key-size {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+  }
+
+  .change-key-size:hover, .change-key-size:focus {
+    background-color: #2980B9;
+  }
+  
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown a:hover {background-color: #ddd;}
+  
+  .show {display: block;}
+  .dropdown:hover .dropbtn {background-color: #3e8e41;}
 /* Home button */
 
 .btn-home-hello {

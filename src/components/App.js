@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Gun from 'gun';
-import Validation from './Validation';
+import DPKStorage from './DPKStorage';
 import { Switch, Route } from 'react-router-dom'
 import Signin from './Signin';
 import MyPairsList from './MyPairsList';
@@ -19,6 +19,7 @@ class App extends Component {
     super();
     this.gun = Gun(location.origin + '/gun');
   }
+
   handleSignIn(e) {
     e.preventDefault();
     userSession.redirectToSignIn();
@@ -55,26 +56,7 @@ class App extends Component {
           }
           <GenerateKeys userSession={userSession}/>
           <EmailForm userSession={userSession}/>
-
-          {!userSession.isUserSignedIn() ?
-            <Signin userSession={userSession} handleSignIn={this.handleSignIn} />
-            :
-            <Switch>
-              <Route
-                path='/:username?'
-                render={
-                  routeProps =>
-                    <Validation
-                      gun = {this.gun}
-                      userSession={userSession}
-                      handleSignOut={this.handleSignOut}
-                      {...routeProps}
-                    />
-                }
-
-              />
-            </Switch>
-          }
+          <DPKStorage gun = {this.gun}/>     
 
         </div>
       </div>

@@ -1,5 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
+require("babel-core/register");
+require("babel-polyfill");
 
 // copy manifest.json to the path: 'public/build'
 // this will allow for the authRequest to see the file at www.example.com/manifest.json
@@ -34,7 +36,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['babel-polyfill','./src/index.js'],
   target: 'web',
   output: {
     path: path.resolve('public/build'),
@@ -69,6 +71,6 @@ module.exports = {
     NetlifyHeaderPlugin, 
     NetlifyRedirectPlugin,
     IconAssetPlugin,
-    UglifyEsPluginConfig
+    UglifyEsPluginConfig,
   ]
 }

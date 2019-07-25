@@ -68,42 +68,46 @@ class EmailForm extends Component {
 
     encryptedMsg() {
         var crypt = new JSEncrypt();
-        document.getElementById("encryptxbox").disabled = true;
+        document.getElementById("encryptxbox").checked = false;
         var Msg = document.getElementById('message').value;
         var my_pkey = document.getElementById("pubkey").value
         crypt.setKey(my_pkey)
-        document.getElementById("crypted").value = crypt.encrypt(Msg);
-        if (crypt.encrypt(Msg) == false) {
+        if (Msg != '') {
+            document.getElementById("crypted").value = crypt.encrypt(Msg);
+        }else if (Msg == '') {
+        alert("Can't encrypt an empty message!")
+        }
+        if (Msg !='' && crypt.encrypt(Msg) == false) {
             if (my_pkey == '') {
                 alert("Encryption failed! Your public key is not defined.")
             }
             else if (!(my_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
-            !(my_pkey.trim().endsWith("-----END PUBLIC KEY-----")))  {
+                !(my_pkey.trim().endsWith("-----END PUBLIC KEY-----"))) {
                 alert("Encryption failed! Your public key is invalid.");
             }
             document.getElementById("crypted").value = '';
-            document.getElementById("encryptxbox").disabled = false;
-            document.getElementById("encryptxbox").checked = false;
-        }else{
-        document.getElementById("decryptxbox").disabled = true;
-        document.getElementById("decryptxbox").checked = true;
-        document.getElementById("decrypted").disabled = true;
-        }
+        } else if (Msg !='' && crypt.encrypt(Msg) != false){
+            
+            document.getElementById("encryptxbox").disabled = true;
+            document.getElementById("encryptxbox").checked = true;
+            }
     }
 
     decryptedMsg() {
         var crypt = new JSEncrypt();
         document.getElementById("decryptxbox").disabled = true;
-        var cryptedMsg = document.getElementById('crypted').value
-        var my_prkey = document.getElementById('privkey').value
+        var pass = document.getElementById('passphrase').value;
+        var cryptedMsg = document.getElementById('crypted').value;
+        var my_prkey = document.getElementById('privkey').value;
         crypt.setKey(my_prkey)
-        document.getElementById("decrypted").value = crypt.decrypt(cryptedMsg);
+        document.getElementById("decrypted").value = crypt.decrypt(cryptedMsg, pass);
         if (crypt.decrypt(cryptedMsg) == false) {
             alert("Failed to decrypt the message. You need the matched private key of your public key to decrypt it.")
             document.getElementById("decrypted").value = '';
             document.getElementById("decryptxbox").disabled = false;
             document.getElementById("decryptxbox").checked = false;
         }
+
     }
 
     clearAll() {
@@ -118,7 +122,7 @@ class EmailForm extends Component {
         document.getElementById("encryptxbox").checked = false;
         document.getElementById("decryptxbox").checked = false;
         document.getElementById("encryptxbox").disabled = false;
-        document.getElementById("decryptxbox").disabled = false;
+        document.getElementById("decryptxbox").disabled = true;
         $('#isvalid').text('')
         $('#isnotvalid').text('')
     }
@@ -145,26 +149,24 @@ class EmailForm extends Component {
 
                     <br></br><label htmlFor="encrypted">Encrypt</label>
                     <input type="checkbox" id="encryptxbox" className="my_input" onClick={e => this.encryptedMsg(e)}></input>
+
                     <br></br>
                     <br></br><label htmlFor="crypted">Encrypted Message:</label><br></br>
                     <textarea id="crypted" name="crypted" placeholder="Enter your message here..." rows="10" cols="69"></textarea>
 
-                    <br></br><label htmlFor="decrypted">Decrypt</label><br></br>
-                    <input type="checkbox" id="decryptxbox" className="my_input" onClick={e => this.decryptedMsg(e)} ></input>
+                    <br></br><label htmlFor="decrypted">Decrypt</label>
+                    <input type="checkbox" id="decryptxbox" className="my_input" onClick={e => this.decryptedMsg(e)} disabled></input>
 
                     <br></br><label htmlFor="decrypted">Decrypted Message:</label><br></br>
-                    <textarea id="decrypted" name="decrypted" placeholder="Enter your message here..." rows="10" cols="69" ></textarea>
-                    <p>
-                        <button type="reset" className="btn-res" value="Reset" onClick={e => this.clearAll(e)}>RESET</button>
-                    </p>
+                    <textarea id="decrypted" name="decrypted" placeholder="Enter your message here..." rows="10" cols="69" disabled></textarea>
+
+                    <br></br>
+                    <button type="reset" className="btn-res" value="Reset" onClick={e => this.clearAll(e)} >Reset</button>
+
                     <strong id="isvalid" className="isvalid"></strong>
                     <strong id="isnotvalid" className="isnotvalid"></strong>
                     <p>
-                        <button
-                            className="btn btn-primary btn-lg"
-                            onClick={e => this.sendMail(e)}
-                        >Send
-                        </button>
+                        <button className="btn btn-primary btn-lg" id="send" onClick={e => this.sendMail(e)} >Send</button>
                     </p>
                 </div> : null
         );

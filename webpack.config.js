@@ -36,7 +36,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 
 module.exports = {
-  entry: ['babel-polyfill','./src/index.js'],
+  entry: './src/index.js',
   target: 'web',
   output: {
     path: path.resolve('public/build'),

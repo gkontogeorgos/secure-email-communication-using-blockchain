@@ -190,7 +190,7 @@ class MyPairsList extends Component {
               /></div>
             <div className="username">
               <h1>
-                <span id="heading-name">
+                <span id="heading-name" className="heading-name">
                   {person.name() ? person.name() : "Nameless Person"}
                 </span>
               </h1>

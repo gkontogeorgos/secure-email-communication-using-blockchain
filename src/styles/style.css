@@ -400,17 +400,22 @@ label {
 
 .avatar-section {
     position: absolute;
-    top: 0px;
+    top: 20px;
     right: 50px;
 }
 
 .username {
     position: absolute;
-    top: 8px;
+    top: 78px;
     right: 16px;
     font-size: 18px;
 }
-
+.heading-name{
+    position: absolute;
+    top: -10px;
+    right: 206px;
+    font-size: 28pt;
+}
 /* Scaffolding */
 
 .site-wrapper {
@@ -479,18 +484,20 @@ label {
     color: red;
 }
 
-.change-key-size {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-  }
+.change-key-size{
+    color: #fff;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(0, 114, 66);
+    border-radius: 10px;
+    font-size: 13pt;
+    margin: 5px;
+}
 
-  .change-key-size:hover, .change-key-size:focus {
-    background-color: #2980B9;
-  }
-  
+.change-key-size:hover{
+    color: black;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(81, 192, 87);
+}
 
   .dropdown {
     position: relative;

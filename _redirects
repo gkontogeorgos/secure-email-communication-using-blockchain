@@ -1,4 +1,4 @@
-/icon-192x192.png	/icon-192x192.png	200
-/manifest.json	/manifest.json	200
-/*    /index.html	200
+src/images//icon-192x192.png	src/images/icon-192x192.png	200
+src/assets/manifest.json	src/assets/manifest.json	200
+/*    src/index.html	200
 

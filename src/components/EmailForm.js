@@ -122,7 +122,6 @@ class EmailForm extends Component {
         document.getElementById("encryptxbox").checked = false;
         document.getElementById("decryptxbox").checked = false;
         document.getElementById("encryptxbox").disabled = false;
-        document.getElementById("decryptxbox").disabled = true;
         $('#isvalid').text('')
         $('#isnotvalid').text('')
     }

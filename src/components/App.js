@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Gun from 'gun';
-import DPKStorage from './DPKStorage';
+import DPKPairs from './DPKPairs';
 import { Switch, Route } from 'react-router-dom'
 import Signin from './Signin';
 import MyPairsList from './MyPairsList';
@@ -56,7 +56,7 @@ class App extends Component {
           }
           <GenerateKeys userSession={userSession}/>
           <EmailForm userSession={userSession}/>
-          <DPKStorage gun = {this.gun}/>     
+          <DPKPairs gun = {this.gun}/>     
 
         </div>
       </div>

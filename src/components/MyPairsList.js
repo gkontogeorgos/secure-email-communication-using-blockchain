@@ -249,8 +249,8 @@ class MyPairsList extends Component {
                 <div id="My pairs" className="tabcontent">
                 
                   <div className="col-sm-2 mypairs">
-                    <h1>For Validation</h1>
-                    <h2>These pairs will be validated one by one, starting from the first one...</h2>
+                    <h3>For Validation</h3>
+                    <h4>These pairs will be validated one by one, starting from the first one...</h4>
                     <br></br>
                     <h4><strong className="remove-notice">If one of your pairs is already stored in the DPK DB, please, remove it from your list!</strong></h4>
                     {this.state.isLoading && <span>Loading...</span>}

@@ -199,7 +199,7 @@ class GenerateKeys extends Component {
             <br></br>Key Size: 
 
 
-            <button id="key-size" className="change-key-size" data-value="2048" onClick = {e => this.key_size(e)}>Select</button>
+            <button id="key-size" className="change-key-size" data-value="2048" onClick = {e => this.key_size(e)}>2048 bits (Default) - Click to change size</button>
             <div className="dropdown">
               <div id="myDropdown" className="dropdown-content">
                 <a className="change-key-size" data-value="512" onClick = {e => this.key_size(e)}>512 bits<br />(Not recommended)</a>
@@ -231,14 +231,15 @@ class GenerateKeys extends Component {
           <br />
           <div className="block">
             <label htmlFor="pubkey">Public Key</label><br />
-            <textarea id="pubkey" rows="15" cols="69"></textarea><br />
+            <textarea id="pubkey" className="pubkey" rows="15" cols="65"></textarea><br />
             <button type="save" onClick={e => this.savePubkeyAsFile(pubkey.value, 'public_key.pem')}>Download Public Key</button><br /><br />
-            <label htmlFor="privkey">Private Key</label><br />
-            <textarea id="privkey" rows="15" cols="69"></textarea><br />
-            <button type="save" onClick={e => this.savePrivkeyAsFile(privkey.value, 'private_key.pem')}>Download Private Key</button><br />
-            <label htmlFor="pub_other_peer_pkey">Other Peer's Public Key</label><br />
-            <textarea id="pub_other_peer_pkey" rows="15" cols="69"></textarea><br />
-            <button type="save" onClick={e => this.savePubkeyOtherPairAsFile(pub_other_peer_pkey.value, 'other_peer_public_key.pem')}>Download Public Key</button><br />
+            <label htmlFor="privkey" >Private Key</label><br />
+            <textarea id="privkey" className="privkey" rows="15" cols="65"></textarea><br />
+            <button type="save" onClick={e => this.savePrivkeyAsFile(privkey.value, 'private_key.pem')}>Download Private Key</button><br /><br />
+            <label htmlFor="pub_other_peer_pkey" >Other Peer's Public Key</label><br />
+            <textarea id="pub_other_peer_pkey" className="pub_other_peer_pkey" rows="15" cols="65"></textarea><br />
+            <button type="save" onClick={e => this.savePubkeyOtherPairAsFile(pub_other_peer_pkey.value, 'other_peer_public_key.pem')}>
+              Download Public Key</button><br />
           </div>
           <br />
 

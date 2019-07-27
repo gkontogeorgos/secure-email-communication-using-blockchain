@@ -121,13 +121,23 @@ html, body {
     height: 100%;
 }
 
+.recepient-email{
+    height: 20px;
+    width: 235px;
+}
+
 .textarea {
     text-align: center;
 }
 
 .verification-message{
     color: red;
-    font-size: 12pt;
+    font-size: 20pt;
+}
+
+.storeddb{
+    color: rgb(0, 114, 66);
+    font-size: 20pt;
 }
 
 /* ALERTS */
@@ -452,10 +462,12 @@ label {
 
 .isvalid {
     color: green;
+    font-size: 20pt;
 }
 
 .isnotvalid {
     color: red;
+    font-size: 20pt;
 }
 
 .btn-st {
@@ -508,7 +520,7 @@ label {
 }
 
 .pub_other_peer_pkey{
-    background-color: rgb(177, 177, 177);
+    background-color: rgb(223, 223, 223);
 }
 
   .dropdown {

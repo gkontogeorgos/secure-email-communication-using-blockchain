@@ -48,9 +48,6 @@ class MyPairsList extends Component {
     });
   }
 
-
-  
-
   saveNewStatus(emailText, public_keyText) {
     const { userSession } = this.props
     let statuses = []

@@ -87,7 +87,7 @@ class GenerateKeys extends Component {
   }
 
   savePubkeyAsFile(textToWrite, fileNameToSaveAs) {
-    var textFileAsBlob = new Blob([textToWrite], { type: '.pem' });
+    var textFileAsBlob = new Blob([textToWrite], { type: '.asc' });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
     downloadLink.innerHTML = "Download File";
@@ -116,7 +116,7 @@ class GenerateKeys extends Component {
   }
 
   savePubkeyOtherPairAsFile(textToWrite, fileNameToSaveAs) {
-    var textFileAsBlob = new Blob([textToWrite], { type: '.pem' });
+    var textFileAsBlob = new Blob([textToWrite], { type: '.asc' });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
     downloadLink.innerHTML = "Download File";
@@ -146,7 +146,7 @@ class GenerateKeys extends Component {
   }
 
   savePrivkeyAsFile(textToWrite, fileNameToSaveAs) {
-    var textFileAsBlob = new Blob([textToWrite], { type: '.pem' });
+    var textFileAsBlob = new Blob([textToWrite], { type: '.asc' });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
     downloadLink.innerHTML = "Download File";
@@ -231,14 +231,14 @@ class GenerateKeys extends Component {
           <br />
           <div className="block">
             <label htmlFor="pubkey">Public Key</label><br />
-            <textarea id="pubkey" className="pubkey" rows="15" cols="65"></textarea><br />
-            <button type="save" onClick={e => this.savePubkeyAsFile(pubkey.value, 'public_key.pem')}>Download Public Key</button><br /><br />
+            <textarea id="pubkey" className="pubkey" rows="15" cols="69"></textarea><br />
+            <button type="save" onClick={e => this.savePubkeyAsFile(pubkey.value, 'public_key.asc')}>Download Public Key</button><br /><br />
             <label htmlFor="privkey" >Private Key</label><br />
-            <textarea id="privkey" className="privkey" rows="15" cols="65"></textarea><br />
-            <button type="save" onClick={e => this.savePrivkeyAsFile(privkey.value, 'private_key.pem')}>Download Private Key</button><br /><br />
+            <textarea id="privkey" className="privkey" rows="15" cols="69"></textarea><br />
+            <button type="save" onClick={e => this.savePrivkeyAsFile(privkey.value, 'private_key.asc')}>Download Private Key</button><br /><br />
             <label htmlFor="pub_other_peer_pkey" >Other Peer's Public Key</label><br />
-            <textarea id="pub_other_peer_pkey" className="pub_other_peer_pkey" rows="15" cols="65"></textarea><br />
-            <button type="save" onClick={e => this.savePubkeyOtherPairAsFile(pub_other_peer_pkey.value, 'other_peer_public_key.pem')}>
+            <textarea id="pub_other_peer_pkey" className="pub_other_peer_pkey" rows="15" cols="69"></textarea><br />
+            <button type="save" onClick={e => this.savePubkeyOtherPairAsFile(pub_other_peer_pkey.value, 'other_peer_public_key.asc')}>
               Download Public Key</button><br />
           </div>
           <br />

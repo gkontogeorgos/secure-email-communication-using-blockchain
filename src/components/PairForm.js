@@ -83,7 +83,7 @@ class PairForm extends Component {
 
   savePubkeyAsFile(textToWrite, fileNameToSaveAs)
   {
-    var textFileAsBlob = new Blob([textToWrite], {type:'.pem'}); 
+    var textFileAsBlob = new Blob([textToWrite], {type:'.asc'}); 
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
     downloadLink.innerHTML = "Download File";
@@ -136,7 +136,8 @@ class PairForm extends Component {
               value={this.state.public_key}
               onChange={this.handleNewPKeyChange.bind(this)} disabled />
           </FormGroup><br/>
-          <button type="save" className ="btn btn-primary btn-lg" onClick={e=> this.savePubkeyAsFile(public_key.value,'public_key.pem')}>Download Public Key</button>
+          <button type="save" className ="btn btn-primary btn-lg" onClick={e=> this.savePubkeyAsFile(public_key.value,'public_key.asc')}>
+            Download Public Key</button>
           <br/><br/>
           <FormGroup>
             <ControlLabel>Or upload your own public key in the database:</ControlLabel> <strong>(.txt or .asc)</strong> <br />
@@ -156,6 +157,7 @@ class PairForm extends Component {
           <br/>
           <br/>
           <strong id="verification-message" className="verification-message"></strong>
+          <strong id="storeddb" className="storeddb"></strong>
           <br/>
             <Button className="btn-store" id="save" onClick={this.saveBtnClick.bind(this)}>Save</Button>
             <Button id="cancel" onClick={this.resetState}>Cancel</Button>

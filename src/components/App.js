@@ -55,9 +55,25 @@ class App extends Component {
             </Switch>
           }
           <GenerateKeys userSession={userSession}/>
-          <EmailForm userSession={userSession}/>
-          <DPKPairs gun = {this.gun}/>     
+          <EmailForm userSession={userSession}/>  
+          {!userSession.isUserSignedIn() ?
+            <Signin userSession={userSession} handleSignIn={this.handleSignIn} />
+            :
+            <Switch>
+              <Route
+                path='/:username?'
+                render={
+                  routeProps =>
+                  <DPKPairs gun = {this.gun}   
+                      userSession={userSession}
+                      handleSignOut={this.handleSignOut}
+                      {...routeProps}
+                    />
+                }
 
+              />
+            </Switch>
+          }
         </div>
       </div>
     );

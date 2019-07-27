@@ -90,7 +90,7 @@ class EmailForm extends Component {
 
             document.getElementById("encryptxbox").disabled = true;
             document.getElementById("encryptxbox").checked = true;
-        } 
+        }
     }
 
     decryptedMsg() {
@@ -122,7 +122,7 @@ class EmailForm extends Component {
             }
 
         }
-        else if (crypt.decrypt(cryptedMsg, pass) == null){
+        else if (crypt.decrypt(cryptedMsg, pass) == null) {
             $('#isnotvalid').text('Pair could not be validated! Invalid encrypted message or private key.');
             document.getElementById("decryptxbox").checked = false;
             console.log('The following pair could not be validated and can not be added in the database: {Email:', email, ', Public key: ', pkey, '}');
@@ -163,29 +163,29 @@ class EmailForm extends Component {
 
             !userSession.isSignInPending() && person ?
                 <div id="Send an email (Validation Process)" className="tabcontent">
-                    
-                    <br/><label htmlFor="email">To:</label><br/>
+
+                    <br /><label htmlFor="email">To:</label><br />
                     <input type="email" id="recepient_email" className="recepient-email" name="email" placeholder="Enter your email..." />
 
-                    <br/><label htmlFor="email">Topic:</label><br/>
+                    <br /><label htmlFor="email">Topic:</label><br />
                     <textarea type="topic" id="topic" name="Topic" placeholder="Topic..." rows="3" cols="69"></textarea>
 
-                    <br/><label htmlFor="email">Message:</label><br/>
+                    <br /><label htmlFor="email">Message:</label><br />
                     <textarea id="message" name="Message" placeholder="Enter your message here..." rows="10" cols="69"></textarea>
 
-                    <br/><label htmlFor="encrypted">Encrypt</label>
+                    <br /><label htmlFor="encrypted">Encrypt</label>
                     <input type="checkbox" id="encryptxbox" className="my_input" onClick={e => this.encryptedMsg(e)}></input>
 
-                    <br/>
-                    <br/><label htmlFor="cryptednsg">Encrypted Message:</label><br/>
+                    <br />
+                    <br /><label htmlFor="cryptednsg">Encrypted Message:</label><br />
                     <textarea id="crypted" name="cryptedmsg" placeholder="Enter your message here..." rows="10" cols="69"></textarea>
 
-                    <br/><label htmlFor="decrypted_">Decrypt</label>
+                    <br /><label htmlFor="decrypted_">Decrypt</label>
                     <input type="checkbox" id="decryptxbox" className="my_input" onClick={e => this.decryptedMsg(e)} ></input>
-                    <br/>
-                    <br/><label htmlFor="decrypted">Decrypted Message:</label><br/>
+                    <br />
+                    <br /><label htmlFor="decrypted">Decrypted Message:</label><br />
                     <textarea id="decrypted" name="decrypted" placeholder="Enter your message here..." rows="10" cols="69" disabled></textarea>
-                    <br/><strong id="isvalid" className="isvalid"></strong>
+                    <br /><strong id="isvalid" className="isvalid"></strong>
                     <strong id="isnotvalid" className="isnotvalid"></strong>
 
                     <br />

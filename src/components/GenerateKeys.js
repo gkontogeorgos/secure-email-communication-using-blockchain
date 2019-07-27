@@ -84,6 +84,7 @@ class GenerateKeys extends Component {
     document.getElementById("privkey").value = '';
     document.getElementById("time-report").text = '';
     document.getElementById("async-gen").checked = false;
+    document.getElementById("pub_other_peer_pkey").value = '';
   }
 
   savePubkeyAsFile(textToWrite, fileNameToSaveAs) {
@@ -191,6 +192,7 @@ class GenerateKeys extends Component {
               type="pass"
               name="passphrase"
               id="passphrase"
+              className="passphrase"
               autoComplete="on"
             />
 

@@ -123,7 +123,7 @@ class EmailForm extends Component {
 
         }
         else if (crypt.decrypt(cryptedMsg, pass) == null) {
-            $('#isnotvalid').text('Pair could not be validated! Invalid encrypted message or private key.');
+            $('#isnotvalid').text('Pair could not be validated! Invalid encrypted message.');
             document.getElementById("decryptxbox").checked = false;
             console.log('The following pair could not be validated and can not be added in the database: {Email:', email, ', Public key: ', pkey, '}');
         }

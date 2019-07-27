@@ -114,12 +114,29 @@ class DPKPairs extends Component {
     var decryptedMsg = document.getElementById('decrypted').value;
     var email = document.getElementById('email_address').value
     var pkey = document.getElementById('public_key').value
-    const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    var pkey_db = pkey.replace(/^\s+/,"").replace(/\s+$/,"").replace(/\s+/g,"");
+    var pkey_pair = document.getElementById('pkey-peer').innerHTML.replace(/\s+$/,"").replace(/\s+/g,"");
+
+    var email_db = email.replace(/^\s+/,"").replace(/\s+$/,"").replace(/\s+/g,"");
+    var email_pair = document.getElementById('email-peer').innerHTML.replace(/\s+$/,"").replace(/\s+/g,"");
+
+    const pattern = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
     var result = pattern.test(email);
+
     String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, "");
     }
-    if (email.trim() == '') {
+
+    if ((pkey.trim() != '') && (email.trim() != '') &&
+    ((pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
+      (pkey.trim().endsWith("-----END PUBLIC KEY-----"))) && (result == true) &&
+    document.getElementById("email_address").disabled == true &&
+    document.getElementById("public_key").disabled == true &&
+    cryptedMsg.trim() == '' && decryptedMsg.trim() == '' &&
+    document.getElementById("message").disabled == false) {
+    alert("You have to add a new pair, first...")
+    }
+    else if (email.trim() == '') {
       alert("You must enter your email address...");
     }
     else if (result == false) {
@@ -130,11 +147,18 @@ class DPKPairs extends Component {
     }
     else if (!(pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
       !(pkey.trim().endsWith("-----END PUBLIC KEY-----"))) {
-
       alert("Invalid public key... Please enter a valid public key!")
-
     }
-    if ((pkey.trim() != '') && (email.trim() != '') &&
+    else if (email_pair =='' || pkey_pair == ''){
+      alert ("Please make sure that you have a pair of email address and public key saved in your Blocstack list 'My Pairs'.");
+    }
+    else if ((email_db != email_pair)){
+      alert ("Invalid email address. Please make sure, you have entered the same email address that you have saved in your Blocstack list 'My Pairs'.");
+    }
+    else if ((pkey_db != pkey_pair)){
+      alert ("Invalid public key. Please make sure, you have entered the same public key that you have saved in your Blockstack list 'My Pairs'.");
+    }
+    else if ((pkey.trim() != '') && (email.trim() != '') &&
       ((pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
         (pkey.trim().endsWith("-----END PUBLIC KEY-----"))) && (result == true) &&
       document.getElementById("email_address").disabled == false &&
@@ -154,21 +178,20 @@ class DPKPairs extends Component {
         document.getElementById("send").disabled = true;
 
         document.getElementById('cancel').onclick = function () {
-          $('#save').text('Save')
+          $('#save').text('Save');
+          $('#verification-message').text("");
           document.getElementById("email_address").disabled = false;
           document.getElementById("public_key").disabled = false;
-          $('#verification-message').text("");
+          document.getElementById("recepient_email").disabled = false;
+          document.getElementById("topic").disabled = false;
+          document.getElementById("decrypted").disabled = true;
+          document.getElementById("email_address").disabled = false;
+          document.getElementById("public_key").disabled = false;
+          document.getElementById("message").disabled = false;
+          document.getElementById("encryptxbox").disabled = false;
+          document.getElementById("send").disabled = false;
         }
       }
-    }
-    else if ((pkey.trim() != '') && (email.trim() != '') &&
-      ((pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&
-        (pkey.trim().endsWith("-----END PUBLIC KEY-----"))) && (result == true) &&
-      document.getElementById("email_address").disabled == true &&
-      document.getElementById("public_key").disabled == true &&
-      cryptedMsg.trim() == '' && decryptedMsg.trim() == '' &&
-      document.getElementById("message").disabled == false) {
-      alert("You have to add a new pair, first...")
     }
     else if ((pkey.trim() != '') && (email.trim() != '') &&
       ((pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----")) &&

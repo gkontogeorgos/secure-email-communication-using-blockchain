@@ -16,7 +16,7 @@ class Signin extends Component {
           <button
             className="btn btn-primary btn-lg"
             id="signin-button"
-            onClick={ handleSignIn.bind(this) }
+            onClick={handleSignIn.bind(this)}
           >
             Sign In with Blockstack
           </button>

@@ -242,7 +242,7 @@ class DPKPairs extends Component {
       document.getElementById("email_address").disabled == false &&
       document.getElementById("public_key").disabled == false) {
       console.log('The following pair is sent to your Blocsktack gaia hub: {Email:', email, ', Public key: ', pkey, '}')
-      alert("Pair saved to your list. Refresh page to apply the new changes!");
+      alert("Pair sent to your list. Refresh page to apply the new changes!");
       this.saveNewStatus(document.getElementById("email_address").value, document.getElementById("public_key").value);
       this.setState({
         email: "",

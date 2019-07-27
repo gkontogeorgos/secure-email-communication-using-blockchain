@@ -102,14 +102,15 @@ class EmailForm extends Component {
         var pkey = document.getElementById('public_key').value;
         var pass = document.getElementById('passphrase').value;
         var cryptedMsg = document.getElementById('crypted').value;
-        var decryptedMsg = document.getElementById('decrypted').value;
         var my_prkey = document.getElementById('privkey').value;
+        $('#isnotvalid').text('');
+        $('#isvalid').text('');
         crypt.setKey(my_prkey)
         if (cryptedMsg.trim() == '') {
             alert("Can't decrypt an empty message!");
             document.getElementById("decryptxbox").checked = false;
         }
-        else if (cryptedMsg.trim() != '' && crypt.decrypt(cryptedMsg, pass) == '') {
+        else if (cryptedMsg.trim() != '' && crypt.decrypt(cryptedMsg, pass) == false) {
             if (my_prkey.trim() == '') {
                 alert("Decryption failed! Your private key is not defined.")
                 document.getElementById("decryptxbox").checked = false;
@@ -120,19 +121,20 @@ class EmailForm extends Component {
                 document.getElementById("decryptxbox").checked = false;
             }
 
-        } 
-        else if (cryptedMsg.trim() != '' && crypt.decrypt(cryptedMsg, pass) != '' && decryptedMsg == crypt.decrypt(cryptedMsg, pass)) {
+        }
+        else if (crypt.decrypt(cryptedMsg, pass) == null){
+            $('#isnotvalid').text('Pair could not be validated! Invalid encrypted message or private key.');
+            document.getElementById("decryptxbox").checked = false;
+            console.log('The following pair could not be validated and can not be added in the database: {Email:', email, ', Public key: ', pkey, '}');
+        }
+        else if (crypt.decrypt(cryptedMsg, pass) != null) {
             document.getElementById("decrypted").value = crypt.decrypt(cryptedMsg, pass);
             document.getElementById("decryptxbox").disabled = true;
             document.getElementById("decryptxbox").checked = true;
             $('#isvalid').text('Pair is validated!');
-            console.log('The following pair is validated and can be added to the decentralized database: {Email:', email, ', Public key: ', pkey, '}')
+            console.log('The following pair is validated and can be added to the decentralized database: {Email:', email, ', Public key: ', pkey, '}');
         }
-        else if (decryptedMsg != crypt.decrypt(cryptedMsg, pass)){
-            $('#isnotvalid').text('Pair could not be validated! Invalid encrypted message or private key.');
-            document.getElementById("decryptxbox").checked = false;
-            console.log('The following pair could not be validated and can not be added in the database: {Email:', email, ', Public key: ', pkey, '}')
-        }
+
 
     }
 

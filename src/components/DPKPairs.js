@@ -32,13 +32,13 @@ class DPKPairs extends Component {
       username: "",
       email: "",
       pubkeystored: "",
-      statuses: [],
       statusIndex: 0,
       isLoading: false,
       pairs: [],
       currentId: ''
     };
   }
+
 
   componentWillMount() {
 
@@ -63,20 +63,9 @@ class DPKPairs extends Component {
         })
       }, []);
     })
+    return this.fetchData();
   }
 
-  componentDidMount() {
-
-    if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn();
-      return this.fetchData();
-    }
-
-    if (userSession.isUserSignedIn()) {
-      return this.fetchData();
-    }
-
-  }
   newPairBtnClick() {
     this.setState({ currentId: '' });
     document.getElementById("public_key").disabled = false;
@@ -112,8 +101,12 @@ class DPKPairs extends Component {
 
     var cryptedMsg = document.getElementById('crypted').value;
     var decryptedMsg = document.getElementById('decrypted').value;
-    var email = document.getElementById('email_address').value
-    var pkey = document.getElementById('public_key').value
+    var email = document.getElementById('email_address').value;
+    var pkey = document.getElementById('public_key').value;
+
+    if (!(document.getElementById('pkey-peer')) && !(document.getElementById('email-peer'))){
+      alert("You need to add a pair in your list 'My Pairs' first.")
+    }
     var pkey_db = pkey.replace(/^\s+/,"").replace(/\s+$/,"").replace(/\s+/g,"");
     var pkey_pair = document.getElementById('pkey-peer').innerHTML.replace(/\s+$/,"").replace(/\s+/g,"");
 
@@ -122,6 +115,7 @@ class DPKPairs extends Component {
 
     const pattern = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
     var result = pattern.test(email);
+
 
     String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, "");
@@ -277,8 +271,8 @@ class DPKPairs extends Component {
 
   saveNewStatus(emailText, public_keyText) {
 
-    let statuses = []
-    statuses = (this.state.statuses)
+    let your_pairs = []
+    your_pairs = (this.state.your_pairs)
     /* let statuses = Array (this.state.statuses)*/
 
     let status = {
@@ -288,12 +282,12 @@ class DPKPairs extends Component {
       created_at: Date.now()
     }
 
-    statuses.unshift(status)
+    your_pairs.unshift(status)
     const options = { encrypt: false }
-    userSession.putFile('statuses.json', JSON.stringify(statuses), options)
+    userSession.putFile('your_pairs.json', JSON.stringify(your_pairs), options)
       .then(() => {
         this.setState({
-          statuses: statuses
+          your_pairs: your_pairs
         })
       })
 
@@ -301,25 +295,25 @@ class DPKPairs extends Component {
     //  console.log(customersData);
   }
 
+
   fetchData() {
 
     this.setState({ isLoading: true })
 
     const options = { decrypt: false }
-    userSession.getFile('statuses.json', options)
+    userSession.getFile('your_pairs.json', options)
       .then((file) => {
-        var statuses = JSON.parse(file || '[]')
+        var your_pairs = JSON.parse(file || '[]')
         this.setState({
 
-          statusIndex: statuses.length,
-          statuses: statuses,
+          statusIndex: your_pairs.length,
+          your_pairs: your_pairs,
         })
       })
       .finally(() => {
         this.setState({ isLoading: false })
       })
   }
-
   render() {
     this.getCurrentPair = this.getCurrentPair.bind(this);
     const { person } = this.state;
@@ -338,9 +332,11 @@ class DPKPairs extends Component {
                   <br></br>
                 </li>
               ))}
+              <br/>
               <label>Add a new pair in the decentralized database</label>
               <br></br>
-              <Button bsStyle="primary" id="newpair" block onClick={this.newPairBtnClick.bind(this)}>New Pair</Button>
+              <Button bsStyle="primary" id="newpair" block onClick={this.newPairBtnClick.bind(this)}>New Pair</Button><br/>
+              <small>You need to have at least one pair in your list at your Blockstack account before storing it in the database!</small>
 
             </Col>
             <Col xs={8}>

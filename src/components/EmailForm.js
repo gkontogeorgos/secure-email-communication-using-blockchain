@@ -23,7 +23,7 @@ class EmailForm extends Component {
             username: "",
             email: "",
             pubkeystored: "",
-            statuses: [],
+            your_pairs: [],
             statusIndex: 0,
             isLoading: false
         };
@@ -107,7 +107,7 @@ class EmailForm extends Component {
         $('#isvalid').text('');
         crypt.setKey(my_prkey)
         if (cryptedMsg.trim() == '') {
-            alert("Can't decrypt an empty message!");
+            alert("Can't decrypt an empty encrypted message!");
             document.getElementById("decryptxbox").checked = false;
         }
         else if (cryptedMsg.trim() != '' && crypt.decrypt(cryptedMsg, pass) == false) {

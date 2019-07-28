@@ -113,6 +113,7 @@ class PairForm extends Component {
 
     return (
       <div className="content-pair">
+        <br/><br/>
         <FormGroup>
           <ControlLabel>Email address:</ControlLabel>
           <br />
@@ -125,7 +126,7 @@ class PairForm extends Component {
         </FormGroup>
         <br />
         <FormGroup>
-          <ControlLabel>Public_key:</ControlLabel>
+          <ControlLabel>Public key:</ControlLabel>
           <br />
           <textarea id="public_key" className="pubpairkey"
             rows="6" cols="72"
@@ -133,7 +134,7 @@ class PairForm extends Component {
             value={this.state.public_key}
             onChange={this.handleNewPKeyChange.bind(this)} disabled />
         </FormGroup><br />
-        <button type="save" className="btn btn-primary btn-lg" onClick={e => this.savePubkeyAsFile(public_key.value, 'public_key.asc')}>
+        <button type="save" className="btn-dl" onClick={e => this.savePubkeyAsFile(public_key.value, 'public_key.asc')}>
           Download Public Key</button>
         <br /><br />
         <FormGroup>

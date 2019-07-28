@@ -29,7 +29,7 @@ class MyPairsList extends Component {
       username: "",
       email: "",
       pubkeystored: "",
-      statuses: [],
+      your_pairs: [],
       statusIndex: 0,
       isLoading: false
     };
@@ -50,9 +50,9 @@ class MyPairsList extends Component {
 
   saveNewStatus(emailText, public_keyText) {
     const { userSession } = this.props
-    let statuses = []
-    statuses = (this.state.statuses)
-    /* let statuses = Array (this.state.statuses)*/
+    let your_pairs = []
+    your_pairs = (this.state.your_pairs)
+    /* let your_pairs = Array (this.state.your_pairs)*/
 
     let status = {
       id: this.state.statusIndex++,
@@ -61,12 +61,12 @@ class MyPairsList extends Component {
       created_at: Date.now()
     }
 
-    statuses.unshift(status)
+    your_pairs.unshift(status)
     const options = { encrypt: false }
-    userSession.putFile('statuses.json', JSON.stringify(statuses), options)
+    userSession.putFile('your_pairs.json', JSON.stringify(your_pairs), options)
       .then(() => {
         this.setState({
-          statuses: statuses
+          your_pairs: your_pairs
         })
       })
   }
@@ -74,16 +74,16 @@ class MyPairsList extends Component {
   deleteMyPair(e, id) {
 
     const { userSession } = this.props
-    var index = this.state.statuses.findIndex(e => e.id == id);
+    var index = this.state.your_pairs.findIndex(e => e.id == id);
     const options = { encrypt: false }
 
     let newArray = []
-    newArray = this.state.statuses.slice()
+    newArray = this.state.your_pairs.slice()
     newArray.splice(index, 1)
-    userSession.putFile('statuses.json', JSON.stringify(newArray), options)
+    userSession.putFile('your_pairs.json', JSON.stringify(newArray), options)
       .then(() => {
         this.setState({
-          statuses: newArray
+          your_pairs: newArray
         })
       })
   }
@@ -93,14 +93,14 @@ class MyPairsList extends Component {
     this.setState({ isLoading: true })
     if (this.isLocal()) {
       const options = { decrypt: false }
-      userSession.getFile('statuses.json', options)
+      userSession.getFile('your_pairs.json', options)
         .then((file) => {
-          var statuses = JSON.parse(file || '[]')
+          var your_pairs = JSON.parse(file || '[]')
           this.setState({
             person: new Person(userSession.loadUserData().profile),
             username: userSession.loadUserData().username,
-            statusIndex: statuses.length,
-            statuses: statuses,
+            statusIndex: your_pairs.length,
+            your_pairs: your_pairs,
           })
         })
         .finally(() => {
@@ -120,16 +120,16 @@ class MyPairsList extends Component {
           console.log('could not resolve profile')
         })
       const options = { username: username, decrypt: false }
-      userSession.getFile('statuses.json', options)
+      userSession.getFile('your_pairs.json', options)
         .then((file) => {
-          var statuses = JSON.parse(file || '[]')
+          var your_pairs = JSON.parse(file || '[]')
           this.setState({
-            statusIndex: statuses.length,
-            statuses: statuses
+            statusIndex: your_pairs.length,
+            your_pairs: your_pairs
           })
         })
         .catch((error) => {
-          console.log('could not fetch statuses')
+          console.log('could not fetch your pairs')
         })
         .finally(() => {
           this.setState({ isLoading: false })
@@ -248,7 +248,8 @@ class MyPairsList extends Component {
                     <br></br>
                     <h4><strong className="remove-notice">If one of your pairs is already stored in the DPK DB, please, remove it from your list!</strong></h4>
                     {this.state.isLoading && <span>Loading...</span>}
-                    {Array.isArray(this.state.statuses) && this.state.statuses.map(status => (
+                    <div id = "pairs_blockstack">
+                    {Array.isArray(this.state.your_pairs) && this.state.your_pairs.map(status => (
                       <li key={status.id} className="mypair">
                         <p>
                           <strong>email: </strong> <small id="email-peer">{status.email_address}</small> <br></br>
@@ -257,7 +258,7 @@ class MyPairsList extends Component {
                        </button>
                         </p>
                       </li>
-                    ))}
+                    ))}</div>
                   </div>
 
                 </div>

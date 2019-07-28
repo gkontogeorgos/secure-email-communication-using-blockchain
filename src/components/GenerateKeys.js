@@ -44,7 +44,7 @@ class GenerateKeys extends Component {
     var time = -(dt.getTime());
     var pass = document.getElementById("passphrase").value;
     if (pass == "") {
-      $('#five-words').text('Passphrase must not be empty!');
+      $('#five-words').text('Passphrase is required!');
     }
     else if (!(pass.split(" ").length > 4)) {
       $('#five-words').text('Passphrase must have at least 5 words!');
@@ -195,7 +195,7 @@ class GenerateKeys extends Component {
               className="passphrase"
               autoComplete="on"
             />
-
+            <br />
             <strong id="five-words" className="passlength"></strong>
             <br />
             <br></br>Key Size: 
@@ -234,13 +234,13 @@ class GenerateKeys extends Component {
           <div className="block">
             <label htmlFor="pubkey">Public Key</label><br />
             <textarea id="pubkey" className="pubkey" rows="15" cols="69"></textarea><br />
-            <button type="save" onClick={e => this.savePubkeyAsFile(pubkey.value, 'public_key.asc')}>Download Public Key</button><br /><br />
+            <button type="save" className ="btn-dl" onClick={e => this.savePubkeyAsFile(pubkey.value, 'public_key.asc')}>Download Public Key</button><br /><br />
             <label htmlFor="privkey" >Private Key</label><br />
             <textarea id="privkey" className="privkey" rows="15" cols="69"></textarea><br />
-            <button type="save" onClick={e => this.savePrivkeyAsFile(privkey.value, 'private_key.asc')}>Download Private Key</button><br /><br />
+            <button type="save" className ="btn-dl" onClick={e => this.savePrivkeyAsFile(privkey.value, 'private_key.asc')}>Download Private Key</button><br /><br />
             <label htmlFor="pub_other_peer_pkey" >Other Peer's Public Key</label><br />
             <textarea id="pub_other_peer_pkey" className="pub_other_peer_pkey" rows="15" cols="69"></textarea><br />
-            <button type="save" onClick={e => this.savePubkeyOtherPairAsFile(pub_other_peer_pkey.value, 'other_peer_public_key.asc')}>
+            <button type="save" className ="btn-dl"  onClick={e => this.savePubkeyOtherPairAsFile(pub_other_peer_pkey.value, 'other_peer_public_key.asc')}>
               Download Public Key</button><br />
           </div>
           <br />

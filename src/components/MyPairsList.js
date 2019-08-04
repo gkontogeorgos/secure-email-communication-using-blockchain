@@ -73,31 +73,6 @@ class MyPairsList extends Component {
         });
       });
   }
-
-
-  saveNewStatus(emailText, public_keyText) {
-    const { userSession } = this.props;
-    let my_pairs = [];
-    my_pairs = this.state.my_pairs;
-    /* let my_pairs = Array (this.state.my_pairs)*/
-
-    let status = {
-      id: this.state.statusIndex++,
-      email_address: emailText.trim(),
-      public_key: public_keyText.trim(),
-      created_at: Date.now()
-    };
-
-    my_pairs.unshift(status);
-    const options = { encrypt: false };
-    userSession
-      .putFile("my_pairs.json", JSON.stringify(my_pairs), options)
-      .then(() => {
-        this.setState({
-          my_pairs: my_pairs
-        });
-      });
-  }
   
   fetchData() {
     const { userSession } = this.props;

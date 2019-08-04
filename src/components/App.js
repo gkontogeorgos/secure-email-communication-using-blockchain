@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Gun from 'gun';
-import DPKPairs from './DPKPairs';
 import { Switch, Route } from 'react-router-dom'
 import Signin from './Signin';
 import MyPairsList from './MyPairsList';
-import EmailForm from './EmailForm';
+import DPKPairsStorage from './DPKPairsStorage';
+import SecureEmailForm from './SecureEmailForm';
 import GenerateKeys from './GenerateKeys';
 import {
   UserSession,
@@ -55,8 +55,8 @@ class App extends Component {
             </Switch>
           }
           <GenerateKeys userSession={userSession}/>
-          <EmailForm userSession={userSession}/>  
-          <DPKPairs gun = {this.gun} userSession={userSession}/>
+          <SecureEmailForm userSession={userSession}/>  
+          <DPKPairsStorage gun={this.gun}/>
 
         </div>
       </div>

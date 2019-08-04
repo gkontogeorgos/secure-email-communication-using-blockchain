@@ -30,6 +30,7 @@
     "babel-preset-stage-1": "^6.24.1",
     "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
+    "concurrently": "^4.1.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
@@ -53,6 +54,7 @@
     "clean": "rimraf dist",
     "serve": "node server.js",
     "start": "webpack-dev-server",
+    "dev": "concurrently --kill-others \"npm start\" \"npm run serve\"",
     "build": "webpack",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test --watch"

@@ -1,17 +1,12 @@
 import React, { Component } from "react";
 
-import {
-  Person,
-  lookupProfile,
-} from "blockstack";
-
+import { Person, lookupProfile } from "blockstack";
 
 const avatarFallbackImage =
   "https://s3.amazonaws.com/onename/avatar-placeholder.png";
-let crypt = null
-let privateKey = null
-let publickey = null
-
+let crypt = null;
+let privateKey = null;
+let publickey = null;
 
 class MyPairsList extends Component {
   constructor(props) {
@@ -29,15 +24,14 @@ class MyPairsList extends Component {
       username: "",
       email: "",
       pubkeystored: "",
-      your_pairs: [],
+      my_pairs: [],
       statusIndex: 0,
       isLoading: false
     };
   }
 
-
   componentDidMount() {
-    this.fetchData()
+    this.fetchData();
   }
 
   componentWillMount() {
@@ -46,95 +40,6 @@ class MyPairsList extends Component {
       person: new Person(userSession.loadUserData().profile),
       username: userSession.loadUserData().username
     });
-  }
-
-  saveNewStatus(emailText, public_keyText) {
-    const { userSession } = this.props
-    let your_pairs = []
-    your_pairs = (this.state.your_pairs)
-    /* let your_pairs = Array (this.state.your_pairs)*/
-
-    let status = {
-      id: this.state.statusIndex++,
-      email_address: emailText.trim(),
-      public_key: public_keyText.trim(),
-      created_at: Date.now()
-    }
-
-    your_pairs.unshift(status)
-    const options = { encrypt: false }
-    userSession.putFile('your_pairs.json', JSON.stringify(your_pairs), options)
-      .then(() => {
-        this.setState({
-          your_pairs: your_pairs
-        })
-      })
-  }
-
-  deleteMyPair(e, id) {
-
-    const { userSession } = this.props
-    var index = this.state.your_pairs.findIndex(e => e.id == id);
-    const options = { encrypt: false }
-
-    let newArray = []
-    newArray = this.state.your_pairs.slice()
-    newArray.splice(index, 1)
-    userSession.putFile('your_pairs.json', JSON.stringify(newArray), options)
-      .then(() => {
-        this.setState({
-          your_pairs: newArray
-        })
-      })
-  }
-
-  fetchData() {
-    const { userSession } = this.props
-    this.setState({ isLoading: true })
-    if (this.isLocal()) {
-      const options = { decrypt: false }
-      userSession.getFile('your_pairs.json', options)
-        .then((file) => {
-          var your_pairs = JSON.parse(file || '[]')
-          this.setState({
-            person: new Person(userSession.loadUserData().profile),
-            username: userSession.loadUserData().username,
-            statusIndex: your_pairs.length,
-            your_pairs: your_pairs,
-          })
-        })
-        .finally(() => {
-          this.setState({ isLoading: false })
-        })
-    } else {
-      const username = this.props.match.params.username
-
-      lookupProfile(username)
-        .then((profile) => {
-          this.setState({
-            person: new Person(profile),
-            username: username
-          })
-        })
-        .catch((error) => {
-          console.log('could not resolve profile')
-        })
-      const options = { username: username, decrypt: false }
-      userSession.getFile('your_pairs.json', options)
-        .then((file) => {
-          var your_pairs = JSON.parse(file || '[]')
-          this.setState({
-            statusIndex: your_pairs.length,
-            your_pairs: your_pairs
-          })
-        })
-        .catch((error) => {
-          console.log('could not fetch your pairs')
-        })
-        .finally(() => {
-          this.setState({ isLoading: false })
-        })
-    }
   }
 
 
@@ -152,125 +57,227 @@ class MyPairsList extends Component {
     evt.currentTarget.className += " active";
   }
 
+  deleteMyPair(e, id) {
+    const { userSession } = this.props;
+    var index = this.state.my_pairs.findIndex(e => e.id == id);
+    const options = { encrypt: false };
+
+    let newArray = [];
+    newArray = this.state.my_pairs.slice();
+    newArray.splice(index, 1);
+    userSession
+      .putFile("my_pairs.json", JSON.stringify(newArray), options)
+      .then(() => {
+        this.setState({
+          my_pairs: newArray
+        });
+      });
+  }
+
+
+  saveNewStatus(emailText, public_keyText) {
+    const { userSession } = this.props;
+    let my_pairs = [];
+    my_pairs = this.state.my_pairs;
+    /* let my_pairs = Array (this.state.my_pairs)*/
+
+    let status = {
+      id: this.state.statusIndex++,
+      email_address: emailText.trim(),
+      public_key: public_keyText.trim(),
+      created_at: Date.now()
+    };
+
+    my_pairs.unshift(status);
+    const options = { encrypt: false };
+    userSession
+      .putFile("my_pairs.json", JSON.stringify(my_pairs), options)
+      .then(() => {
+        this.setState({
+          my_pairs: my_pairs
+        });
+      });
+  }
+  
+  fetchData() {
+    const { userSession } = this.props;
+    this.setState({ isLoading: true });
+    if (this.isLocal()) {
+      const options = { decrypt: false };
+      userSession
+        .getFile("my_pairs.json", options)
+        .then(file => {
+          var my_pairs = JSON.parse(file || "[]");
+          this.setState({
+            person: new Person(userSession.loadUserData().profile),
+            username: userSession.loadUserData().username,
+            statusIndex: my_pairs.length,
+            my_pairs: my_pairs
+          });
+        })
+        .finally(() => {
+          this.setState({ isLoading: false });
+        });
+    } else {
+      const username = this.props.match.params.username;
+
+      lookupProfile(username)
+        .then(profile => {
+          this.setState({
+            person: new Person(profile),
+            username: username
+          });
+        })
+        .catch(error => {
+          console.log("could not resolve profile");
+        });
+      const options = { username: username, decrypt: false };
+      userSession
+        .getFile("my_pairs.json", options)
+        .then(file => {
+          var my_pairs = JSON.parse(file || "[]");
+          this.setState({
+            statusIndex: my_pairs.length,
+            my_pairs: my_pairs
+          });
+        })
+        .catch(error => {
+          console.log("could not fetch your pairs");
+        })
+        .finally(() => {
+          this.setState({ isLoading: false });
+        });
+    }
+  }
+
+
   isLocal() {
     return this.props.match.params.username ? false : true;
   }
-
 
   render() {
     const { handleSignOut, userSession } = this.props;
     const { person } = this.state;
     const { username } = this.state;
 
+    return !userSession.isSignInPending() && person ? (
+      <div className="container">
+        <div id="topNav">
+          <h2>DPKS</h2>
+          <h2>This is a decentralized shared database of public keys/emails</h2>
 
-    return (
-      !userSession.isSignInPending() && person ?
-        <div className="container">
-
-          <div id="topNav">
-            <h2>DPKS</h2><h2>This is a decentralized shared database of public keys/emails</h2>
-
-
-
-            <div className="avatar-section">
-              <img
-                src={
-                  person.avatarUrl()
-                    ? person.avatarUrl()
-                    : avatarFallbackImage
-                }
-                className="img-rounded avatar"
-                id="avatar-image"
-              /></div>
-            <div className="username">
-              <h1>
-                <span id="heading-name" className="heading-name">
-                  {person.name() ? person.name() : "Nameless Person"}
-                </span>
-              </h1>
-              <span>{username}</span>
-              {(
-                <span>
-                  &nbsp; | &nbsp;
-                      <button
-                    className="btn btn-primary btn-lg"
-                    onClick={handleSignOut.bind(this)}
-                  >
-                    Logout
-                      </button>
-                </span>
-              )}
-            </div>
-
-            <div className="tab">
-              <button
-                className="tablinks"
-                onClick={e =>
-                  this.chooseSecurityFeature(e, "Generate Keys")
-                }
-              >
-                Generate Keys
-              </button>
-              <button
-                className="tablinks"
-                onClick={e => this.chooseSecurityFeature(e, "DPK DB")}
-              >
-                DPK DB
-              </button>
-              <button
-                className="tablinks"
-                onClick={e => this.chooseSecurityFeature(e, "Send an email (Validation Process)")}
-              >
-                Send an email (Validation Process)
-              </button>
-              <button
-                className="tablinks"
-                onClick={e => this.chooseSecurityFeature(e, "My pairs")}
-              >
-                My pairs
-              </button>
-            </div>
-
+          <div className="avatar-section">
+            <img
+              src={
+                person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage
+              }
+              className="img-rounded avatar"
+              id="avatar-image"
+            />
+          </div>
+          <div className="username">
+            <h1>
+              <span id="heading-name" className="heading-name">
+                {person.name() ? person.name() : "Nameless Person"}
+              </span>
+            </h1>
+            <span id="user" className="user">
+              {username}
+            </span>
+            {
+              <span>
+                &nbsp; | &nbsp;
+                <button
+                  className="btn btn-primary btn-lg"
+                  onClick={handleSignOut.bind(this)}
+                >
+                  Logout
+                </button>
+              </span>
+            }
           </div>
 
+          <div className="tab">
+            <button
+              className="tablinks"
+              onClick={e => this.chooseSecurityFeature(e, "Generate Keys")}
+            >
+              Generate Keys
+            </button>
+            <button
+              className="tablinks"
+              onClick={e => this.chooseSecurityFeature(e, "DPK DB")}
+            >
+              DPK DB
+            </button>
+            <button
+              className="tablinks"
+              onClick={e =>
+                this.chooseSecurityFeature(
+                  e,
+                  "Send an email (Validation Process)"
+                )
+              }
+            >
+              Send an email (Validation Process)
+            </button>
+            <button
+              className="tablinks"
+              onClick={e => this.chooseSecurityFeature(e, "My pairs")}
+            >
+              My pairs
+            </button>
+          </div>
+        </div>
 
-          <div className="row">
+        <div className="row">
+          <div className="col-md-offset-3 col-md-6">
+            <div className="col-md-12">
+              <div id="My pairs" className="tabcontent">
+                <div className="col-sm-2 mypairs">
+                  <h3>For Validation</h3>
+                  <h4>
+                    These pairs will be validated one by one, starting from the
+                    last one inserted (First one in the list)...
+                  </h4>
+                  <br></br>
+                  <h4>
+                    <strong className="remove-notice">
+                      If for some reason one of your pairs is already stored in the DPK DB
+                      and it's not automatically removed,<br/> please, remove it from your list!
+                    </strong>
+                  </h4>
+                  {this.state.isLoading && <span>Loading...</span>}
+                  <div id="pairs_blockstack">
+                    {Array.isArray(this.state.my_pairs) &&
+                      this.state.my_pairs.map(status => (
+                        <li key={status.id} className="mypair">
+                          <p>
+                            <strong>email: </strong>{" "}
+                            <small id="email-peer">
+                              {status.email_address}
+                            </small>{" "}
+                            <br></br>
+                            <strong>public_key: </strong>{" "}
+                            <small id="pkey-peer">{status.public_key}</small>{" "}
+                            <br></br>
 
-            <div className="col-md-offset-3 col-md-6">
-              <div className="col-md-12">
+                            <button
+                              className="btn-st"
+                              onClick={e => this.deleteMyPair(e, status.id)}
+                            >Remove</button>
+                          </p>
 
-
-                <div id="My pairs" className="tabcontent">
-
-                  <div className="col-sm-2 mypairs">
-                    <h3>For Validation</h3>
-                    <h4>These pairs will be validated one by one, starting from the first one...</h4>
-                    <br></br>
-                    <h4><strong className="remove-notice">If one of your pairs is already stored in the DPK DB, please, remove it from your list!</strong></h4>
-                    {this.state.isLoading && <span>Loading...</span>}
-                    <div id = "pairs_blockstack">
-                    {Array.isArray(this.state.your_pairs) && this.state.your_pairs.map(status => (
-                      <li key={status.id} className="mypair">
-                        <p>
-                          <strong>email: </strong> <small id="email-peer">{status.email_address}</small> <br></br>
-                          <strong>public_key: </strong> <small id="pkey-peer">{status.public_key}</small> <br>
-                          </br><button className="btn-st" onClick={e => this.deleteMyPair(e, status.id)}>Remove
-                       </button>
-                        </p>
-                      </li>
-                    ))}</div>
+                        </li>
+                      ))}
                   </div>
-
                 </div>
-
-
-
               </div>
             </div>
           </div>
-
-        </div> : null
-    );
+        </div>
+      </div>
+    ) : null;
   }
 }
 export default MyPairsList;

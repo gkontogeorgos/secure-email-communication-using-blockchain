@@ -1,23 +1,24 @@
-const path = require('path');
-const express = require('express');
-const Gun = require('gun');
+const path = require("path");
+const express = require("express");
+const Gun = require("gun");
 
 const app = express();
-const port = (process.env.PORT || 8080);
+const port = process.env.PORT || 8080;
 
-if (process.env.NODE_ENV !== 'production') {
-  const webpack = require('webpack');
-  const webpackDevMiddleware = require('webpack-dev-middleware');
-  const webpackHotMiddleware = require('webpack-hot-middleware');
-  const config = require('./webpack.config.js');
+if (process.env.NODE_ENV != "production") {
+  console.log("This is the development mode!");
+  const webpack = require("webpack");
+  const webpackDevMiddleware = require("webpack-dev-middleware");
+  const webpackHotMiddleware = require("webpack-hot-middleware");
+  const config = require("./webpack.config.js");
   const compiler = webpack(config);
 
   app.use(webpackHotMiddleware(compiler));
   app.use(webpackDevMiddleware(compiler));
-}else{
-  const indexPath = path.join(__dirname, 'dist/index.html');
-  app.use(express.static('dist'));
-  app.get('*', function (_, res) { 
+} else {
+  const indexPath = path.join(__dirname, "dist/index.html");
+  app.use(express.static("dist"));
+  app.get("*", function(_, res) {
     res.sendFile(indexPath);
   });
 }
@@ -25,4 +26,5 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(Gun.serve);
 const server = app.listen(port);
 
-Gun({	file: 'db/data.json', web: server });
+Gun({ file: "db/data.json", web: server });
+console.log('Project is running at http://localhost:'+port + ' with /gun\n');

@@ -186,7 +186,7 @@ class GenerateKeys extends Component {
     return (
       <div className="container">
         <div id="Generate Keys" className="tabcontent">
-          <h2>Generating a PGP pair of keys with RSA algorithm</h2>
+          <h2 className="generating_keys">Generating a PGP pair of keys with RSA algorithm</h2>
           <br />
           <br />
           <div className="block">

@@ -88,6 +88,7 @@ class DPKPairStorage extends Component {
   itemClick(event) {
     document.getElementById("public_key").disabled = true;
     document.getElementById("email_address").disabled = true;
+    document.getElementById("blockstack_id").disabled = true;
     this.setState({ currentId: event.target.id });
   }
 
@@ -97,17 +98,6 @@ class DPKPairStorage extends Component {
     });
     const pair = this.state.pairs[index] || newPair;
     return pair;
-  }
-
-  deletePair(e, id) {
-    var index = this.state.pairs.findIndex(e => e.id == id);
-    let newPairs = [];
-    newPairs = this.state.pairs.slice();
-    newPairs.splice(index, 1);
-
-    this.setState({
-      pairs: newPairs
-    });
   }
 
   sendToYourDB() {
@@ -152,8 +142,9 @@ class DPKPairStorage extends Component {
 
       pkey_found = pkey_text.substr(index).replace(/\s+$/, "").replace(/\s+/g, "");
 
-      if (pkey_input == pkey_found) {
-        $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! <br/> Please, choose another one!');
+      if (pkey_input == pkey_found && document.getElementById("email_address").disabled == false &&
+      document.getElementById("public_key").disabled == false) {
+        $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! </br> Please, choose another one!');
         break;
       }
       else
@@ -255,6 +246,7 @@ class DPKPairStorage extends Component {
           email: "",
           pubkeystored: ""
         });
+        document.getElementById('deleteAllPairs').disabled = false;
       }
     }
   }
@@ -320,8 +312,9 @@ class DPKPairStorage extends Component {
 
       pkey_found = pkey_text.substr(index).replace(/\s+$/, "").replace(/\s+/g, "");
 
-      if (pkey_input == pkey_found) {
-        $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database!' + <br/> + 'Please, choose another one!');
+      if (pkey_input == pkey_found && document.getElementById("email_address").disabled == false &&
+      document.getElementById("public_key").disabled == false) {
+        $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! </br> Please, choose another one!');
         break;
       }
       else
@@ -510,13 +503,14 @@ class DPKPairStorage extends Component {
     newArray = this.state.my_pairs.slice();
     newArray.splice(index, 1);
     userSession
-      .putFile("my_pairs.json", JSON.stringify(newArray), options)
+      .deleteFile("my_pairs.json", JSON.stringify(newArray), options)
       .then(() => {
         this.setState({
           my_pairs: newArray
         });
       });
   }
+
   saveNewPair(emailText, public_keyText) {
     let my_pairs = [];
     my_pairs = this.state.my_pairs;
@@ -544,6 +538,7 @@ class DPKPairStorage extends Component {
     this.setState({ isLoading: true });
 
     const options = { decrypt: false };
+    
     userSession
       .getFile("my_pairs.json", options)
       .then(file => {
@@ -564,11 +559,11 @@ class DPKPairStorage extends Component {
 
     return !userSession.isSignInPending() && person ? (
       <div id="DPK DB" className="tabcontent">
-        <h2>Decentralized database of valid pairs</h2>
+        <h2 className="dec_db">Decentralized database of valid pairs</h2>
         
         <br />
         <br />
-        <label>Add a new pair in the shared DPK DB</label>
+        <label>Add a new pair:</label>
         <br />
         <Button
           bsStyle="primary"

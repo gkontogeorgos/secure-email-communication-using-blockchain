@@ -73,12 +73,37 @@ class MyPairsList extends Component {
         });
       });
   }
-  
+
+  deleteAll() {
+    const { userSession } = this.props;
+    const options = { encrypt: false };
+    let my_pairs = [];
+    my_pairs = this.state.my_pairs;
+    if (
+      document.getElementById("pkey-peer") &&
+      document.getElementById("email-peer")
+    ) {
+      userSession
+        .deleteFile("my_pairs.json", JSON.stringify(my_pairs), options)
+        .then(() => {
+          this.setState({
+            my_pairs: my_pairs
+          });
+        });
+    }
+    else {
+      alert('There are currently no pairs stored in your list! You need to add at least a new pair!');
+    }
+  }
+
   fetchData() {
     const { userSession } = this.props;
+
     this.setState({ isLoading: true });
+
     if (this.isLocal()) {
       const options = { decrypt: false };
+
       userSession
         .getFile("my_pairs.json", options)
         .then(file => {
@@ -93,6 +118,7 @@ class MyPairsList extends Component {
         .finally(() => {
           this.setState({ isLoading: false });
         });
+
     } else {
       const username = this.props.match.params.username;
 
@@ -104,7 +130,7 @@ class MyPairsList extends Component {
           });
         })
         .catch(error => {
-          console.log("could not resolve profile");
+          console.log("Could not resolve Blockstack profile!");
         });
       const options = { username: username, decrypt: false };
       userSession
@@ -117,7 +143,7 @@ class MyPairsList extends Component {
           });
         })
         .catch(error => {
-          console.log("could not fetch your pairs");
+          console.log("Could not fetch the pairs!");
         })
         .finally(() => {
           this.setState({ isLoading: false });
@@ -210,16 +236,16 @@ class MyPairsList extends Component {
             <div className="col-md-12">
               <div id="My pairs" className="tabcontent">
                 <div className="col-sm-2 mypairs">
-                  <h3>For Validation</h3>
+                  <h3 className ='validationTitle'>For Validation</h3>
                   <h4>
                     These pairs will be validated one by one, starting from the
-                    last one inserted (First one in the list)...
+                    last one inserted (First one in the list)
                   </h4>
                   <br></br>
                   <h4>
                     <strong className="remove-notice">
                       If for some reason one of your pairs is already stored in the DPK DB
-                      and it's not automatically removed,<br/> please, remove it from your list!
+                      and it's not automatically removed,<br /> please, remove it from your list!
                     </strong>
                   </h4>
                   {this.state.isLoading && <span>Loading...</span>}
@@ -245,6 +271,11 @@ class MyPairsList extends Component {
 
                         </li>
                       ))}
+                    <br />
+                    <button
+                      className="btn-st"
+                      onClick={e => this.deleteAll(e)}
+                    >Delete All</button>
                   </div>
                 </div>
               </div>

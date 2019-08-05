@@ -8,7 +8,6 @@ a:hover {
 
 html,
 body {
-    height: 100%;
     background-color: rgb(255, 255, 255);
     color: rgb(7, 30, 37);
     text-align: center;
@@ -120,6 +119,7 @@ body {
 .landing-heading {
     font-family: 'Source Code Pro', monospace;
     font-weight: 400;
+    font-size: 25pt;
 }
 
 #background {
@@ -132,9 +132,23 @@ body {
     /* Ensure div tag stays behind content; -999 might work, too. */
 }
 
+#topNav{
+    font-style: italic;
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0.025em;
+    font-size: 15pt;
+   }
+   
 .stretch {
-    width: 100%;
     height: 100%;
+}
+.generating_keys{
+    font-size: 24pt;
+}
+
+.dec_db{
+    font-size: 24pt;
 }
 
 .recepient-email {
@@ -443,6 +457,9 @@ label {
     top: 20px;
 }
 
+.validationTitle{
+    font-size: 25pt;
+}
 
 /* Warning Messages */
 

@@ -520,7 +520,7 @@ class DPKPairStorage extends Component {
   saveNewPair(emailText, public_keyText) {
     let my_pairs = [];
     my_pairs = this.state.my_pairs;
-    /* let statuses = Array (this.state.statuses)*/
+    /* let my_pairs = Array (this.state.my_pairs)*/
 
     let status = {
       id: this.state.statusIndex++,

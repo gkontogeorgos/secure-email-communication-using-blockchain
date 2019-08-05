@@ -212,7 +212,7 @@ class SecureEmailForm extends Component {
           id="recepient_email"
           className="recepient-email"
           name="email"
-          placeholder="Enter your email..."
+          placeholder="Enter the other peer's email address..."
         />
 
         <br /> <br />

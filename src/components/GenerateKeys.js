@@ -8,7 +8,7 @@ class GenerateKeys extends Component {
   key_size() {
     document.getElementById("myDropdown").classList.toggle("show");
     // Close the dropdown if the user clicks outside of it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (!event.target.matches(".change-key-size")) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
         var i;
@@ -20,10 +20,10 @@ class GenerateKeys extends Component {
         }
       }
       //Change the key size value for new keys
-      $(".change-key-size").each(function(index, value) {
+      $(".change-key-size").each(function (index, value) {
         var el = $(value);
         var keySize = el.attr("data-value");
-        el.click(function(e) {
+        el.click(function (e) {
           var button = $("#key-size");
           button.attr("data-value", keySize);
           button.html(keySize + " bits");
@@ -40,20 +40,42 @@ class GenerateKeys extends Component {
     var async = $("#async-gen").is(":checked");
     var dt = new Date();
     var time = -dt.getTime();
+    var id = document
+      .getElementById("blockstack_ID")
+      .value.replace(/\s+$/, "")
+      .replace(/\s+/g, "");
+    var blockstack_user = document
+      .getElementById("user")
+      .innerHTML.replace(/\s+$/, "")
+      .replace(/\s+/g, "");
     var pass = document.getElementById("passphrase").value;
-    if (pass == "") {
-      $("#five-words").text("Passphrase is required!");
-    } else if (pass.split(" ").join("").length < 7) {
+    if (id.trim() == "") {
+      $("#blockstack_id_message").text("Please enter your blockstack ID...");
+    }
+    else if (!id.trim().endsWith("id.blockstack")) {
+      $("#blockstack_id_message").text("Invalid blockstack ID...");
+    }
+    else if (id.trim() != blockstack_user) {
+      $("#blockstack_id_message").text("This blockstack ID does not belong to this account!");
+    }
+    else if (pass == "") {
+      $("#blockstack_id_message").text("");
+      $("#five-words").text("Please enter your passphrase...");
+    }
+    else if (pass.split(" ").join("").length < 7) {
+      $("#blockstack_id_message").text("");
       $("#five-words").text("Passphrase must have at least 7 characters!");
-    } else {
+    }
+    else {
+      $("#blockstack_id_message").text("");
       $("#five-words").text("");
       if (async) {
         $("#time-report").text(".");
-        var load = setInterval(function() {
+        var load = setInterval(function () {
           var text = $("#time-report").text();
           $("#time-report").text(text + ".");
         }, 500);
-        crypt.getKey(function() {
+        crypt.getKey(function () {
           clearInterval(load);
           dt = new Date();
           time += dt.getTime();
@@ -190,18 +212,30 @@ class GenerateKeys extends Component {
           <br />
           <br />
           <div className="block">
-            <label htmlFor="passphrase">Choose a passphrase:</label>
+            <label htmlFor="blockstack_ID">Enter your blockstack ID:</label>
             <br />
+            <input
+              type="text"
+              id="blockstack_ID"
+              className="blockstack_ID"
+              placeholder="Enter your blockstack id..."
+            />
+            <br />
+            <strong id="blockstack_id_message" className="blockstack_id_message"></strong>
+            <br />
+            <br />
+            <label htmlFor="passphrase">Choose a passphrase:</label>
             <br />
             <input
               type="pass"
               name="passphrase"
               id="passphrase"
               className="passphrase"
-              autoComplete="on"
+              placeholder="Enter your passphrase..."
             />
             <br />
             <strong id="five-words" className="passlength"></strong>
+            <br />
             <br />
             <label htmlFor="key_size">Key Size:</label>
 

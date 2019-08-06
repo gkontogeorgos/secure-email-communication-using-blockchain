@@ -77,6 +77,8 @@ class DPKPairStorage extends Component {
     document.getElementById("email_address").disabled = false;
     document.getElementById("blockstack_id").value = "";
     document.getElementById("blockstack_id").disabled = false;
+    $("#isvalid").text('');
+    $("#isnotvalid").text('');
     $("#pkey-duplicate").text('');
     $("#verification-message").text("");
     $("#email-message").text("");
@@ -427,7 +429,8 @@ class DPKPairStorage extends Component {
           $("#verification-message").text("");
           $("#confirmed").text("");
           $("#storeddb").text("");
-          document.getElementById("encryptxbox").checked = false;
+          document.getElementById("blockstack_id").disabled = false;
+          document.getElementById("blockstack_id").value = '';
           document.getElementById("email_address").disabled = false;
           document.getElementById("public_key").disabled = false;
           document.getElementById("recepient_email").disabled = false;
@@ -437,6 +440,7 @@ class DPKPairStorage extends Component {
           document.getElementById("email_address").disabled = false;
           document.getElementById("public_key").disabled = false;
           document.getElementById("message").disabled = false;
+          document.getElementById("encryptxbox").checked = false;
           document.getElementById("encryptxbox").disabled = false;
           document.getElementById("send").disabled = false;
         };

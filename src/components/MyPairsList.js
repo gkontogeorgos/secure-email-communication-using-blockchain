@@ -92,7 +92,7 @@ class MyPairsList extends Component {
         });
     }
     else {
-      alert('There are currently no pairs stored in your list! You need to add at least a new pair!');
+      alert("Error 404: File 'my_pairs' not found! There are currently no pairs stored in your list! You need to add at least one pair!");
     }
   }
 

@@ -166,7 +166,8 @@ body {
 }
 
 .storeddb {
-    color: rgb(0, 114, 66);
+    background-color: rgb(0, 114, 66);
+    color: white;
     font-size: 20pt;
 }
 
@@ -480,12 +481,14 @@ label {
 }
 
 .isvalid {
-    color: green;
+    background-color: green;
+    color: white;
     font-size: 20pt;
 }
 
 .isnotvalid {
-    color: red;
+    background-color: red;
+    color: white;
     font-size: 20pt;
 }
 
@@ -580,7 +583,17 @@ label {
 
 .passphrase {
     height: 30px;
-    width: 155px;
+    width: 185px;
+}
+
+.blockstack_ID{
+    height: 30px;
+    width: 185px;
+}
+
+.blockstack_id_message {
+
+    color :red;
 }
 
 .dropdown {

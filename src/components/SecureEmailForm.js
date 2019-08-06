@@ -113,6 +113,14 @@ class SecureEmailForm extends Component {
     var email = document.getElementById("email_address").value;
     var pkey = document.getElementById("public_key").value;
     var pass = document.getElementById("passphrase").value;
+    var id_user = document
+    .getElementById("blockstack_ID")
+    .value.replace(/\s+$/, "")
+    .replace(/\s+/g, "");
+    var blockstack_user = document
+    .getElementById("user")
+    .innerHTML.replace(/\s+$/, "")
+    .replace(/\s+/g, "");
     var cryptedMsg = document.getElementById("crypted").value;
     var my_prkey = document.getElementById("privkey").value;
     var decryptedMsg = document.getElementById("decrypted");
@@ -124,10 +132,31 @@ class SecureEmailForm extends Component {
       alert ("Decryption is available only while storing the pair in the database!")
       document.getElementById("decryptxbox").checked = false;
     }
+    else if (id_user.trim() ==''){
+      alert ("The blockstack ID is required for the decryption! Please, fill it in the 'Generate Keys' tab.")
+      document.getElementById("decryptxbox").checked = false;
+    }
+    else if (!id_user.trim().endsWith("id.blockstack")) {
+      alert ("Invalid blockstack ID!");
+      document.getElementById("decryptxbox").checked = false;
+    }
+    else if (id_user.trim() != blockstack_user) {
+      alert ("This blockstack ID could not be verified!");
+      document.getElementById("decryptxbox").checked = false;    
+    }
+    else if (pass.trim() ==''){
+      alert ("A passphrase is required for the decryption! Please, fill it in the 'Generate Keys' tab.")
+      document.getElementById("decryptxbox").checked = false;
+    }
+    else if (pass.split(" ").join("").length < 7) {
+      alert("The passphrase must have at least 7 characters!");
+      document.getElementById("decryptxbox").checked = false;
+    }
     else if (cryptedMsg.trim() == "" && decryptedMsg.disabled == false) {
       alert("Can't decrypt an empty message!");
       document.getElementById("decryptxbox").checked = false;
-    } else if (
+    }
+    else if (
       cryptedMsg.trim() != "" &&
       crypt.decrypt(cryptedMsg, pass) == false &&
       decryptedMsg.disabled == false
@@ -143,7 +172,8 @@ class SecureEmailForm extends Component {
         alert("Decryption failed! Your private key is invalid.");
         document.getElementById("decryptxbox").checked = false;
       }
-    } else if (
+    } 
+    else if (
       crypt.decrypt(cryptedMsg, pass) == null &&
       decryptedMsg.disabled == false
     ) {
@@ -158,7 +188,8 @@ class SecureEmailForm extends Component {
         pkey,
         "}"
       );
-    } else if (
+    } 
+    else if (
       crypt.decrypt(cryptedMsg, pass) != null &&
       decryptedMsg.disabled == false
     ) {

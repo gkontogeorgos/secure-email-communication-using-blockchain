@@ -81,7 +81,7 @@ class SecureEmailForm extends Component {
     var Msg = document.getElementById("message").value;
     var my_pkey = document.getElementById("pub_other_peer_pkey").value;
     document.getElementById("encryptxbox").checked = false;
-    document.getElementById("decryptxbox").disabled = true;
+    document.getElementById("decryptxbox").readOnly = true;
     crypt.setKey(my_pkey);
     if (Msg != "") {
       document.getElementById("crypted").value = crypt.encrypt(Msg);
@@ -99,7 +99,7 @@ class SecureEmailForm extends Component {
       }
       document.getElementById("crypted").value = "";
     } else if (Msg != "" && crypt.encrypt(Msg) != false) {
-      document.getElementById("encryptxbox").disabled = true;
+      document.getElementById("encryptxbox").readOnly = true;
       document.getElementById("encryptxbox").checked = true;
     }
   }
@@ -128,7 +128,7 @@ class SecureEmailForm extends Component {
     $("#isvalid").text("");
     crypt.setKey(my_prkey);
     
-    if (Msg.disabled == false){
+    if (Msg.readOnly == false){
       alert ("Decryption is available only while storing the pair in the database!")
       document.getElementById("decryptxbox").checked = false;
     }
@@ -152,14 +152,14 @@ class SecureEmailForm extends Component {
       alert("The passphrase must have at least 7 characters!");
       document.getElementById("decryptxbox").checked = false;
     }
-    else if (cryptedMsg.trim() == "" && decryptedMsg.disabled == false) {
+    else if (cryptedMsg.trim() == "" && decryptedMsg.readOnly == false) {
       alert("Can't decrypt an empty message!");
       document.getElementById("decryptxbox").checked = false;
     }
     else if (
       cryptedMsg.trim() != "" &&
       crypt.decrypt(cryptedMsg, pass) == false &&
-      decryptedMsg.disabled == false
+      decryptedMsg.readOnly == false
     ) {
       if (my_prkey.trim() == "") {
         alert("Decryption failed! Your private key is not defined.");
@@ -167,7 +167,7 @@ class SecureEmailForm extends Component {
       } else if (
         !my_prkey.trim().startsWith("-----BEGIN RSA PRIVATE KEY-----") &&
         !my_prkey.trim().endsWith("-----END RSA PRIVATE KEY-----") &&
-        decryptedMsg.disabled == false
+        decryptedMsg.readOnly == false
       ) {
         alert("Decryption failed! Your private key is invalid.");
         document.getElementById("decryptxbox").checked = false;
@@ -175,7 +175,7 @@ class SecureEmailForm extends Component {
     } 
     else if (
       crypt.decrypt(cryptedMsg, pass) == null &&
-      decryptedMsg.disabled == false
+      decryptedMsg.readOnly == false
     ) {
       $("#isnotvalid").text(
         "Pair could not be validated! Invalid encrypted message."
@@ -191,7 +191,7 @@ class SecureEmailForm extends Component {
     } 
     else if (
       crypt.decrypt(cryptedMsg, pass) != null &&
-      decryptedMsg.disabled == false
+      decryptedMsg.readOnly == false
     ) {
       document.getElementById("decrypted").value = crypt.decrypt(
         cryptedMsg,
@@ -199,8 +199,8 @@ class SecureEmailForm extends Component {
       );
       document.getElementById("decryptxbox").disabled = true;
       document.getElementById("decryptxbox").checked = true;
-      document.getElementById("crypted").disabled = true;
-      document.getElementById("decrypted").disabled = true;
+      document.getElementById("crypted").readOnly = true;
+      document.getElementById("decrypted").readOnly = true;
       $("#isvalid").text(
         "Pair is validated and can be added to the DPK database!"
       );
@@ -224,7 +224,6 @@ class SecureEmailForm extends Component {
     document.getElementById("decryptxbox").checked = false;
     document.getElementById("encryptxbox").disabled = false;
     document.getElementById("decryptxbox").disabled = false;
-    //document.getElementById("decryptxbox").disabled = false;
     $("#isvalid").text("");
     $("#isnotvalid").text("");
   }
@@ -309,7 +308,7 @@ class SecureEmailForm extends Component {
           placeholder="Decrypted message with your private key..."
           rows="10"
           cols="69"
-          disabled
+          readOnly
         ></textarea>
         <br />
         <strong id="isvalid" className="isvalid"></strong>

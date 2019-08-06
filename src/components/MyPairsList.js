@@ -90,9 +90,10 @@ class MyPairsList extends Component {
             my_pairs: my_pairs
           });
         });
+        alert("All your pairs are removed from the list! Please, refresh the page to apply the new changes!");
     }
     else {
-      alert("Error 404: File 'my_pairs' not found! There are currently no pairs stored in your list! You need to add at least one pair!");
+      alert("Error 404: File 'my_pairs' is empty! There are currently no pairs stored in your list! You need to add at least one pair!");
     }
   }
 
@@ -274,6 +275,7 @@ class MyPairsList extends Component {
                     <br />
                     <button
                       className="btn-st"
+                      id="deleteAllPairs"
                       onClick={e => this.deleteAll(e)}
                     >Delete All</button>
                   </div>

@@ -110,10 +110,10 @@ class GenerateKeys extends Component {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
     if (document.getElementById("pubkey").value == "") {
       alert("Public key can't be empty!");
-    } else if (
+    }
+    else if (
       !document
         .getElementById("pubkey")
         .value.startsWith("-----BEGIN PUBLIC KEY-----") &&
@@ -122,17 +122,19 @@ class GenerateKeys extends Component {
         .value.endsWith("-----END PUBLIC KEY-----")
     ) {
       alert("Invalid public key!");
-    } else if (window.webkitURL != null) {
+    }
+    else if (window.webkitURL != null) {
       // Chrome allows the link to be clicked
       // without actually adding it to the DOM.
       downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    } else {
+    }
+    else {
       // Firefox requires the link to be added to the DOM
       // before it can be clicked.
       downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-      downloadLink.onclick = destroyClickedElement;
+      downloadLink.target = `_blank`;
       downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
+      document.body.appendChild(downloadLink.download);
     }
 
     downloadLink.click();
@@ -142,11 +144,11 @@ class GenerateKeys extends Component {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
 
     if (document.getElementById("pub_other_peer_pkey").value == "") {
       alert("Public key can't be empty!");
-    } else if (
+    }
+    else if (
       !document
         .getElementById("pub_other_peer_pkey")
         .value.startsWith("-----BEGIN PUBLIC KEY-----") &&
@@ -155,17 +157,20 @@ class GenerateKeys extends Component {
         .value.endsWith("-----END PUBLIC KEY-----")
     ) {
       alert("Invalid public key!");
-    } else if (window.webkitURL != null) {
+    }
+    else if (window.webkitURL != null) {
       // Chrome allows the link to be clicked
       // without actually adding it to the DOM.
       downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    } else {
+      downloadLink.target = `_blank`;
+    }
+    else {
       // Firefox requires the link to be added to the DOM
       // before it can be clicked.
       downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-      downloadLink.onclick = destroyClickedElement;
+      downloadLink.target = `_blank`;
       downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
+      document.body.appendChild(downloadLink.download);
     }
 
     downloadLink.click();
@@ -175,11 +180,11 @@ class GenerateKeys extends Component {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
 
     if (document.getElementById("privkey").value == "") {
       alert("Private key can't be empty!");
-    } else if (
+    }
+    else if (
       !document
         .getElementById("privkey")
         .value.startsWith("-----BEGIN RSA PRIVATE KEY-----") &&
@@ -188,17 +193,20 @@ class GenerateKeys extends Component {
         .value.endsWith("-----END RSA PRIVATE KEY-----")
     ) {
       alert("Invalid private key key!");
-    } else if (window.webkitURL != null) {
+    }
+    else if (window.webkitURL != null) {
       // Chrome allows the link to be clicked
       // without actually adding it to the DOM.
       downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    } else {
+      downloadLink.target = `_blank`;
+    }
+    else {
       // Firefox requires the link to be added to the DOM
       // before it can be clicked.
       downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-      downloadLink.onclick = destroyClickedElement;
+      downloadLink.target = `_blank`;
       downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
+      document.body.appendChild(downloadLink.download);
     }
 
     downloadLink.click();
@@ -219,6 +227,7 @@ class GenerateKeys extends Component {
               id="blockstack_ID"
               className="blockstack_ID"
               placeholder="Enter your blockstack id..."
+              onChange={e => this.generateKeypair(e)}
             />
             <br />
             <strong id="blockstack_id_message" className="blockstack_id_message"></strong>

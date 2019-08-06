@@ -122,7 +122,7 @@ class DPKPairForm extends Component {
             rows="2"
             cols="5"
             placeholder="Enter your blockstack id..."
-            disabled
+            readOnly
           />
           <strong id="confirmed" className="confirmed"></strong>
           <br />
@@ -139,10 +139,10 @@ class DPKPairForm extends Component {
             className="pubpairemail"
             rows="2"
             cols="5"
-            placeholder="Enter your email_address..."
+            placeholder="Enter your email address..."
             value={this.state.email_address}
             onChange={this.handleNewEmailChange.bind(this)}
-            disabled
+            readOnly
           />
         </FormGroup>
         <br />
@@ -157,7 +157,7 @@ class DPKPairForm extends Component {
             placeholder="Enter your public key..."
             value={this.state.public_key}
             onChange={this.handleNewPKeyChange.bind(this)}
-            disabled
+            readOnly
           />
           <br />
           <strong id="pkey-duplicate" className="pkey-duplicate"></strong>

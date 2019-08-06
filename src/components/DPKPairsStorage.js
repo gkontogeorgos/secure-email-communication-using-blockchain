@@ -73,10 +73,10 @@ class DPKPairStorage extends Component {
 
   newPairBtnClick() {
     this.setState({ currentId: "" });
-    document.getElementById("public_key").disabled = false;
-    document.getElementById("email_address").disabled = false;
+    document.getElementById("public_key").readOnly = false;
+    document.getElementById("email_address").readOnly = false;
     document.getElementById("blockstack_id").value = "";
-    document.getElementById("blockstack_id").disabled = false;
+    document.getElementById("blockstack_id").readOnly = false;
     $("#isvalid").text('');
     $("#isnotvalid").text('');
     $("#pkey-duplicate").text('');
@@ -88,9 +88,9 @@ class DPKPairStorage extends Component {
   }
 
   itemClick(event) {
-    document.getElementById("public_key").disabled = true;
-    document.getElementById("email_address").disabled = true;
-    document.getElementById("blockstack_id").disabled = true;
+    document.getElementById("public_key").readOnly = true;
+    document.getElementById("email_address").readOnly = true;
+    document.getElementById("blockstack_id").readOnly = true;
     this.setState({ currentId: event.target.id });
   }
 
@@ -130,7 +130,7 @@ class DPKPairStorage extends Component {
         .innerHTML.replace(/\s+$/, "")
         .replace(/\s+/g, "");
     } catch (err) {
-      $("#pkey-message").text(
+      console.log(
         "You need to add a new public key in your pair in the list 'My Pairs' first."
       );
     }
@@ -144,8 +144,8 @@ class DPKPairStorage extends Component {
 
       pkey_found = pkey_text.substr(index).replace(/\s+$/, "").replace(/\s+/g, "");
 
-      if (pkey_input == pkey_found && document.getElementById("email_address").disabled == false &&
-      document.getElementById("public_key").disabled == false) {
+      if (pkey_input == pkey_found && document.getElementById("email_address").readOnly == false &&
+      document.getElementById("public_key").readOnly == false) {
         $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! </br> Please, choose another one!');
         break;
       }
@@ -159,19 +159,19 @@ class DPKPairStorage extends Component {
       (pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
         pkey.trim().endsWith("-----END PUBLIC KEY-----")) &&
       result == true &&
-      document.getElementById("email_address").disabled == true &&
-      document.getElementById("public_key").disabled == true &&
+      document.getElementById("email_address").readOnly == true &&
+      document.getElementById("public_key").readOnly == true &&
       cryptedMsg.trim() == "" &&
       decryptedMsg.trim() == "" &&
-      document.getElementById("message").disabled == false
+      document.getElementById("message").readOnly == false
     ) {
       alert("You have to add a new pair, first...");
     } else if (
       pkey.trim() == "" &&
       email.trim() == "" &&
-      document.getElementById("email_address").disabled == true &&
-      document.getElementById("public_key").disabled == true &&
-      document.getElementById("decrypted").disabled == true
+      document.getElementById("email_address").readOnly == true &&
+      document.getElementById("public_key").readOnly == true &&
+      document.getElementById("decrypted").readOnly == true
     ) {
       alert("You have to add a new pair, first...");
     } else if (id.trim() == "") {
@@ -183,7 +183,7 @@ class DPKPairStorage extends Component {
     } else if (email.trim() == "") {
       alert("You must enter your email address...");
     } else if (result == false) {
-      alert("Wrong email address!");
+      alert("Invalid Email address!");
     } else if (pkey.trim() == "") {
       alert("You must enter your public key...");
     } else if (
@@ -197,8 +197,8 @@ class DPKPairStorage extends Component {
       (pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
         pkey.trim().endsWith("-----END PUBLIC KEY-----")) &&
       result == true &&
-      document.getElementById("email_address").disabled == false &&
-      document.getElementById("public_key").disabled == false && document.getElementById("pkey-duplicate").innerHTML == ''
+      document.getElementById("email_address").readOnly == false &&
+      document.getElementById("public_key").readOnly == false && document.getElementById("pkey-duplicate").innerHTML == ''
     ) {
       if (
         document.getElementById("pkey-peer") &&
@@ -206,7 +206,7 @@ class DPKPairStorage extends Component {
       ) {
         if (pkey_input == pkey_pair) {
           alert(
-            "Invalid public key. Please make sure you have entered the same public key that you have saved in your Blockstack list 'My Pairs'."
+            "This public key is already stored in your Blockstack list 'My Pairs'. Please, choose another one!"
           );
         }
         else if (pkey_input != pkey_pair) {
@@ -226,6 +226,9 @@ class DPKPairStorage extends Component {
             email: "",
             pubkeystored: ""
           });
+          $("#pkey-message").text("");
+          $("#email-message").text("");
+          document.getElementById('blockstack_id').value = '';
         }
       }
       else if (
@@ -248,7 +251,9 @@ class DPKPairStorage extends Component {
           email: "",
           pubkeystored: ""
         });
-        document.getElementById('deleteAllPairs').disabled = false;
+        $("#pkey-message").text("");
+        $("#email-message").text("");
+        document.getElementById('blockstack_id').value = '';
       }
     }
   }
@@ -284,8 +289,8 @@ class DPKPairStorage extends Component {
         .innerHTML.replace(/\s+$/, "")
         .replace(/\s+/g, "");
     } catch (err) {
-      $("#email-message").html(
-        "Your list is empty! </br> You need to add an email address in your pair in the list 'My Pairs' first."
+      console.log(
+        "Your list is empty! You need to add an email address in your pair in the list 'My Pairs' first."
       );
     }
 
@@ -295,8 +300,8 @@ class DPKPairStorage extends Component {
         .innerHTML.replace(/\s+$/, "")
         .replace(/\s+/g, "");
     } catch (err) {
-      $("#pkey-message").text(
-        "You need to add a new public key in your pair in the list 'My Pairs' first."
+      console.log(
+        "Your list is empty! You need to add a new public key in your pair in the list 'My Pairs' first."
       );
     }
 
@@ -314,8 +319,8 @@ class DPKPairStorage extends Component {
 
       pkey_found = pkey_text.substr(index).replace(/\s+$/, "").replace(/\s+/g, "");
 
-      if (pkey_input == pkey_found && document.getElementById("email_address").disabled == false &&
-      document.getElementById("public_key").disabled == false) {
+      if (pkey_input == pkey_found && document.getElementById("email_address").readOnly == false &&
+      document.getElementById("public_key").readOnly == false) {
         $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! </br> Please, choose another one!');
         break;
       }
@@ -328,19 +333,19 @@ class DPKPairStorage extends Component {
       (pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
         pkey.trim().endsWith("-----END PUBLIC KEY-----")) &&
       result == true &&
-      document.getElementById("email_address").disabled == true &&
-      document.getElementById("public_key").disabled == true &&
+      document.getElementById("email_address").readOnly == true &&
+      document.getElementById("public_key").readOnly == true &&
       cryptedMsg.trim() == "" &&
       decryptedMsg.trim() == "" &&
-      document.getElementById("message").disabled == false
+      document.getElementById("message").readOnly == false
     ) {
       alert("You have to add a new pair, first...");
     } else if (
       pkey.trim() == "" &&
       email.trim() == "" &&
-      document.getElementById("email_address").disabled == true &&
-      document.getElementById("public_key").disabled == true &&
-      document.getElementById("decrypted").disabled == true
+      document.getElementById("email_address").readOnly == true &&
+      document.getElementById("public_key").readOnly == true &&
+      document.getElementById("decrypted").readOnly == true
     ) {
       alert("You have to add a new pair, first...");
     } else if (id.trim() == "") {
@@ -354,7 +359,7 @@ class DPKPairStorage extends Component {
       $("#confirmed").text(" Verified!");
       $("#msg").text("");
     } else if (result == false) {
-      alert("Wrong email address...");
+      alert("Invalid Email address...");
     } else if (pkey.trim() == "") {
       alert("You must enter your public key...");
     } else if (
@@ -395,9 +400,9 @@ class DPKPairStorage extends Component {
       (pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
         pkey.trim().endsWith("-----END PUBLIC KEY-----")) &&
       result == true &&
-      document.getElementById("email_address").disabled == false &&
-      document.getElementById("public_key").disabled == false &&
-      document.getElementById("message").disabled == false &&
+      document.getElementById("email_address").readOnly == false &&
+      document.getElementById("public_key").readOnly == false &&
+      document.getElementById("message").readOnly == false &&
       document.getElementById("pkey-peer") &&
       document.getElementById("email-peer") && document.getElementById("pkey-duplicate").innerHTML == ''
     ) {
@@ -410,14 +415,14 @@ class DPKPairStorage extends Component {
         );
         $("#save").text("Confirm");
         $("#confirmed").text("");
-        document.getElementById("recepient_email").disabled = true;
-        document.getElementById("topic").disabled = true;
-        document.getElementById("crypted").disabled = false;
-        document.getElementById("decrypted").disabled = false;
-        document.getElementById("blockstack_id").disabled = true;
-        document.getElementById("email_address").disabled = true;
-        document.getElementById("public_key").disabled = true;
-        document.getElementById("message").disabled = true;
+        document.getElementById("recepient_email").readOnly = true;
+        document.getElementById("topic").readOnly = true;
+        document.getElementById("crypted").readOnly = false;
+        document.getElementById("decrypted").readOnly = false;
+        document.getElementById("blockstack_id").readOnly = true;
+        document.getElementById("email_address").readOnly = true;
+        document.getElementById("public_key").readOnly = true;
+        document.getElementById("message").readOnly = true;
         document.getElementById("message").value = '';
         document.getElementById("crypted").value = '';
         document.getElementById("encryptxbox").checked = false;
@@ -429,17 +434,20 @@ class DPKPairStorage extends Component {
           $("#verification-message").text("");
           $("#confirmed").text("");
           $("#storeddb").text("");
-          document.getElementById("blockstack_id").disabled = false;
+          $("#pkey-duplicate").text("");
+          $("#pkey-message").text("");
+          $("#email-message").text("");
+          document.getElementById("blockstack_id").readOnly = false;
           document.getElementById("blockstack_id").value = '';
-          document.getElementById("email_address").disabled = false;
-          document.getElementById("public_key").disabled = false;
-          document.getElementById("recepient_email").disabled = false;
-          document.getElementById("topic").disabled = false;
-          document.getElementById("crypted").disabled = false;
-          document.getElementById("decrypted").disabled = true;
-          document.getElementById("email_address").disabled = false;
-          document.getElementById("public_key").disabled = false;
-          document.getElementById("message").disabled = false;
+          document.getElementById("email_address").readOnly = false;
+          document.getElementById("public_key").readOnly = false;
+          document.getElementById("recepient_email").readOnly = false;
+          document.getElementById("topic").readOnly = false;
+          document.getElementById("crypted").readOnly = false;
+          document.getElementById("decrypted").readOnly = true;
+          document.getElementById("email_address").readOnly = false;
+          document.getElementById("public_key").readOnly = false;
+          document.getElementById("message").readOnly = false;
           document.getElementById("encryptxbox").checked = false;
           document.getElementById("encryptxbox").disabled = false;
           document.getElementById("send").disabled = false;
@@ -451,11 +459,11 @@ class DPKPairStorage extends Component {
       (pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
         pkey.trim().endsWith("-----END PUBLIC KEY-----")) &&
       result == true &&
-      document.getElementById("email_address").disabled == true &&
-      document.getElementById("public_key").disabled == true &&
+      document.getElementById("email_address").readOnly == true &&
+      document.getElementById("public_key").readOnly == true &&
       cryptedMsg.trim() == "" &&
       decryptedMsg.trim() == "" &&
-      document.getElementById("message").disabled == true
+      document.getElementById("message").readOnly == true
     ) {
       alert(
         "You need to decrypt the encrypted message before storing the pair in the decentralized database."
@@ -471,8 +479,8 @@ class DPKPairStorage extends Component {
     ) {
       document.getElementById("cancel").onclick = function () {
         $("#save").text("Save");
-        document.getElementById("email_address").disabled = true;
-        document.getElementById("public_key").disabled = true;
+        document.getElementById("email_address").readOnly = true;
+        document.getElementById("public_key").readOnly = true;
         $("#verification-message").text("");
       };
       document.getElementById("save").disabled = true;

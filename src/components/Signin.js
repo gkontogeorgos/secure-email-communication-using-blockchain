@@ -11,7 +11,7 @@ class Signin extends Component {
     return (
       <div className="panel-landing" id="section-1">
         <h1 className="landing-heading">DPKS</h1>
-        <h2 className="landing-heading-1">Decentralized database of pairs of pk/email for secure email communication</h2>
+        <h2 className="landing-heading-1">Decentralized database of pairs of email/public key for secure email communication</h2>
         <p className="lead">
           <button
             className="btn btn-primary btn-lg"

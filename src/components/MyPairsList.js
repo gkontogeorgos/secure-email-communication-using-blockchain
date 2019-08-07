@@ -165,9 +165,9 @@ class MyPairsList extends Component {
     return !userSession.isSignInPending() && person ? (
       <div className="container">
         <div id="topNav">
-          <h2>DPKS</h2>
-          <h2>This is a decentralized shared database of public keys/emails</h2>
-
+        <h1 className="landing-heading">DPKS</h1>
+        <h2 className="landing-heading-1">Decentralized database of pairs of email/public key for secure email communication</h2>
+       
           <div className="avatar-section">
             <img
               src={

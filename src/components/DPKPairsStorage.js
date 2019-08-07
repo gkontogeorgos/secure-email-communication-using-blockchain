@@ -34,10 +34,6 @@ class DPKPairStorage extends Component {
     };
   }
 
-  componentDidMount() {
-    return this.fetchData();
-  }
-
   componentWillMount() {
     let pairs = this.state.pairs;
     const self = this;
@@ -69,6 +65,7 @@ class DPKPairStorage extends Component {
         []
       );
     });
+    return this.fetchData();
   }
 
   newPairBtnClick() {
@@ -437,8 +434,11 @@ class DPKPairStorage extends Component {
           $("#pkey-duplicate").text("");
           $("#pkey-message").text("");
           $("#email-message").text("");
+          $("#isvalid").text("");
+          $("#isnotvalid").text("");
           document.getElementById("blockstack_id").readOnly = false;
           document.getElementById("blockstack_id").value = '';
+          document.getElementById("crypted").value = '';
           document.getElementById("email_address").readOnly = false;
           document.getElementById("public_key").readOnly = false;
           document.getElementById("recepient_email").readOnly = false;
@@ -572,8 +572,6 @@ class DPKPairStorage extends Component {
     return !userSession.isSignInPending() && person ? (
       <div id="DPK DB" className="tabcontent">
         <h2 className="dec_db">Decentralized database of valid pairs</h2>
-        
-        <br />
         <br />
         <label>Add a new pair:</label>
         <br />

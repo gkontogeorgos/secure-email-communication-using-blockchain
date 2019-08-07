@@ -309,11 +309,11 @@ class GenerateKeys extends Component {
             <br />
             <button
               className="btn btn-primary"
-              value="Generate PGP Keys"
+              value="Generate Keys"
               id="generate"
               onClick={e => this.generateKeypair(e)}
             >
-              Generate PGP Keys
+              Generate Keys
             </button>
             <br></br>
             <span>

@@ -30,13 +30,9 @@ class SecureEmailForm extends Component {
 
   sendMail() {
     var topic = document
-    .getElementById("topic")
-    .value.replace(/\s+$/, "")
-    .replace(/\s+/g, "");
-    var blockstack_user = document
-    .getElementById("user")
-    .innerHTML.replace(/\s+$/, "")
-    .replace(/\s+/g, "");
+      .getElementById("topic")
+      .value.replace(/\s+$/, "")
+      .replace(/\s+/g, "");
     var rec_email = document.getElementById("recepient_email").value;
     var message = document.getElementById("message").value;
     var encrypted_message = document.getElementById("crypted").value;
@@ -44,7 +40,7 @@ class SecureEmailForm extends Component {
     const pattern = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
     var result = pattern.test(email);
 
-    String.prototype.trim = function() {
+    String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, "");
     };
     if (rec_email == "") {
@@ -52,9 +48,7 @@ class SecureEmailForm extends Component {
     } else if (result == false) {
       alert("Invalid email address...");
     } else if (topic == '') {
-        alert("Topic can't be empty...");
-    } else if (topic != blockstack_user) {
-        alert("Please, enter your blockstack ID as topic...");
+      alert("Topic can't be empty...");
     } else if (message.trim() == "") {
       alert("Please, enter a message!");
     } else if (encrypted_message.trim() == "") {
@@ -79,34 +73,42 @@ class SecureEmailForm extends Component {
     var crypt = new JSEncrypt();
     document.getElementById("encryptxbox").checked = false;
     var Msg = document.getElementById("message").value;
-    var my_pkey = document.getElementById("pub_other_peer_pkey").value;
+    var other_peer_pkey = document.getElementById("pub_other_peer_pkey").value;
     document.getElementById("encryptxbox").checked = false;
-    document.getElementById("decryptxbox").readOnly = true;
-    crypt.setKey(my_pkey);
-    if (Msg != "") {
-      document.getElementById("crypted").value = crypt.encrypt(Msg);
-    } else if (Msg == "") {
+    document.getElementById("decryptxbox").disabled = true;
+    crypt.setKey(other_peer_pkey);
+    if (Msg == "") {
       alert("Can't encrypt an empty message!");
     }
-    if (Msg != "" && crypt.encrypt(Msg) == false) {
-      if (my_pkey == "") {
+    else if (Msg != "" && crypt.encrypt(Msg) == false) {
+      if (other_peer_pkey == "") {
         alert("Encryption failed! The other peer's public key is not defined.");
-      } else if (
-        !my_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
-        !my_pkey.trim().endsWith("-----END PUBLIC KEY-----")
+      }
+      else if (
+        !other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
+        !other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----")
       ) {
         alert("Encryption failed! The other peer's public key is invalid.");
       }
       document.getElementById("crypted").value = "";
-    } else if (Msg != "" && crypt.encrypt(Msg) != false) {
-      document.getElementById("encryptxbox").readOnly = true;
+    }
+    else if (
+      !other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
+      !other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----")
+    ) {
+      alert("Encryption failed! The other peer's public key is invalid.");
+    }
+    else if (Msg != "" && crypt.encrypt(Msg) != false && other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
+      other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----")) {
+      document.getElementById("crypted").value = crypt.encrypt(Msg);
+      document.getElementById("encryptxbox").disabled = true;
       document.getElementById("encryptxbox").checked = true;
     }
   }
 
   decryptedMsg() {
     var crypt = new JSEncrypt();
-    String.prototype.trim = function() {
+    String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, "");
     };
     var Msg = document.getElementById("message");
@@ -114,38 +116,38 @@ class SecureEmailForm extends Component {
     var pkey = document.getElementById("public_key").value;
     var pass = document.getElementById("passphrase").value;
     var id_user = document
-    .getElementById("blockstack_ID")
-    .value.replace(/\s+$/, "")
-    .replace(/\s+/g, "");
+      .getElementById("blockstack_ID")
+      .value.replace(/\s+$/, "")
+      .replace(/\s+/g, "");
     var blockstack_user = document
-    .getElementById("user")
-    .innerHTML.replace(/\s+$/, "")
-    .replace(/\s+/g, "");
+      .getElementById("user")
+      .innerHTML.replace(/\s+$/, "")
+      .replace(/\s+/g, "");
     var cryptedMsg = document.getElementById("crypted").value;
     var my_prkey = document.getElementById("privkey").value;
     var decryptedMsg = document.getElementById("decrypted");
     $("#isnotvalid").text("");
     $("#isvalid").text("");
     crypt.setKey(my_prkey);
-    
-    if (Msg.readOnly == false){
-      alert ("Decryption is available only while storing the pair in the database!")
+
+    if (Msg.readOnly == false) {
+      alert("Decryption is available only while storing the pair in the database!")
       document.getElementById("decryptxbox").checked = false;
     }
-    else if (id_user.trim() ==''){
-      alert ("The blockstack ID is required for the decryption! Please, fill it in the 'Generate Keys' tab.")
+    else if (id_user.trim() == '') {
+      alert("The blockstack ID is required for the decryption! Please, fill it in the 'Generate Keys' tab.")
       document.getElementById("decryptxbox").checked = false;
     }
     else if (!id_user.trim().endsWith("id.blockstack")) {
-      alert ("Invalid blockstack ID!");
+      alert("Invalid blockstack ID!");
       document.getElementById("decryptxbox").checked = false;
     }
     else if (id_user.trim() != blockstack_user) {
-      alert ("This blockstack ID could not be verified!");
-      document.getElementById("decryptxbox").checked = false;    
+      alert("This blockstack ID could not be verified!");
+      document.getElementById("decryptxbox").checked = false;
     }
-    else if (pass.trim() ==''){
-      alert ("A passphrase is required for the decryption! Please, fill it in the 'Generate Keys' tab.")
+    else if (pass.trim() == '') {
+      alert("A passphrase is required for the decryption! Please, fill it in the 'Generate Keys' tab.")
       document.getElementById("decryptxbox").checked = false;
     }
     else if (pass.split(" ").join("").length < 7) {
@@ -172,7 +174,7 @@ class SecureEmailForm extends Component {
         alert("Decryption failed! Your private key is invalid.");
         document.getElementById("decryptxbox").checked = false;
       }
-    } 
+    }
     else if (
       crypt.decrypt(cryptedMsg, pass) == null &&
       decryptedMsg.readOnly == false
@@ -188,7 +190,7 @@ class SecureEmailForm extends Component {
         pkey,
         "}"
       );
-    } 
+    }
     else if (
       crypt.decrypt(cryptedMsg, pass) != null &&
       decryptedMsg.readOnly == false
@@ -224,6 +226,8 @@ class SecureEmailForm extends Component {
     document.getElementById("decryptxbox").checked = false;
     document.getElementById("encryptxbox").disabled = false;
     document.getElementById("decryptxbox").disabled = false;
+    document.getElementById("crypted").readOnly = false;
+    document.getElementById("decrypted").readOnly = true;
     $("#isvalid").text("");
     $("#isnotvalid").text("");
   }
@@ -234,6 +238,7 @@ class SecureEmailForm extends Component {
 
     return !userSession.isSignInPending() && person ? (
       <div id="Send an email (Validation Process)" className="tabcontent">
+        <h2 className="send_mail">Send an encrypted email message</h2>
         <br />
         <label htmlFor="email">To:</label>
         <br />
@@ -246,13 +251,13 @@ class SecureEmailForm extends Component {
         />
 
         <br /> <br />
-        <label htmlFor="email">Topic: (Your Blockstack ID)</label>
+        <label htmlFor="email">Topic: (Suggested: Your blockstack id)</label>
         <br />
         <textarea
           type="topic"
           id="topic"
           name="Topic"
-          placeholder="Enter your blockstack ID..."
+          placeholder="Enter your blockstack ID or another topic..."
           rows="3"
           cols="69"
         ></textarea>
@@ -287,6 +292,7 @@ class SecureEmailForm extends Component {
           placeholder="Encrypted message with the other peer's public key..."
           rows="10"
           cols="69"
+          readOnly
         ></textarea>
 
         <br />

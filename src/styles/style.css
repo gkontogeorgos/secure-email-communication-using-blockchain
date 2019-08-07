@@ -118,8 +118,16 @@ body {
 
 .landing-heading {
     font-family: 'Source Code Pro', monospace;
+    line-height: 2;
     font-weight: 400;
-    font-size: 25pt;
+    font-size: 50px;
+}
+
+.landing-heading-1 {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 400;
+    font-size: 15pt;
+    font-style: italic;
 }
 
 #background {
@@ -131,14 +139,6 @@ body {
     z-index: -1;
     /* Ensure div tag stays behind content; -999 might work, too. */
 }
-
-#topNav{
-    font-style: italic;
-    line-height: 2;
-    font-weight: 400;
-    letter-spacing: 0.025em;
-    font-size: 15pt;
-   }
    
 .stretch {
     height: 100%;
@@ -148,6 +148,10 @@ body {
 }
 
 .dec_db{
+    font-size: 24pt;
+}
+
+.send_mail{
     font-size: 24pt;
 }
 
@@ -445,6 +449,7 @@ label {
     top: 8px;
     right: 16px;
     font-size: 18px;
+    font-style: italic;
 }
 
 .heading-name {

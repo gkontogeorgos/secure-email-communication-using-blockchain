@@ -597,10 +597,16 @@ label {
     width: 185px;
 }
 
+.pubpairemail{
+    height: 30px;
+    width: 185px;  
+}
+
 .blockstack_ID{
     height: 30px;
     width: 185px;
 }
+
 
 .blockstack_id_message {
 

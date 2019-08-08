@@ -577,6 +577,8 @@ class DPKPairStorage extends Component {
         >
           Send pair to your list (My Pairs)
         </button>
+        <br /><br />
+        You can click on the stored pairs and check their details above:
         <br />
         <div className="content-pair">
           <div className="storedpairs">

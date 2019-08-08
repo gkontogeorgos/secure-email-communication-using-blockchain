@@ -114,23 +114,21 @@ class DPKPairForm extends Component {
         <br />
         <br />
         <FormGroup>
-          <ControlLabel>ID:</ControlLabel>
+          <ControlLabel>Confirm your Blocskstack ID:</ControlLabel>
           <br />
           <input
             type="text"
             id="blockstack_id"
-            rows="2"
-            cols="5"
+            className="blockstack_ID"
             placeholder="Enter your blockstack id..."
             readOnly
           />
           <strong id="confirmed" className="confirmed"></strong>
           <br />
-          <type id="msg">(Confirm your blockstack id)</type>
         </FormGroup>
         <br />
         <FormGroup>
-          <ControlLabel>Email address:</ControlLabel>
+          <ControlLabel>Your Email address:</ControlLabel>
           <br />
           <input
             type="email"
@@ -147,7 +145,7 @@ class DPKPairForm extends Component {
         </FormGroup>
         <br />
         <FormGroup>
-          <ControlLabel>Public key:</ControlLabel>
+          <ControlLabel>Your Public key:</ControlLabel>
           <br />
           <textarea
             id="public_key"

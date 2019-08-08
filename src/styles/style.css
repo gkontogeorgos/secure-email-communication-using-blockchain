@@ -501,10 +501,16 @@ label {
     color: rgb(24, 169, 189);
 }
 
+.pkey-duplicate-list {
+    background-color: rgb(172, 90, 90);
+    color:white;
+}
+
 .pkey-duplicate {
     background-color: rgb(230, 29, 29);
     color:white;
 }
+
 
 .pubkey {
     background-color: rgb(231, 245, 235);

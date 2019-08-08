@@ -160,6 +160,8 @@ class DPKPairForm extends Component {
             readOnly
           />
           <br />
+          <strong id="pkey-duplicate-list" className="pkey-duplicate-list"></strong>
+          <br />
           <strong id="pkey-duplicate" className="pkey-duplicate"></strong>
         </FormGroup>
         <br />

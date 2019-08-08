@@ -30,8 +30,13 @@ class DPKPairStorage extends Component {
       statusIndex: 0,
       isLoading: false,
       pairs: [],
+      my_pairs: [],
       currentId: ""
     };
+  }
+
+  componentDidMount() {
+    return this.fetchData();
   }
 
   componentWillMount() {
@@ -65,7 +70,6 @@ class DPKPairStorage extends Component {
         []
       );
     });
-    return this.fetchData();
   }
 
   newPairBtnClick() {
@@ -118,6 +122,7 @@ class DPKPairStorage extends Component {
       .replace(/^\s+/, "")
       .replace(/\s+$/, "")
       .replace(/\s+/g, "");
+    var pair_list = document.getElementsByClassName("mypair");
 
     var pkey_stored_db = document.getElementsByClassName('status')
     var pkey_found;
@@ -131,9 +136,11 @@ class DPKPairStorage extends Component {
         "You need to add a new public key in your pair in the list 'My Pairs' first."
       );
     }
+
     String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, "");
     };
+
 
     for (var i = 0; i < pkey_stored_db.length; i++) {
       var pkey_text = pkey_stored_db[i].textContent;
@@ -142,13 +149,27 @@ class DPKPairStorage extends Component {
       pkey_found = pkey_text.substr(index).replace(/\s+$/, "").replace(/\s+/g, "");
 
       if (pkey_input == pkey_found && document.getElementById("email_address").readOnly == false &&
-      document.getElementById("public_key").readOnly == false) {
+        document.getElementById("public_key").readOnly == false) {
         $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! </br> Please, choose another one!');
         break;
       }
       else
         $("#pkey-duplicate").text('')
     }
+
+    for (var i = 0; i < pair_list.length; i++) {
+      var pair = pair_list[i].textContent;
+      var index = pair.indexOf('-----BEGIN PUBLIC KEY-----')
+
+      var pkey_found_list = pair.substr(index).replace(/\s+$/, "").replace(/\s+/g, "").replace('Remove', '');
+      if (pkey_input == pkey_found_list) {
+        $("#pkey-duplicate-list").html("This public key is already stored in your Blockstack list 'My Pairs'. Please, choose another one!");
+        break;
+      }
+      else
+        $("#pkey-duplicate-list").text('')
+    }
+
 
     if (
       pkey.trim() != "" &&
@@ -195,64 +216,57 @@ class DPKPairStorage extends Component {
         pkey.trim().endsWith("-----END PUBLIC KEY-----")) &&
       result == true &&
       document.getElementById("email_address").readOnly == false &&
-      document.getElementById("public_key").readOnly == false && document.getElementById("pkey-duplicate").innerHTML == ''
+      document.getElementById("public_key").readOnly == false &&
+      document.getElementById("pkey-duplicate").innerHTML == '' &&
+      document.getElementById("pkey-duplicate-list").innerHTML == ''
     ) {
-      if (
-        document.getElementById("pkey-peer") &&
-        document.getElementById("email-peer")
-      ) {
-        if (pkey_input == pkey_pair) {
-          alert(
-            "This public key is already stored in your Blockstack list 'My Pairs'. Please, choose another one!"
-          );
-        }
-        else if (pkey_input != pkey_pair) {
-          console.log(
-            "The following pair is sent to your Blocsktack gaia hub: {Email:",
-            email,
-            ", Public key: ",
-            pkey,
-            "}"
-          );
-          alert("Pair sent to your list. Refresh page to apply the new changes!");
-          this.saveNewPair(
-            document.getElementById("email_address").value,
-            document.getElementById("public_key").value
-          );
-          this.setState({
-            email: "",
-            pubkeystored: ""
-          });
-          $("#pkey-message").text("");
-          $("#email-message").text("");
-          document.getElementById('blockstack_id').value = '';
-        }
-      }
-      else if (
-        !document.getElementById("pkey-peer") &&
-        !document.getElementById("email-peer")
-      ) {
-        console.log(
-          "The following pair is sent to your Blocsktack gaia hub: {Email:",
-          email,
-          ", Public key: ",
-          pkey,
-          "}"
-        );
-        alert("Pair sent to your list. Refresh page to apply the new changes!");
-        this.saveNewPair(
-          document.getElementById("email_address").value,
-          document.getElementById("public_key").value
-        );
-        this.setState({
-          email: "",
-          pubkeystored: ""
-        });
-        $("#pkey-message").text("");
-        $("#email-message").text("");
-        document.getElementById('blockstack_id').value = '';
-      }
+
+
+      console.log(
+        "The following pair is sent to your Blocsktack gaia hub: {Email:",
+        email,
+        ", Public key: ",
+        pkey,
+        "}"
+      );
+      alert("Pair sent to your list. Refresh page to apply the new changes!");
+      this.saveNewPair(
+        document.getElementById("email_address").value,
+        document.getElementById("public_key").value
+      );
+      this.setState({
+        email: "",
+        pubkeystored: ""
+      });
+      $("#pkey-message").text("");
+      $("#email-message").text("");
+      document.getElementById('blockstack_id').value = '';
     }
+
+
+  }
+
+  saveNewPair(emailText, public_keyText) {
+
+    let my_pairs = this.state.my_pairs;
+    /* let my_pairs = Array (this.state.my_pairs)*/
+
+    let status = {
+      id: this.state.statusIndex++,
+      email_address: emailText.trim(),
+      public_key: public_keyText.trim(),
+      created_at: Date.now()
+    };
+
+    my_pairs.unshift(status);
+    const options = { encrypt: false };
+    userSession
+      .putFile("my_pairs.json", JSON.stringify(my_pairs), options)
+      .then(() => {
+        this.setState({
+          my_pairs: my_pairs
+        });
+      });
   }
 
   storeToDPKDB(data) {
@@ -317,7 +331,7 @@ class DPKPairStorage extends Component {
       pkey_found = pkey_text.substr(index).replace(/\s+$/, "").replace(/\s+/g, "");
 
       if (pkey_input == pkey_found && document.getElementById("email_address").readOnly == false &&
-      document.getElementById("public_key").readOnly == false) {
+        document.getElementById("public_key").readOnly == false) {
         $("#pkey-duplicate").html('This public key is already stored for another pair in the decentralized database! </br> Please, choose another one!');
         break;
       }
@@ -491,7 +505,6 @@ class DPKPairStorage extends Component {
       } else {
         this.pairsRef.set(this.gun.put(pair));
       }
-      this.deleteMyPair(document.getElementById("pkey-peer").value)
       $("#email-message").text("");
       $("#pkey-message").text("");
       $("#verification-message").text("");
@@ -507,50 +520,11 @@ class DPKPairStorage extends Component {
     }
   }
 
-  deleteMyPair(e, id) {
-    var index = this.state.my_pairs.findIndex(e => e.id == id);
-    const options = { encrypt: false };
-
-    let newArray = [];
-    newArray = this.state.my_pairs.slice();
-    newArray.splice(index, 1);
-    userSession
-      .deleteFile("my_pairs.json", JSON.stringify(newArray), options)
-      .then(() => {
-        this.setState({
-          my_pairs: newArray
-        });
-      });
-  }
-
-  saveNewPair(emailText, public_keyText) {
-    let my_pairs = [];
-    my_pairs = this.state.my_pairs;
-    /* let my_pairs = Array (this.state.my_pairs)*/
-
-    let status = {
-      id: this.state.statusIndex++,
-      email_address: emailText.trim(),
-      public_key: public_keyText.trim(),
-      created_at: Date.now()
-    };
-
-    my_pairs.unshift(status);
-    const options = { encrypt: false };
-    userSession
-      .putFile("my_pairs.json", JSON.stringify(my_pairs), options)
-      .then(() => {
-        this.setState({
-          my_pairs: my_pairs
-        });
-      });
-  }
-
   fetchData() {
     this.setState({ isLoading: true });
-
+    let my_pairs = [];
     const options = { decrypt: false };
-    
+
     userSession
       .getFile("my_pairs.json", options)
       .then(file => {
@@ -588,8 +562,8 @@ class DPKPairStorage extends Component {
           You need to have at least one pair in your list at your Blockstack
           account before storing it in the database!
         </small>
-       
-        <br/>
+
+        <br />
         <Col xs={8}>
           <DPKPairForm
             pair={this.getCurrentPair()}
@@ -603,7 +577,7 @@ class DPKPairStorage extends Component {
         >
           Send pair to your list (My Pairs)
         </button>
-        <br/>
+        <br />
         <div className="content-pair">
           <div className="storedpairs">
             {Array.isArray(this.state.pairs) &&

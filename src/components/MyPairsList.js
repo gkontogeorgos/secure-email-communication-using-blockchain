@@ -90,7 +90,7 @@ class MyPairsList extends Component {
             my_pairs: my_pairs
           });
         });
-        alert("All your pairs are removed from the list! Please, refresh the page to apply the new changes!");
+      alert("All your pairs are removed from the list! Please, refresh the page to apply the new changes!");
     }
     else {
       alert("Error 404: File 'my_pairs' is empty! There are currently no pairs stored in your list! You need to add at least one pair!");
@@ -165,9 +165,9 @@ class MyPairsList extends Component {
     return !userSession.isSignInPending() && person ? (
       <div className="container">
         <div id="topNav">
-        <h1 className="landing-heading">DPKS</h1>
-        <h2 className="landing-heading-1">Decentralized database of pairs of email/public key for secure email communication</h2>
-       
+          <h1 className="landing-heading">DPKS</h1>
+          <h2 className="landing-heading-1">Decentralized database of pairs of email/public key for secure email communication</h2>
+
           <div className="avatar-section">
             <img
               src={
@@ -237,7 +237,7 @@ class MyPairsList extends Component {
             <div className="col-md-12">
               <div id="My pairs" className="tabcontent">
                 <div className="col-sm-2 mypairs">
-                  <h3 className ='validationTitle'>For Validation</h3>
+                  <h3 className='validationTitle'>For Validation</h3>
                   <h4>
                     These pairs will be validated one by one, starting from the
                     last one inserted (First one in the list)
@@ -252,21 +252,22 @@ class MyPairsList extends Component {
                   {this.state.isLoading && <span>Loading...</span>}
                   <div id="pairs_blockstack">
                     {Array.isArray(this.state.my_pairs) &&
-                      this.state.my_pairs.map(status => (
-                        <li key={status.id} className="mypair">
+                      this.state.my_pairs.map((mypair, index) => (
+                        <li key={index} id="my_personal_pair" className="mypair">
                           <p>
-                            <strong>email: </strong>{" "}
-                            <small id="email-peer">
-                              {status.email_address}
-                            </small>{" "}
+                            <strong>email: </strong>
+                            <small id="email-peer" className="mypair_email" name="email-peer">
+                              {mypair.email_address}
+                            </small>
                             <br></br>
-                            <strong>public_key: </strong>{" "}
-                            <small id="pkey-peer">{status.public_key}</small>{" "}
+                            <strong>public_key: </strong>
+                            <small id="pkey-peer" className="mypair_pkey" name="pkey-peer">
+                              {mypair.public_key}</small>
                             <br></br>
 
                             <button
                               className="btn-st"
-                              onClick={e => this.deleteMyPair(e, status.id)}
+                              onClick={e => this.deleteMyPair(e, index)}
                             >Remove</button>
                           </p>
 

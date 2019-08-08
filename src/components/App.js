@@ -54,9 +54,9 @@ class App extends Component {
               />
             </Switch>
           }
-          <GenerateKeys userSession={userSession}/>
-          <SecureEmailForm userSession={userSession}/>  
-          <DPKPairsStorage gun={this.gun}/>
+          <GenerateKeys userSession={userSession} />
+          <SecureEmailForm userSession={userSession} />
+          <DPKPairsStorage gun={this.gun} />
 
         </div>
       </div>

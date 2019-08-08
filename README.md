@@ -5,9 +5,9 @@ If there are issues with some packages, just delete node_modules and package-loc
 # npm install
 
 For decentralized and syncrhonized real time p2p decentralized database, run:
-# npm start
+# npm run serve
 and then, go to 'DPK' tab
 
 For using Blockstack features, and looking each peer's personal pairs that it's required for the decryption, run:
-# npm run serve
+# npm start
 and navigate to localhost:8080/'blockstack_id', and then, go to 'MyPairs' tab

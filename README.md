@@ -1,4 +1,3 @@
-# secure-email-communication-using-blockchain
 # A Decentralized Blockstack database that stores shared pairs of public key/email for secure email communication among different peers
 
 If there are issues with some packages, just delete node_modules and package-lock files and execute the command:

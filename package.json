@@ -56,7 +56,6 @@
     "start": "webpack-dev-server",
     "dev": "concurrently --kill-others \"npm start\" \"npm run serve\"",
     "build": "webpack",
-    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test --watch"
   }
 }

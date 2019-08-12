@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+// this class displays the welcome panel that shows up before the user signs in the Blockstack app
 class Signin extends Component {
   constructor(props) {
     super(props);

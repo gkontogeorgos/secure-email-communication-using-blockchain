@@ -4,10 +4,12 @@ let crypt = null;
 let privateKey = null;
 let publickey = null;
 
+// This class generates a synchronous or asynchronous pair of keys using the JSencrypt module
 class GenerateKeys extends Component {
+
   key_size() {
     document.getElementById("myDropdown").classList.toggle("show");
-    // Close the dropdown if the user clicks outside of it
+    // if the user clicks on the dropdown, it shows the size of keys, otherwise shows nothing
     window.onclick = function (event) {
       if (!event.target.matches(".change-key-size")) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -19,7 +21,7 @@ class GenerateKeys extends Component {
           }
         }
       }
-      //Change the key size value for new keys
+      // change the key size value for new keys.. gets the value from the dropdown and replaces the default value with the chosen one
       $(".change-key-size").each(function (index, value) {
         var el = $(value);
         var keySize = el.attr("data-value");
@@ -33,13 +35,17 @@ class GenerateKeys extends Component {
     };
   }
 
+  // this function generates a pair of keys and validates the blockstack id, passphrase, and the pair of keys
   generateKeypair() {
     var sKeySize = $("#key-size").attr("data-value");
     var keySize = parseInt(sKeySize);
     var crypt = new JSEncrypt({ default_key_size: keySize });
     var async = $("#async-gen").is(":checked");
+
+    // get the time in milliseconds
     var dt = new Date();
     var time = -dt.getTime();
+
     var id = document
       .getElementById("blockstack_ID")
       .value.replace(/\s+$/, "")
@@ -69,17 +75,21 @@ class GenerateKeys extends Component {
     else {
       $("#blockstack_id_message").text("");
       $("#five-words").text("");
+
+      // if user clicks on asynchronous generation of keys, returns the pair of keys and the time for their generation
       if (async) {
-        $("#time-report").text(".");
+        $("#generating-time-report").text(".");
         var load = setInterval(function () {
-          var text = $("#time-report").text();
-          $("#time-report").text(text + ".");
+          var text = $("#generating-time-report").text();
+          $("#generating-time-report").text(text + ".");
         }, 500);
+
+        // stops the time on the loading of the page, and gets the time for generating a pair of public/private key, and the generated pair
         crypt.getKey(function () {
           clearInterval(load);
           dt = new Date();
           time += dt.getTime();
-          $("#time-report").text("Generated in " + time + " ms");
+          $("#generating-time-report").text("Generated in " + time + " ms");
           $("#privkey").val(crypt.getPrivateKey());
           $("#pubkey").val(crypt.getPublicKey());
         });
@@ -88,24 +98,24 @@ class GenerateKeys extends Component {
       crypt.getKey();
       dt = new Date();
       time += dt.getTime();
-      $("#time-report").text("Generated in " + time + " ms");
+      $("#generating-time-report").text("Generated in " + time + " ms");
       $("#privkey").val(crypt.getPrivateKey());
       $("#pubkey").val(crypt.getPublicKey());
     }
-    document.getElementById("pubgenkey").value = document.getElementById(
-      "pubkey"
-    ).value;
+    document.getElementById("pubgenkey").value = document.getElementById("pubkey").value;
   }
 
+  // this function resets all the fields to the default value
   clearAll() {
     document.getElementById("passphrase").value = "";
     document.getElementById("pubkey").value = "";
     document.getElementById("privkey").value = "";
-    document.getElementById("time-report").text = "";
+    document.getElementById("generating-time-report").text = "";
     document.getElementById("async-gen").checked = false;
     document.getElementById("pub_other_peer_pkey").value = "";
   }
 
+  // Saves generated public key as an .asc file and lets the user download it
   savePubkeyAsFile(textToWrite, fileNameToSaveAs) {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
@@ -124,22 +134,23 @@ class GenerateKeys extends Component {
       alert("Invalid public key!");
     }
     else if (window.webkitURL != null) {
-      // Chrome allows the link to be clicked
-      // without actually adding it to the DOM.
+      // Required for the Chrome browser since it allows the link
+      // to be clicked without adding it to the DOM
       downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
     }
     else {
-      // Firefox requires the link to be added to the DOM
-      // before it can be clicked.
+      // Required for the Firefox browser since it allows the link to be added to the DOM
+      // before it can be clicked by the user
       downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
       downloadLink.target = `_blank`;
       downloadLink.style.display = "none";
+       // using downloadLink.download for Firefox
       document.body.appendChild(downloadLink.download);
     }
-
     downloadLink.click();
   }
 
+  // Saves other peer's public key as an .asc file and lets the user download it
   savePubkeyOtherPairAsFile(textToWrite, fileNameToSaveAs) {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
@@ -165,11 +176,12 @@ class GenerateKeys extends Component {
       downloadLink.target = `_blank`;
     }
     else {
-      // Firefox requires the link to be added to the DOM
-      // before it can be clicked.
+      // Required for the Firefox browser since it allows the link to be added to the DOM
+      // before it can be clicked by the user
       downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
       downloadLink.target = `_blank`;
       downloadLink.style.display = "none";
+      // using downloadLink.download for Firefox
       document.body.appendChild(downloadLink.download);
     }
 
@@ -208,7 +220,6 @@ class GenerateKeys extends Component {
       downloadLink.style.display = "none";
       document.body.appendChild(downloadLink.download);
     }
-
     downloadLink.click();
   }
 
@@ -318,7 +329,7 @@ class GenerateKeys extends Component {
             <br></br>
             <span>
               <i>
-                <small id="time-report" className="time-report"></small>
+                <small id="generating-time-report" className="generating-time-report"></small>
               </i>
             </span>
           </div>

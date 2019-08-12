@@ -11,6 +11,7 @@ import {
   AppConfig
 } from 'blockstack';
 
+// sets appconfig and userSession required for Blockstack to write and publish user data
 const appConfig = new AppConfig(['store_write', 'publish_data'])
 const userSession = new UserSession({ appConfig: appConfig })
 
@@ -20,6 +21,7 @@ class App extends Component {
     this.gun = Gun(location.origin + '/gun');
   }
 
+  // functions when the user signs in and signs out from the Blockstack app
   handleSignIn(e) {
     e.preventDefault();
     userSession.redirectToSignIn();

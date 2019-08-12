@@ -8,6 +8,8 @@ let crypt = null;
 let privateKey = null;
 let publickey = null;
 
+// displays the list of pairs stored in the Blockstack gaia hub
+
 class MyPairsList extends Component {
   constructor(props) {
     super(props);
@@ -30,10 +32,12 @@ class MyPairsList extends Component {
     };
   }
 
+  // gets the stored data in the Blockstack user's list when the app launches
   componentDidMount() {
     this.fetchData();
   }
 
+  // it will update the Blockstack userSession with the Blockstack user's data
   componentWillMount() {
     const { userSession } = this.props;
     this.setState({
@@ -42,8 +46,8 @@ class MyPairsList extends Component {
     });
   }
 
-
-  chooseSecurityFeature(evt, securityFeature) {
+  // functionality for each tab.. first it hides the tab's content, and when it clicks on it, it shows its content
+  chooseSecurityFeature(event, securityFeature) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -54,19 +58,27 @@ class MyPairsList extends Component {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(securityFeature).style.display = "block";
-    evt.currentTarget.className += " active";
+    event.currentTarget.className += " active";
   }
 
+  // function for the Delete Button: it deletes a pair from the personal list stored in Gaia Hub
   deleteMyPair(e, id) {
     const { userSession } = this.props;
+
+    // get the id of each pair
     var index = this.state.my_pairs.findIndex(e => e.id == id);
+
+    // sets encryption of the file to false
     const options = { encrypt: false };
 
+    // initializes an empty array and use slice and splice function to split the array by its index...
+    // then uses stringify function to read the newArray of pairs as a string and 
+    // put it in the 'my_pairs.json' file of the Blockstack usersession in Gaia hub by using the putFile function
     let newArray = [];
     newArray = this.state.my_pairs.slice();
     newArray.splice(index, 1);
     userSession
-      .putFile("my_pairs.json", JSON.stringify(newArray), options)
+      .putFile("my_pairs.json", JSON.stringify(newArray), options) // uses putFile to put the user's data to his userSession in gaia hub
       .then(() => {
         this.setState({
           my_pairs: newArray
@@ -74,17 +86,20 @@ class MyPairsList extends Component {
       });
   }
 
+  // removes all pairs from the personal list stored in Gaia Hub
   deleteAll() {
     const { userSession } = this.props;
     const options = { encrypt: false };
     let my_pairs = [];
     my_pairs = this.state.my_pairs;
+    
+    // checks if there are already any pairs added in the user's list
     if (
       document.getElementById("pkey-peer") &&
       document.getElementById("email-peer")
     ) {
       userSession
-        .deleteFile("my_pairs.json", JSON.stringify(my_pairs), options)
+        .deleteFile("my_pairs.json", JSON.stringify(my_pairs), options) // uses deleteFile to delete the user's data to his userSession in gaia hub
         .then(() => {
           this.setState({
             my_pairs: my_pairs
@@ -97,12 +112,16 @@ class MyPairsList extends Component {
     }
   }
 
+  // gets the user profile's data, and his list of pairs either it's local account or not
   fetchData() {
     const { userSession } = this.props;
 
     this.setState({ isLoading: true });
 
+    // checks if this is the user's profile or another user's profile
     if (this.isLocal()) {
+
+      // set decryption to false for the file
       const options = { decrypt: false };
 
       userSession
@@ -123,6 +142,7 @@ class MyPairsList extends Component {
     } else {
       const username = this.props.match.params.username;
 
+      // lookupProfile is required to go to other Blockstack profiles and fetch their data
       lookupProfile(username)
         .then(profile => {
           this.setState({
@@ -135,7 +155,7 @@ class MyPairsList extends Component {
         });
       const options = { username: username, decrypt: false };
       userSession
-        .getFile("my_pairs.json", options)
+        .getFile("my_pairs.json", options) // uses getFile to get and read the user's data from his userSession in gaia hub
         .then(file => {
           var my_pairs = JSON.parse(file || "[]");
           this.setState({
@@ -152,7 +172,7 @@ class MyPairsList extends Component {
     }
   }
 
-
+  // checks if the peer's username is local or not; required for fetch the data from other users
   isLocal() {
     return this.props.match.params.username ? false : true;
   }
@@ -231,7 +251,7 @@ class MyPairsList extends Component {
             </button>
           </div>
         </div>
-
+       
         <div className="row">
           <div className="col-md-offset-3 col-md-6">
             <div className="col-md-12">
@@ -245,8 +265,7 @@ class MyPairsList extends Component {
                   <br></br>
                   <h4>
                     <strong className="remove-notice">
-                      If for some reason one of your pairs is already stored in the DPK DB
-                      and it's not automatically removed,<br /> please, remove it from your list!
+                      If one of your pairs is already stored in the DPK DB, please, remove it from your list!
                     </strong>
                   </h4>
                   {this.state.isLoading && <span>Loading...</span>}
@@ -267,7 +286,7 @@ class MyPairsList extends Component {
 
                             <button
                               className="btn-st"
-                              onClick={e => this.deleteMyPair(e, index)}
+                              onClick={e => this.deleteMyPair(e, mypair.id)}
                             >Remove</button>
                           </p>
 
@@ -278,7 +297,8 @@ class MyPairsList extends Component {
                       className="btn-st"
                       id="deleteAllPairs"
                       onClick={e => this.deleteAll(e)}
-                    >Delete All</button>
+                    >Delete All
+                    </button>
                   </div>
                 </div>
               </div>

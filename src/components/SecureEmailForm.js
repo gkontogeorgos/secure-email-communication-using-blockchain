@@ -6,6 +6,8 @@ let crypt = null;
 let privateKey = null;
 let publickey = null;
 
+// this class represents all the features for the 'Send an email (Validation Process)' tab
+// where the user can send an encrypted email message to another user
 class SecureEmailForm extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +30,9 @@ class SecureEmailForm extends Component {
     };
   }
 
+  /* validates every single input, and based on these inputs it 
+     opens the external mail client that lets the user send an encrypted email message
+  */
   sendMail() {
     var topic = document
       .getElementById("topic")
@@ -37,6 +42,8 @@ class SecureEmailForm extends Component {
     var message = document.getElementById("message").value;
     var encrypted_message = document.getElementById("crypted").value;
     var email = rec_email.split(" ").join("");
+    
+    // this is a regex pattern to test all valid email addresses
     const pattern = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
     var result = pattern.test(email);
 
@@ -69,6 +76,8 @@ class SecureEmailForm extends Component {
     }
   }
 
+  /* validates the message (plaintext), and the encrypted message, 
+  and lets a peer encrypt a message with another peer's public key based on JSEncrypt module */
   encryptedMsg() {
     var crypt = new JSEncrypt();
     document.getElementById("encryptxbox").checked = false;
@@ -100,12 +109,14 @@ class SecureEmailForm extends Component {
     }
     else if (Msg != "" && crypt.encrypt(Msg) != false && other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
       other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----")) {
-      document.getElementById("crypted").value = crypt.encrypt(Msg);
+      document.getElementById("crypted").value = crypt.encrypt(Msg); // encrypts the input message with the JSencrypt module
       document.getElementById("encryptxbox").disabled = true;
       document.getElementById("encryptxbox").checked = true;
     }
   }
 
+  /* validates the encrypted and the decrypted message, blockstack id and password that are required for the decryption, 
+  and lets a peer decrypt the encrypted message with the peer's private key based on JSEncrypt module */
   decryptedMsg() {
     var crypt = new JSEncrypt();
     String.prototype.trim = function () {
@@ -214,8 +225,12 @@ class SecureEmailForm extends Component {
         "}"
       );
     }
+    else {
+      alert("Decryption failed!");
+    }
   }
 
+  // this function is for the Reset button that resets all the fields 
   clearAll() {
     document.getElementById("recepient_email").value = "";
     document.getElementById("topic").value = "";
@@ -251,7 +266,7 @@ class SecureEmailForm extends Component {
         />
 
         <br /> <br />
-        <label htmlFor="email">Topic: (Suggested: Your blockstack id)</label>
+        <label htmlFor="email">Topic:</label> (Suggested: Your blockstack id)
         <br />
         <textarea
           type="topic"

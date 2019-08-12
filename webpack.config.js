@@ -3,8 +3,6 @@ const webpack = require('webpack');
 require("babel-core/register");
 require("babel-polyfill");
 
-// copy manifest.json to the path: 'public/build'
-// this will allow for the authRequest to see the file at www.example.com/manifest.json
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ManifestAssetPlugin = new CopyWebpackPlugin([ { from: 'src/assets/manifest.json', to: 'manifest.json' } ]);
 const NetlifyHeaderPlugin = new CopyWebpackPlugin([ { from: '_headers', to: '_headers', toType: 'file' } ]);

@@ -1,44 +1,56 @@
 import React, { Component } from "react";
 import { Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 
+// this class is responsible for the inputs of the decentralized database
 class DPKPairForm extends Component {
+
   componentWillMount() {
     this.resetState = this.resetState.bind(this);
     this.resetState();
   }
 
+  // updates the existing pairs with the new pairs
   componentWillReceiveProps(nextProps) {
     const { id, email_address, public_key } = nextProps.pair;
     this.setState({ id, email_address, public_key });
   }
 
+  // resets the current email address and public key
   resetState() {
     const { id, email_address, public_key } = this.props.pair;
+    $("#save").text("Save");
+    $("#verification-message").text("");
+    $("#confirmed").text("");
+    $("#storeddb").text("");
+    $("#pkey-duplicate").text("");
+    $("#pkey-message").text("");
+    $("#email-message").text("");
+    $("#isvalid").text("");
+    $("#isnotvalid").text("");
     this.setState({ id, email_address, public_key });
+    
   }
 
-  onInputChange(event) {
-    let obj = {};
-    obj[event.target.id] = event.target.value;
-    this.setState(obj);
-  }
-
+  // handles the field for the new email address
   handleNewEmailChange(event) {
     this.setState({
       email_address: event.target.value
     });
   }
 
+  // handles the field for the new public key
   handleNewPKeyChange(event) {
     this.setState({
       public_key: event.target.value
     });
   }
 
+  // this function is for the 'Save' button where it saves the pair in DPK DBB
   saveBtnClick() {
     this.props.storeToDPKDB(this.state);
   }
 
+  // reads a file with the proper format (asc or txt) and writes it as a String
   readFile() {
     var input = document.getElementById("fileinput");
     input.addEventListener("change", loadFile, false);
@@ -58,6 +70,7 @@ class DPKPairForm extends Component {
       } else if (!input.files[0]) {
         return;
       } else {
+        // loads the file using the FileReader and reads it as a text
         file = input.files[0];
         reader = new FileReader();
         reader.onload = receivedText;
@@ -77,37 +90,41 @@ class DPKPairForm extends Component {
     }
   }
 
+  // saves public key as an .asc file and lets the user download it
   savePubkeyAsFile(textToWrite, fileNameToSaveAs) {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
-    if (document.getElementById("public_key").value == "") {
+    if (document.getElementById("pubkey").value == "") {
       alert("Public key can't be empty!");
-    } else if (
+    }
+    else if (
       !document
-        .getElementById("public_key")
+        .getElementById("pubkey")
         .value.startsWith("-----BEGIN PUBLIC KEY-----") &&
       !document
-        .getElementById("public_key")
+        .getElementById("pubkey")
         .value.endsWith("-----END PUBLIC KEY-----")
     ) {
       alert("Invalid public key!");
-    } else if (window.webkitURL != null) {
-      // Chrome allows the link to be clicked
-      // without actually adding it to the DOM.
-      downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    } else {
-      // Firefox requires the link to be added to the DOM
-      // before it can be clicked.
-      downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-      downloadLink.onclick = destroyClickedElement;
-      downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
     }
-
+    else if (window.webkitURL != null) {
+      // Required for the Chrome browser since it allows the link
+      // to be clicked without adding it to the DOM
+      downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else {
+      // Required for the Firefox browser since it allows the link to be added to the DOM
+      // before it can be clicked by the user
+      downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+      downloadLink.target = `_blank`;
+      downloadLink.style.display = "none";
+       // using downloadLink.download for Firefox
+      document.body.appendChild(downloadLink.download);
+    }
     downloadLink.click();
   }
+
   render() {
     return (
       <div className="content-pair">

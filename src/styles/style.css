@@ -13,14 +13,103 @@ body {
     text-align: center;
 }
 
-#key-size {
-    font-weight: 600;
-    line-height: 1.5;
-    font-style: normal;
+
+#background {
+    width: 100%;
+    height: 100%;
+    position: static;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+    /* Ensure div tag stays behind content; -999 might work, too. */
+}
+   
+.stretch {
+    height: 100%;
 }
 
 
 /* Buttons */
+
+.button {
+    max-width: 100%;
+    max-height: 4em;
+    font-size: 1em;
+    margin: auto;
+    display: inline-block;
+    padding: 1em;
+    color: #000;
+    transition: color 0.3s linear;
+    border-color: #000;
+    border-width: 2px;
+}
+
+.button-small:hover {
+    color: white;
+    border: 2px solid white;
+    background-color: black;
+}
+
+.button-small {
+    max-width: 100%;
+    max-height: 4em;
+    font-size: 0.8em;
+    margin: auto;
+    display: inline-block;
+    padding: 0.5em;
+    color: #000;
+    transition: color 0.3s linear;
+    border-color: #000;
+    border-width: 2px;
+}
+
+.button:hover {
+    color: white;
+    border: 2px solid white;
+    background-color: black;
+}
+
+
+.btn-block {
+    color: #fff;
+    border: 1px solid rgb(44, 135, 255);
+    background-color: rgb(2, 21, 128);
+    border-radius: 10px;
+    font-size: 13pt;
+    margin: 5px;
+}
+
+.btn-block:hover {
+    color: black;
+    border: 1px solid rgb(44, 135, 255);
+    background-color: rgb(125, 125, 197);
+}
+
+.btn-res {
+    color: #fff;
+    border: 1px solid rgb(2, 4, 22);
+    background-color: rgb(1, 16, 31);
+    float: center;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0.228em;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: rgb(6, 4, 29);
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
 
 .btn {
     font-family: 'Lato', Sans-Serif;
@@ -108,41 +197,55 @@ body {
     background-color: rgb(81, 192, 87);
 }
 
+.btn-st {
+    color: rgb(255, 255, 255);
+    background-color: red;
+    position: relative;
+    text-align: center;
+    padding: 10px;
+    font-size: 12pt;
+}
+
+/* Formatting */
+
+.input-status {
+    width: 100%;
+    height: 70px;
+    border-radius: 6px;
+}
+
+input {
+    text-align: left;
+}
+
+.new-status {
+    text-align: center;
+}
+
+.topic {
+    text-align: left;
+}
+
+.my_input {
+    height: 22px;
+    width: 22px;
+    background-color: #2196F3;
+}
+
+#key-size {
+    font-weight: 600;
+    line-height: 1.5;
+    font-style: normal;
+}
+
+#checkpairs{
+    display: none;
+}
+
 .email_address {
     text-align: center;
 }
 
-.hide {
-    display: none;
-}
-
-.landing-heading {
-    font-family: 'Source Code Pro', monospace;
-    line-height: 2;
-    font-weight: 400;
-    font-size: 50px;
-}
-
-.landing-heading-1 {
-    font-family: 'Source Code Pro', monospace;
-    font-weight: 400;
-    font-size: 15pt;
-    font-style: italic;
-}
-
-#background {
-    width: 100%;
-    height: 100%;
-    position: static;
-    left: 0px;
-    top: 0px;
-    z-index: -1;
-    /* Ensure div tag stays behind content; -999 might work, too. */
-}
-   
-.stretch {
-    height: 100%;
-}
 .generating_keys{
     font-size: 24pt;
 }
@@ -175,8 +278,12 @@ body {
     font-size: 20pt;
 }
 
+.blockstack_id_message {
+    color :red;
+}
 
-/* ALERTS */
+
+/* Alert messages */
 
 .alert {
     padding: 20px;
@@ -199,24 +306,8 @@ body {
     background-color: #ff9800;
 }
 
-.closebtn {
-    margin-left: 15px;
-    color: rgb(6, 4, 29);
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.closebtn:hover {
-    color: black;
-}
-
 
 /*Tabs */
-
 
 /* Style the buttons that are used to open the tab content */
 
@@ -230,44 +321,36 @@ body {
     transition: 0.3s;
 }
 
-.button {
-    max-width: 100%;
-    max-height: 4em;
-    font-size: 1em;
-    margin: auto;
-    display: inline-block;
-    padding: 1em;
-    color: #000;
-    transition: color 0.3s linear;
-    border-color: #000;
-    border-width: 2px;
+/* Style the tab content */
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 5px solid rgb(255, 255, 255);
+    text-align: center;
 }
 
-.button-small:hover {
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: rgb(235, 33, 33);
     color: white;
-    border: 2px solid white;
-    background-color: black;
 }
 
-.button-small {
-    max-width: 100%;
-    max-height: 4em;
-    font-size: 0.8em;
-    margin: auto;
-    display: inline-block;
-    padding: 0.5em;
-    color: #000;
-    transition: color 0.3s linear;
-    border-color: #000;
-    border-width: 2px;
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+    background-color: rgb(17, 245, 207);
 }
 
-.button:hover {
-    color: white;
-    border: 2px solid white;
-    background-color: black;
+.tablinks {
+    font-size: 15pt;
 }
 
+
+/* Page Layout */
 .forms {
     display: flex;
     margin-top: 5em;
@@ -287,34 +370,20 @@ body {
     margin-bottom: -200px;
 }
 
-.input-status {
-    width: 100%;
-    height: 70px;
-    border-radius: 6px;
-}
 
-input {
+/* Labels */
+
+label {
     text-align: left;
-}
-
-.new-status {
-    text-align: center;
-}
-
-.topic {
-    text-align: left;
-}
-
-.my_input {
-    height: 22px;
-    width: 22px;
-    background-color: #2196F3;
+    color: black;
+    font-weight: bold;
+    padding: 8px;
+    text-transform: none;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 
-
-
-/* Statuses */
+/* Statuses & Pairs */
 
 .status {
     color: black;
@@ -354,80 +423,6 @@ input {
 .mypair:hover {
     color: black;
     background-color: rgb(179, 179, 179);
-}
-
-
-/* Labels */
-
-label {
-    text-align: left;
-    color: black;
-    font-weight: bold;
-    padding: 8px;
-    text-transform: none;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-}
-
-
-/* Style the tab content */
-
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 5px solid rgb(255, 255, 255);
-    text-align: center;
-}
-
-
-/* Change background color of buttons on hover */
-
-.tab button:hover {
-    background-color: rgb(235, 33, 33);
-    color: white;
-}
-
-
-/* Create an active/current tablink class */
-
-.tab button.active {
-    background-color: rgb(17, 245, 207);
-}
-
-.tablinks {
-    font-size: 15pt;
-}
-
-
-/* Buttons */
-
-.table-header-group {
-    text-align: center;
-}
-
-.btn-block {
-    color: #fff;
-    border: 1px solid rgb(44, 135, 255);
-    background-color: rgb(2, 21, 128);
-    border-radius: 10px;
-    font-size: 13pt;
-    margin: 5px;
-}
-
-.btn-block:hover {
-    color: black;
-    border: 1px solid rgb(44, 135, 255);
-    background-color: rgb(125, 125, 197);
-}
-
-.btn-res {
-    color: #fff;
-    border: 1px solid rgb(2, 4, 22);
-    background-color: rgb(1, 16, 31);
-    float: center;
-    font-size: 1.2rem;
-    line-height: 1.8;
-    font-weight: 200;
-    letter-spacing: 0.228em;
 }
 
 
@@ -497,8 +492,8 @@ label {
     font-size: 20pt;
 }
 
-.time-report {
-    color: rgb(24, 169, 189);
+.generating-time-report {
+    color: rgb(61, 197, 84);
 }
 
 .pkey-duplicate-list {
@@ -510,7 +505,6 @@ label {
     background-color: rgb(230, 29, 29);
     color:white;
 }
-
 
 .pubkey {
     background-color: rgb(231, 245, 235);
@@ -555,14 +549,28 @@ label {
     padding: 0 0 0 0;
 }
 
-.btn-st {
-    color: rgb(255, 255, 255);
-    background-color: red;
-    position: relative;
+.table-header-group {
     text-align: center;
-    padding: 10px;
-    font-size: 12pt;
 }
+
+.hide {
+    display: none;
+}
+
+.landing-heading {
+    font-family: 'Source Code Pro', monospace;
+    line-height: 2;
+    font-weight: 400;
+    font-size: 50px;
+}
+
+.landing-heading-1 {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 400;
+    font-size: 15pt;
+    font-style: italic;
+}
+
 
 .list-group-item {
     color: #fff;
@@ -607,12 +615,13 @@ label {
     width: 185px;
 }
 
-
-.blockstack_id_message {
-
-    color :red;
+.show {
+    display: block;
 }
 
+
+
+/* Dropdown */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -645,23 +654,4 @@ label {
 
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
-}
-
-
-/* Home button */
-
-.btn-home-hello {
-    position: absolute;
-    font-family: 'Source Code Pro', monospace;
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.85);
-    top: 15px;
-    left: 15px;
-    padding: 3px 20px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
 }

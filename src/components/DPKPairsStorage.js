@@ -42,7 +42,7 @@ class DPKPairStorage extends Component {
     return this.fetchData();
   }
 
-  // gets, syncs, and merges the new pairs with the stored pairs using a reduce function
+  // gets and syncs the new pairs with the stored pairs using a reduce and merge functions
   componentWillMount() {
     let pairs = this.state.pairs;
     const self = this;
@@ -63,6 +63,7 @@ class DPKPairStorage extends Component {
               data,
               _.pick(pair, ["email_address", "public_key"])
             );
+            // finds the index of the pair by its key
             const index = _.findIndex(pairs, o => {
               return o.id === key;
             });
@@ -85,7 +86,7 @@ class DPKPairStorage extends Component {
     this.cancel();
   }
 
-  // handles the clicked item... when the user clicks on the pair, its details are displayed on a textarea
+  // handles the clicked item... when the user clicks on the pair, its current state's details are displayed
   itemClick(event) {
     document.getElementById("public_key").readOnly = true;
     document.getElementById("email_address").readOnly = true;
@@ -103,7 +104,7 @@ class DPKPairStorage extends Component {
   }
 
   // validates all the input data from the user, and if the pair he wants to add to his list is not there,
-  // it is successfully stored in the list
+  // it is successfully added to his list
   addToYourDB() {
     var email = document.getElementById("email_address").value;
     var pkey = document.getElementById("public_key").value;

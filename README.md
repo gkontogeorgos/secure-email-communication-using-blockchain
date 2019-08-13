@@ -1,7 +1,9 @@
 # A Decentralized Blockstack database that stores shared pairs of public key/email for secure email communication among different peers
 
-If there are issues with some packages, just delete node_modules and package-lock files and execute the command:
+For having access to the app, install all the required modules with the command:
 - npm install
+
+If there are issues with some packages, just delete node_modules and package-lock files and execute the same command again.
 
 For having full access to the Blockstack app and checking personal pairs from your Blockstack account or other Blockstack users, user should run the script ‘webpack-dev-server’ by executing the command: 
 - npm start 
@@ -16,9 +18,6 @@ For the parallel process of both Blockstack interface and decentralized DPK gun 
 
 For building the app, user could run the webpack by executing the command: 
 - npm run build
-
-For running different tests, user could run the script ‘npm run test --watch’ by executing the command: 
-- npm run test:watch and specifying the test he wants.
 
 For cleaning the memory cache of the app, user could run the script ‘rimraf dist’ by executing the command 
 - npm clean

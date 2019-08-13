@@ -19,12 +19,12 @@ if (process.env.NODE_ENV != "production") {
   app.use(webpackHotMiddleware(compiler));
   app.use(webpackDevMiddleware(compiler));
 } else {
-  const indexPath = path.join(__dirname, "dist/index.html");
+  const index_path = path.join(__dirname, "dist/index.html");
 
   app.use(express.static("dist"));
   app.get("*", function(_, res) {
     // sends the file to the Response using the express module and manages the directory of this file
-    res.sendFile(indexPath);
+    res.sendFile(index_path);
   });
 }
 

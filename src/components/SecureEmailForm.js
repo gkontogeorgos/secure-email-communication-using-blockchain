@@ -135,7 +135,7 @@ class SecureEmailForm extends Component {
       .innerHTML.replace(/\s+$/, "")
       .replace(/\s+/g, "");
     var cryptedMsg = document.getElementById("crypted").value;
-    var my_prkey = document.getElementById("privkey").value;
+    var my_prkey = document.getElementById("gen_priv_key").value;
     var decryptedMsg = document.getElementById("decrypted");
     $("#isnotvalid").text("");
     $("#isvalid").text("");

@@ -11,7 +11,7 @@ class GenerateKeys extends Component {
     document.getElementById("myDropdown").classList.toggle("show");
     // if the user clicks on the dropdown, it shows the size of keys, otherwise shows nothing
     window.onclick = function (event) {
-      if (!event.target.matches(".change-key-size")) {
+      if (!event.target.matches(".change-key_bits_size")) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
         var i;
         for (i = 0; i < dropdowns.length; i++) {
@@ -22,11 +22,11 @@ class GenerateKeys extends Component {
         }
       }
       // change the key size value for new keys.. gets the value from the dropdown and replaces the default value with the chosen one
-      $(".change-key-size").each(function (index, value) {
+      $(".change-key_bits_size").each(function (index, value) {
         var el = $(value);
         var keySize = el.attr("data-value");
         el.click(function (e) {
-          var button = $("#key-size");
+          var button = $("#key_bits_size");
           button.attr("data-value", keySize);
           button.html(keySize + " bits");
           e.preventDefault();
@@ -37,14 +37,14 @@ class GenerateKeys extends Component {
 
   // this function generates a pair of keys and validates the blockstack id, passphrase, and the pair of keys
   generateKeypair() {
-    var sKeySize = $("#key-size").attr("data-value");
-    var keySize = parseInt(sKeySize);
-    var crypt = new JSEncrypt({ default_key_size: keySize });
-    var async = $("#async-gen").is(":checked");
+    var e_key_Size = $("#key_bits_size").attr("data-value");
+    var key_size = parseInt(e_key_Size);
+    var crypt = new JSEncrypt({ default_key_size: key_size });
+    var async_gen = $("#async-gen").is(":checked");
 
     // get the time in milliseconds
-    var dt = new Date();
-    var time = -dt.getTime();
+    var date = new Date();
+    var time = -date.getTime();
 
     var id = document
       .getElementById("blockstack_ID")
@@ -77,11 +77,11 @@ class GenerateKeys extends Component {
       $("#five-words").text("");
 
       // if user clicks on asynchronous generation of keys, returns the pair of keys and the time for their generation
-      if (async) {
-        $("#generating-time-report").text(".");
+      if (async_gen) {
+        $("#generating-time").text(".");
         var load = setInterval(function () {
-          var text = $("#generating-time-report").text();
-          $("#generating-time-report").text(text + ".");
+          var text = $("#generating-time").text();
+          $("#generating-time").text(text + ".");
         }, 500);
 
         // stops the time on the loading of the page, and gets the time for generating a pair of public/private key, and the generated pair
@@ -89,28 +89,28 @@ class GenerateKeys extends Component {
           clearInterval(load);
           dt = new Date();
           time += dt.getTime();
-          $("#generating-time-report").text("Generated in " + time + " ms");
-          $("#privkey").val(crypt.getPrivateKey());
-          $("#pubkey").val(crypt.getPublicKey());
+          $("#generating-time").text("Generated in " + time + " ms");
+          $("#gen_priv_key").val(crypt.getPrivateKey());
+          $("#gen_pub_key").val(crypt.getPublicKey());
         });
         return;
       }
       crypt.getKey();
-      dt = new Date();
-      time += dt.getTime();
-      $("#generating-time-report").text("Generated in " + time + " ms");
-      $("#privkey").val(crypt.getPrivateKey());
-      $("#pubkey").val(crypt.getPublicKey());
+      date = new Date();
+      time += date.getTime();
+      $("#generating-time").text("Generated in " + time + " ms!");
+      $("#gen_priv_key").val(crypt.getPrivateKey());
+      $("#gen_pub_key").val(crypt.getPublicKey());
     }
-    document.getElementById("pubgenkey").value = document.getElementById("pubkey").value;
+    document.getElementById("pubgenkey").value = document.getElementById("gen_pub_key").value;
   }
 
   // this function resets all the fields to the default value
   clearAll() {
     document.getElementById("passphrase").value = "";
-    document.getElementById("pubkey").value = "";
-    document.getElementById("privkey").value = "";
-    document.getElementById("generating-time-report").text = "";
+    document.getElementById("gen_pub_key").value = "";
+    document.getElementById("gen_priv_key").value = "";
+    document.getElementById("generating-time").text = "";
     document.getElementById("async-gen").checked = false;
     document.getElementById("pub_other_peer_pkey").value = "";
   }
@@ -120,15 +120,15 @@ class GenerateKeys extends Component {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
-    if (document.getElementById("pubkey").value == "") {
+    if (document.getElementById("gen_pub_key").value == "") {
       alert("Public key can't be empty!");
     }
     else if (
       !document
-        .getElementById("pubkey")
+        .getElementById("gen_pub_key")
         .value.startsWith("-----BEGIN PUBLIC KEY-----") &&
       !document
-        .getElementById("pubkey")
+        .getElementById("gen_pub_key")
         .value.endsWith("-----END PUBLIC KEY-----")
     ) {
       alert("Invalid public key!");
@@ -193,15 +193,15 @@ class GenerateKeys extends Component {
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
 
-    if (document.getElementById("privkey").value == "") {
+    if (document.getElementById("gen_priv_key").value == "") {
       alert("Private key can't be empty!");
     }
     else if (
       !document
-        .getElementById("privkey")
+        .getElementById("gen_priv_key")
         .value.startsWith("-----BEGIN RSA PRIVATE KEY-----") &&
       !document
-        .getElementById("privkey")
+        .getElementById("gen_priv_key")
         .value.endsWith("-----END RSA PRIVATE KEY-----")
     ) {
       alert("Invalid private key key!");
@@ -260,8 +260,8 @@ class GenerateKeys extends Component {
             <label htmlFor="key_size">Key Size:</label>
 
             <button
-              id="key-size"
-              className="change-key-size"
+              id="key_bits_size"
+              className="change-key_bits_size"
               data-value="2048"
               onClick={e => this.key_size(e)}
             >
@@ -270,7 +270,7 @@ class GenerateKeys extends Component {
             <div className="dropdown">
               <div id="myDropdown" className="dropdown-content">
                 <a
-                  className="change-key-size"
+                  className="change-key_bits_size"
                   data-value="512"
                   onClick={e => this.key_size(e)}
                 >
@@ -279,7 +279,7 @@ class GenerateKeys extends Component {
                   (Not recommended)
                 </a>
                 <a
-                  className="change-key-size"
+                  className="change-key_bits_size"
                   data-value="1024"
                   onClick={e => this.key_size(e)}
                 >
@@ -288,7 +288,7 @@ class GenerateKeys extends Component {
                   (For testing purposes only)
                 </a>
                 <a
-                  className="change-key-size"
+                  className="change-key_bits_size"
                   data-value="2048"
                   onClick={e => this.key_size(e)}
                 >
@@ -297,7 +297,7 @@ class GenerateKeys extends Component {
                   (Secure-Recommended)
                 </a>
                 <a
-                  className="change-key-size"
+                  className="change-key_bits_size"
                   data-value="4096"
                   onClick={e => this.key_size(e)}
                 >
@@ -329,18 +329,18 @@ class GenerateKeys extends Component {
             <br></br>
             <span>
               <i>
-                <small id="generating-time-report" className="generating-time-report"></small>
+                <small id="generating-time" className="generating-time"></small>
               </i>
             </span>
           </div>
 
           <br />
           <div className="block">
-            <label htmlFor="pubkey">Public Key</label>
+            <label htmlFor="gen_pub_key">Public Key</label>
             <br />
             <textarea
-              id="pubkey"
-              className="pubkey"
+              id="gen_pub_key"
+              className="gen_pub_key"
               rows="15"
               cols="69"
             ></textarea>
@@ -349,18 +349,18 @@ class GenerateKeys extends Component {
               type="save"
               className="btn-dl"
               onClick={e =>
-                this.savePubkeyAsFile(pubkey.value, "public_key.asc")
+                this.savePubkeyAsFile(gen_pub_key.value, "public_key.asc")
               }
             >
               Download Public Key
             </button>
             <br />
             <br />
-            <label htmlFor="privkey">Private Key</label>
+            <label htmlFor="gen_priv_key">Private Key</label>
             <br />
             <textarea
-              id="privkey"
-              className="privkey"
+              id="gen_priv_key"
+              className="gen_priv_key"
               rows="15"
               cols="69"
             ></textarea>
@@ -369,7 +369,7 @@ class GenerateKeys extends Component {
               type="save"
               className="btn-dl"
               onClick={e =>
-                this.savePrivkeyAsFile(privkey.value, "private_key.asc")
+                this.savePrivkeyAsFile(gen_priv_key.value, "private_key.asc")
               }
             >
               Download Private Key

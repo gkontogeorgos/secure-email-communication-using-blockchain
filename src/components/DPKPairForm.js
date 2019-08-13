@@ -23,6 +23,7 @@ class DPKPairForm extends Component {
     $("#confirmed").text("");
     $("#storeddb").text("");
     $("#pkey-duplicate").text("");
+    $("#pkey-duplicate-list").text("");
     $("#pkey-message").text("");
     $("#email-message").text("");
     $("#isvalid").text("");
@@ -95,15 +96,15 @@ class DPKPairForm extends Component {
     var textFileAsBlob = new Blob([textToWrite], { type: ".asc" });
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
-    if (document.getElementById("pubkey").value == "") {
+    if (document.getElementById("gen_pub_key").value == "") {
       alert("Public key can't be empty!");
     }
     else if (
       !document
-        .getElementById("pubkey")
+        .getElementById("gen_pub_key")
         .value.startsWith("-----BEGIN PUBLIC KEY-----") &&
       !document
-        .getElementById("pubkey")
+        .getElementById("gen_pub_key")
         .value.endsWith("-----END PUBLIC KEY-----")
     ) {
       alert("Invalid public key!");

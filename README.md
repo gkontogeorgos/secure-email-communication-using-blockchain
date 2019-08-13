@@ -17,8 +17,5 @@ For the parallel process of both Blockstack interface and decentralized DPK gun 
 For building the app, user could run the webpack by executing the command: 
 - npm run build
 
-For running different tests, user could run the script ‘npm run test --watch’ by executing the command: 
-- npm run test:watch and specifying the test he wants.
-
 For cleaning the memory cache of the app, user could run the script ‘rimraf dist’ by executing the command 
 - npm clean

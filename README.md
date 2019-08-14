@@ -8,7 +8,7 @@ If there are issues with some packages, just delete node_modules and package-loc
 For having full access to the Blockstack app and checking personal pairs from your Blockstack account or other Blockstack users, user should run the script ‘webpack-dev-server’ by executing the command: 
 - npm start 
 
-For the realtime offline synchronization process among different peers and p2p decentralized database DPK via offline databbase gun module, user should run the script ‘node server.js’ by executing the command: 
+For the realtime offline synchronization process among different peers and p2p decentralized database DPK via the GUN protocol, user should run the script ‘node server.js’ by executing the command: 
 - npm run serve
 
 It is possible to store the pair in the GUN protocol via npm start, but it will only be synced offline to other peers via 'npm run serve’.

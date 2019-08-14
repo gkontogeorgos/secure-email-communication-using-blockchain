@@ -94,16 +94,16 @@ class SecureEmailForm extends Component {
         alert("Encryption failed! The other peer's public key is not defined.");
       }
       else if (
-        !other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
-        !other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----")
+        !(other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
+        other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----"))
       ) {
         alert("Encryption failed! The other peer's public key is invalid.");
       }
       document.getElementById("crypted").value = "";
     }
     else if (
-      !other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
-      !other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----")
+      !(other_peer_pkey.trim().startsWith("-----BEGIN PUBLIC KEY-----") &&
+      other_peer_pkey.trim().endsWith("-----END PUBLIC KEY-----"))
     ) {
       alert("Encryption failed! The other peer's public key is invalid.");
     }
@@ -178,10 +178,9 @@ class SecureEmailForm extends Component {
         alert("Decryption failed! Your private key is not defined.");
         document.getElementById("decryptxbox").checked = false;
       } else if (
-        !my_prkey.trim().startsWith("-----BEGIN RSA PRIVATE KEY-----") &&
-        !my_prkey.trim().endsWith("-----END RSA PRIVATE KEY-----") &&
-        decryptedMsg.readOnly == false
-      ) {
+        !(my_prkey.trim().startsWith("-----BEGIN RSA PRIVATE KEY-----") &&
+        my_prkey.trim().endsWith("-----END RSA PRIVATE KEY-----")) &&
+        decryptedMsg.readOnly == false) {
         alert("Decryption failed! Your private key is invalid.");
         document.getElementById("decryptxbox").checked = false;
       }

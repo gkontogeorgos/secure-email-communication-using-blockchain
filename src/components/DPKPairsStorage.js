@@ -156,7 +156,8 @@ class DPKPairStorage extends Component {
       var index = pair.indexOf('-----BEGIN PUBLIC KEY-----')
 
       var pkey_found_list = pair.substr(index).replace(/\s+$/, "").replace(/\s+/g, "").replace('Remove', '');
-      if (pkey_input == pkey_found_list) {
+      if (pkey_input == pkey_found_list && document.getElementById("email_address").readOnly == false &&
+      document.getElementById("public_key").readOnly == false) {
         $("#pkey-duplicate-list").html("This public key is already stored in your Blockstack list 'My Pairs'. Please, choose another one!");
         break;
       }

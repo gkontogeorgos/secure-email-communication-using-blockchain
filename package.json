@@ -13,6 +13,7 @@
     "@mui/styled-engine-sc": "^6.2.0",
     "@mui/system": "^6.2.0",
     "@stacks/auth": "^7.0.2",
+    "@stacks/connect": "^7.9.0",
     "blockstack": "^21.1.1",
     "bootstrap": "^5.3.3",
     "express": "^4.21.2",

@@ -1,29 +1,73 @@
-import React, { Component } from 'react';
+import { Box, CircularProgress, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-// this class displays the welcome panel that shows up before the user signs in the Blockstack app
-class Signin extends Component {
-  constructor(props) {
-    super(props);
-  }
+import AnimatedButton from "./../common/components/AnimatedButton";
+import { showConnect } from "@stacks/connect";
 
-  render() {
-    const { handleSignIn } = this.props;
+const SignIn = ({ userSession, userData, setUserData }) => {
+  const [loading, setLoading] = useState(false);
 
-    return (
-      <div className="panel-landing" id="section-1">
-        <h1 className="landing-heading">DPKS</h1>
-        <h2 className="landing-heading-1">Decentralized database of pairs of email/public key for secure email communication</h2>
-        <p className="lead">
-          <button
-            className="btn btn-primary btn-lg"
-            id="signin-button"
-            onClick={handleSignIn.bind(this)}
+  const appDetails = {
+    name: "Secure Email Communication Using Blockchain",
+    icon: "https://freesvg.org/img/1541103084.png",
+  };
+
+  useEffect(() => {
+    if (userSession.isSignInPending()) {
+      setLoading(true);
+      userSession.handlePendingSignIn().then((userData) => {
+        setUserData(userData);
+        setLoading(false);
+      });
+    }
+    if (userSession.isUserSignedIn()) {
+      const userData = userSession.loadUserData();
+      setUserData(userData);
+    }
+  }, [userSession]);
+
+  const connectWallet = () => {
+    setLoading(true);
+    showConnect({
+      appDetails,
+      onFinish: () => {
+        const userData = userSession.loadUserData();
+        setUserData(userData);
+        setLoading(false);
+      },
+      userSession,
+    });
+    setLoading(false);
+  };
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      height="100vh"
+      sx={{
+        textAlign: "center",
+      }}
+    >
+      {loading && <CircularProgress color="primary" />}
+      {!userData && (
+        <>
+          <Typography
+            variant="h3"
+            mt={4}
+            sx={{ color: "#ffffff", fontWeight: "bold" }}
           >
-            Sign In with Blockstack
-          </button>
-        </p>
-      </div>
-    );
-  }
-}
-export default Signin;
+            Secure Email Communication Using Blockchain
+          </Typography>
+          <AnimatedButton onClick={connectWallet}>
+            Connect Wallet
+          </AnimatedButton>
+        </>
+      )}
+    </Box>
+  );
+};
+
+export default SignIn;

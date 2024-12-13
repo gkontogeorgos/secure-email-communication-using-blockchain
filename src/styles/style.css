@@ -3,655 +3,640 @@
 a,
 a:focus,
 a:hover {
-    color: #fff;
+  color: #fff;
 }
 
 html,
 body {
-    background-color: rgb(255, 255, 255);
-    color: rgb(7, 30, 37);
-    text-align: center;
+  background-color: rgb(255, 255, 255);
+  color: rgb(7, 30, 37);
+  text-align: center;
 }
-
 
 #background {
-    width: 100%;
-    height: 100%;
-    position: static;
-    left: 0px;
-    top: 0px;
-    z-index: -1;
-    /* Ensure div tag stays behind content; -999 might work, too. */
-}
-   
-.stretch {
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  position: static;
+  left: 0px;
+  top: 0px;
+  z-index: -1;
+  /* Ensure div tag stays behind content; -999 might work, too. */
 }
 
+.stretch {
+  height: 100%;
+}
 
 /* Buttons */
 
 .button {
-    max-width: 100%;
-    max-height: 4em;
-    font-size: 1em;
-    margin: auto;
-    display: inline-block;
-    padding: 1em;
-    color: #000;
-    transition: color 0.3s linear;
-    border-color: #000;
-    border-width: 2px;
+  max-width: 100%;
+  max-height: 4em;
+  font-size: 1em;
+  margin: auto;
+  display: inline-block;
+  padding: 1em;
+  color: #000;
+  transition: color 0.3s linear;
+  border-color: #000;
+  border-width: 2px;
 }
 
 .button-small:hover {
-    color: white;
-    border: 2px solid white;
-    background-color: black;
+  color: white;
+  border: 2px solid white;
+  background-color: black;
 }
 
 .button-small {
-    max-width: 100%;
-    max-height: 4em;
-    font-size: 0.8em;
-    margin: auto;
-    display: inline-block;
-    padding: 0.5em;
-    color: #000;
-    transition: color 0.3s linear;
-    border-color: #000;
-    border-width: 2px;
+  max-width: 100%;
+  max-height: 4em;
+  font-size: 0.8em;
+  margin: auto;
+  display: inline-block;
+  padding: 0.5em;
+  color: #000;
+  transition: color 0.3s linear;
+  border-color: #000;
+  border-width: 2px;
 }
 
 .button:hover {
-    color: white;
-    border: 2px solid white;
-    background-color: black;
+  color: white;
+  border: 2px solid white;
+  background-color: black;
 }
 
-
 .btn-block {
-    color: #fff;
-    border: 1px solid rgb(44, 135, 255);
-    background-color: rgb(2, 21, 128);
-    border-radius: 10px;
-    font-size: 13pt;
-    margin: 5px;
+  color: #fff;
+  border: 1px solid rgb(44, 135, 255);
+  background-color: rgb(2, 21, 128);
+  border-radius: 10px;
+  font-size: 13pt;
+  margin: 5px;
 }
 
 .btn-block:hover {
-    color: black;
-    border: 1px solid rgb(44, 135, 255);
-    background-color: rgb(125, 125, 197);
+  color: black;
+  border: 1px solid rgb(44, 135, 255);
+  background-color: rgb(125, 125, 197);
 }
 
 .btn-res {
-    color: #fff;
-    border: 1px solid rgb(2, 4, 22);
-    background-color: rgb(1, 16, 31);
-    float: center;
-    font-size: 1.2rem;
-    line-height: 1.8;
-    font-weight: 200;
-    letter-spacing: 0.228em;
+  color: #fff;
+  border: 1px solid rgb(2, 4, 22);
+  background-color: rgb(1, 16, 31);
+  float: center;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  font-weight: 200;
+  letter-spacing: 0.228em;
 }
 
 .closebtn {
-    margin-left: 15px;
-    color: rgb(6, 4, 29);
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
+  margin-left: 15px;
+  color: rgb(6, 4, 29);
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .closebtn:hover {
-    color: black;
+  color: black;
 }
 
 .btn {
-    font-family: 'Lato', Sans-Serif;
-    padding: 0.5625rem 2.5rem;
-    font-size: 0.8125rem;
-    font-weight: 400;
-    line-height: 1.75rem;
-    -webkit-transition: all .2s ease-in-out;
-    -moz-transition: all .2s ease-in-out;
-    -ms-transition: all .2s ease-in-out;
-    -o-transition: all .2s ease-in-out;
-    transition: all .2s ease-in-out;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  font-family: "Lato", Sans-Serif;
+  padding: 0.5625rem 2.5rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .btn-lg {
-    font-size: 1.5rem;
-    padding: 0.4875rem 3.0375rem;
-    line-height: 2.5rem;
+  font-size: 1.5rem;
+  padding: 0.4875rem 3.0375rem;
+  line-height: 2.5rem;
 }
 
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus {
-    outline: none;
+  outline: none;
 }
 
 .btn-dl {
-    color: rgb(0, 0, 0);
-    background-color: rgb(221, 223, 203);
-    border-radius: 10px;
-    font-size: 13pt;
-    margin: 1px;
-    padding: 0.4875rem 3.0375rem;
-    outline: none;
+  color: rgb(0, 0, 0);
+  background-color: rgb(221, 223, 203);
+  border-radius: 10px;
+  font-size: 13pt;
+  margin: 1px;
+  padding: 0.4875rem 3.0375rem;
+  outline: none;
 }
 
 .btn-primary {
-    color: #fff;
-    border: 1px solid #2C96FF;
-    background-color: #2C96FF;
-    border-radius: 10px;
-    font-size: 13pt;
-    margin: 5px;
+  color: #fff;
+  border: 1px solid #2c96ff;
+  background-color: #2c96ff;
+  border-radius: 10px;
+  font-size: 13pt;
+  margin: 5px;
 }
 
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
-    color: #fff;
-    border: 1px solid #1a6ec0;
-    background-color: #053e77;
+  color: #fff;
+  border: 1px solid #1a6ec0;
+  background-color: #053e77;
 }
 
 .btn-default {
-    color: #fff;
-    border: 1px solid rgb(0, 0, 0);
-    background-color: rgb(161, 161, 161);
-    border-radius: 10px;
-    font-size: 13pt;
-    margin: 5px;
+  color: #fff;
+  border: 1px solid rgb(0, 0, 0);
+  background-color: rgb(161, 161, 161);
+  border-radius: 10px;
+  font-size: 13pt;
+  margin: 5px;
 }
 
 .btn-default:hover {
-    color: black;
-    border: 1px solid rgb(255, 255, 255);
-    background-color: rgb(133, 130, 130);
+  color: black;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: rgb(133, 130, 130);
 }
 
 .btn-store {
-    color: #fff;
-    border: 1px solid rgb(0, 0, 0);
-    background-color: rgb(0, 114, 66);
-    border-radius: 10px;
-    font-size: 13pt;
-    margin: 5px;
+  color: #fff;
+  border: 1px solid rgb(0, 0, 0);
+  background-color: rgb(0, 114, 66);
+  border-radius: 10px;
+  font-size: 13pt;
+  margin: 5px;
 }
 
 .btn-store:hover {
-    color: black;
-    border: 1px solid rgb(255, 255, 255);
-    background-color: rgb(81, 192, 87);
+  color: black;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: rgb(81, 192, 87);
 }
 
 .btn-st {
-    color: rgb(255, 255, 255);
-    background-color: red;
-    position: relative;
-    text-align: center;
-    padding: 10px;
-    font-size: 12pt;
+  color: rgb(255, 255, 255);
+  background-color: red;
+  position: relative;
+  text-align: center;
+  padding: 10px;
+  font-size: 12pt;
 }
 
 /* Formatting */
 
 .input-status {
-    width: 100%;
-    height: 70px;
-    border-radius: 6px;
+  width: 100%;
+  height: 70px;
+  border-radius: 6px;
 }
 
 input {
-    text-align: left;
+  text-align: left;
 }
 
 .new-status {
-    text-align: center;
+  text-align: center;
 }
 
 .topic {
-    text-align: left;
+  text-align: left;
 }
 
 .my_input {
-    height: 22px;
-    width: 22px;
-    background-color: #2196F3;
+  height: 22px;
+  width: 22px;
+  background-color: #2196f3;
 }
 
 #key_bits_size {
-    font-weight: 600;
-    line-height: 1.5;
-    font-style: normal;
+  font-weight: 600;
+  line-height: 1.5;
+  font-style: normal;
 }
 
-#checkpairs{
-    display: none;
+#checkpairs {
+  display: none;
 }
 
 .email_address {
-    text-align: center;
+  text-align: center;
 }
 
-.generating_keys{
-    font-size: 24pt;
+.generating_keys {
+  font-size: 24pt;
 }
 
-.dec_db{
-    font-size: 24pt;
+.dec_db {
+  font-size: 24pt;
 }
 
-.send_mail{
-    font-size: 24pt;
+.send_mail {
+  font-size: 24pt;
 }
 
 .recepient-email {
-    height: 30px;
-    width: 235px;
+  height: 30px;
+  width: 235px;
 }
 
 .textarea {
-    text-align: center;
+  text-align: center;
 }
 
 .verification-message {
-    color: red;
-    font-size: 20pt;
+  color: red;
+  font-size: 20pt;
 }
 
 .storeddb {
-    background-color: rgb(0, 114, 66);
-    color: white;
-    font-size: 20pt;
+  background-color: rgb(0, 114, 66);
+  color: white;
+  font-size: 20pt;
 }
 
 .blockstack_id_message {
-    color :red;
+  color: red;
 }
-
 
 /* Alert messages */
 
 .alert {
-    padding: 20px;
-    color: rgb(255, 0, 0);
-    opacity: 1;
-    transition: opacity 0.6s;
-    margin-bottom: 15px;
-    text-align: center;
+  padding: 20px;
+  color: rgb(255, 0, 0);
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .alert.success {
-    background-color: #4CAF50;
+  background-color: #4caf50;
 }
 
 .alert.info {
-    background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .alert.warning {
-    background-color: #ff9800;
+  background-color: #ff9800;
 }
-
 
 /*Tabs */
 
 /* Style the buttons that are used to open the tab content */
 
 .tab button {
-    background-color: inherit;
-    top: 15px;
-    border: 4px 2px;
-    outline: none;
-    cursor: pointer;
-    padding: 16px 16px;
-    transition: 0.3s;
+  background-color: inherit;
+  top: 15px;
+  border: 4px 2px;
+  outline: none;
+  cursor: pointer;
+  padding: 16px 16px;
+  transition: 0.3s;
 }
 
 /* Style the tab content */
 
 .tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 5px solid rgb(255, 255, 255);
-    text-align: center;
+  display: none;
+  padding: 6px 12px;
+  border: 5px solid rgb(255, 255, 255);
+  text-align: center;
 }
-
 
 /* Change background color of buttons on hover */
 
 .tab button:hover {
-    background-color: rgb(235, 33, 33);
-    color: white;
+  background-color: rgb(235, 33, 33);
+  color: white;
 }
-
 
 /* Create an active/current tablink class */
 
 .tab button.active {
-    background-color: rgb(17, 245, 207);
+  background-color: rgb(17, 245, 207);
 }
 
 .tablinks {
-    font-size: 15pt;
+  font-size: 15pt;
 }
-
 
 /* Page Layout */
 .forms {
-    display: flex;
-    margin-top: 5em;
+  display: flex;
+  margin-top: 5em;
 }
 
 .sideNav {
-    background-color: yellow;
-    width: 600px;
-    height: 680px;
-    float: left;
-    padding: 5px;
+  background-color: yellow;
+  width: 600px;
+  height: 680px;
+  float: left;
+  padding: 5px;
 }
 
 .footer {
-    position: relative;
-    height: 200px;
-    margin-bottom: -200px;
+  position: relative;
+  height: 200px;
+  margin-bottom: -200px;
 }
-
 
 /* Labels */
 
 label {
-    text-align: left;
-    color: black;
-    font-weight: bold;
-    padding: 8px;
-    text-transform: none;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  padding: 8px;
+  text-transform: none;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
 }
-
 
 /* Statuses & Pairs */
 
 .status {
-    color: black;
-    background-color: rgb(66, 197, 147);
-    margin: 5px;
-    padding: 0;
-    width: 650px;
-    margin-right: auto;
-    margin-left: auto;
-    border-radius: 6px;
-    display: block;
-    list-style-type: none;
+  color: black;
+  background-color: rgb(66, 197, 147);
+  margin: 5px;
+  padding: 0;
+  width: 650px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 6px;
+  display: block;
+  list-style-type: none;
 }
 
 .status:hover {
-    color: white;
-    background-color: green;
+  color: white;
+  background-color: green;
 }
 
 .mypairs {
-    text-align: center;
+  text-align: center;
 }
 
 .mypair {
-    color: white;
-    background-color: rgb(103, 114, 103);
-    margin: 5px;
-    padding: 0;
-    width: 650px;
-    margin-right: auto;
-    margin-left: auto;
-    border-radius: 6px;
-    display: block;
-    list-style-type: none;
+  color: white;
+  background-color: rgb(103, 114, 103);
+  margin: 5px;
+  padding: 0;
+  width: 650px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 6px;
+  display: block;
+  list-style-type: none;
 }
 
 .mypair:hover {
-    color: black;
-    background-color: rgb(179, 179, 179);
+  color: black;
+  background-color: rgb(179, 179, 179);
 }
-
 
 /* Avatar & Username */
 
 .avatar {
-    width: 75px;
-    height: 75px;
+  width: 75px;
+  height: 75px;
 }
 
 .avatar-section {
-    position: absolute;
-    top: 20px;
-    right: 50px;
+  position: absolute;
+  top: 20px;
+  right: 50px;
 }
 
 .username {
-    position: absolute;
-    top: 8px;
-    right: 16px;
-    font-size: 18px;
-    font-style: italic;
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 18px;
+  font-style: italic;
 }
 
 .heading-name {
-    font-size: 33px;
-    line-height: 1.5;
-    letter-spacing: 0.005em;
-    font-weight: 600;
-    font-style: normal;
-    right: 85px;
-    position: relative;
-    top: 20px;
+  font-size: 33px;
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+  font-weight: 600;
+  font-style: normal;
+  right: 85px;
+  position: relative;
+  top: 20px;
 }
 
-.validationTitle{
-    font-size: 25pt;
+.validationTitle {
+  font-size: 25pt;
 }
 
 /* Warning Messages */
 
 .confirmed {
-    color: green;
+  color: green;
 }
 
 .report {
-    color: rgb(12, 49, 211);
+  color: rgb(12, 49, 211);
 }
 
 .passlength {
-    color: red;
+  color: red;
 }
 
 .remove-notice {
-    color: red;
+  color: red;
 }
 
 .isvalid {
-    background-color: green;
-    color: white;
-    font-size: 20pt;
+  background-color: green;
+  color: white;
+  font-size: 20pt;
 }
 
 .isnotvalid {
-    background-color: red;
-    color: white;
-    font-size: 20pt;
+  background-color: red;
+  color: white;
+  font-size: 20pt;
 }
 
 .generating-time {
-    color: rgb(61, 197, 84);
+  color: rgb(61, 197, 84);
 }
 
 .pkey-duplicate-list {
-    background-color: rgb(172, 90, 90);
-    color:white;
+  background-color: rgb(172, 90, 90);
+  color: white;
 }
 
 .pkey-duplicate {
-    background-color: rgb(230, 29, 29);
-    color:white;
+  background-color: rgb(230, 29, 29);
+  color: white;
 }
 
 .gen_pub_key {
-    background-color: rgb(231, 245, 235);
+  background-color: rgb(231, 245, 235);
 }
 
-.gen_priv_key  {
-    background-color: rgb(231, 245, 235);
+.gen_priv_key {
+  background-color: rgb(231, 245, 235);
 }
 
 .pub_other_peer_pkey {
-    background-color: rgb(223, 223, 223);
+  background-color: rgb(223, 223, 223);
 }
 
 .email-message {
-    color: red;
+  color: red;
 }
 
 .pkey-message {
-    color: red;
+  color: red;
 }
-
 
 /* Scaffolding */
 
 .site-wrapper {
-    display: table;
-    width: 100%;
-    height: 100%;
-    min-height: 100%;
+  display: table;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
 }
 
 .site-wrapper-inner {
-    display: table-cell;
-    vertical-align: middle;
-    margin-right: auto;
-    margin-left: auto;
-    width: 100%;
-    height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  height: 100%;
 }
 
 .panel-authed {
-    padding: 0 0 0 0;
+  padding: 0 0 0 0;
 }
 
 .table-header-group {
-    text-align: center;
+  text-align: center;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 .landing-heading {
-    font-family: 'Source Code Pro', monospace;
-    line-height: 2;
-    font-weight: 400;
-    font-size: 50px;
+  font-family: "Source Code Pro", monospace;
+  line-height: 2;
+  font-weight: 400;
+  font-size: 50px;
 }
 
 .landing-heading-1 {
-    font-family: 'Source Code Pro', monospace;
-    font-weight: 400;
-    font-size: 15pt;
-    font-style: italic;
+  font-family: "Source Code Pro", monospace;
+  font-weight: 400;
+  font-size: 15pt;
+  font-style: italic;
 }
 
-
 .list-group-item {
-    color: #fff;
-    border: 1px solid #2C96FF;
-    background-color: #2C96FF;
-    font-size: 12pt;
-    height: 50px;
+  color: #fff;
+  border: 1px solid #2c96ff;
+  background-color: #2c96ff;
+  font-size: 12pt;
+  height: 50px;
 }
 
 .content-pair {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .change-key_bits_size {
-    color: #fff;
-    border: 1px solid rgb(0, 0, 0);
-    background-color: rgb(0, 114, 66);
-    font-size: 13pt;
-    margin: 5px;
-    outline: none;
+  color: #fff;
+  border: 1px solid rgb(0, 0, 0);
+  background-color: rgb(0, 114, 66);
+  font-size: 13pt;
+  margin: 5px;
+  outline: none;
 }
 
 .change-key_bits_size:hover {
-    color: black;
-    border: 1px solid rgb(255, 255, 255);
-    background-color: rgb(81, 192, 87);
+  color: black;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: rgb(81, 192, 87);
 }
 
 .passphrase {
-    height: 30px;
-    width: 185px;
+  height: 30px;
+  width: 185px;
 }
 
-.pubpairemail{
-    height: 30px;
-    width: 185px;  
+.pubpairemail {
+  height: 30px;
+  width: 185px;
 }
 
-.blockstack_ID{
-    height: 30px;
-    width: 185px;
+.blockstack_ID {
+  height: 30px;
+  width: 185px;
 }
 
 .show {
-    display: block;
+  display: block;
 }
-
-
 
 /* Dropdown */
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 .dropdown-content a {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
 
 .dropdown a:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 .show {
-    display: block;
+  display: block;
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
+  background-color: #3e8e41;
 }

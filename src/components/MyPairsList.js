@@ -1,312 +1,371 @@
-import React, { Component } from "react";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EmailIcon from "@mui/icons-material/Email";
+import KeyIcon from "@mui/icons-material/Key";
+import NoEncryptionIcon from "@mui/icons-material/NoEncryption";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-import { Person, lookupProfile } from "blockstack";
+import ConfirmationModal from "../common/components/ConfirmationModal";
+import InfoMessage from "../common/components/InfoMessage";
+import { useCopyToClipboard } from "@/common/hooks/useCopyToClipboard";
 
-const avatarFallbackImage =
-  "https://s3.amazonaws.com/onename/avatar-placeholder.png";
-let crypt = null;
-let privateKey = null;
-let publickey = null;
+const MyPairsList = ({ gun, userSession }) => {
+  const [pairs, setPairs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    pairId: null,
+  });
+  const { toolTip, copyToClipboard } = useCopyToClipboard("Copy public key");
 
-// displays the list of pairs stored in the Blockstack gaia hub
+  useEffect(() => {
+    if (!gun || !userSession) return;
 
-class MyPairsList extends Component {
-  constructor(props) {
-    super(props);
+    try {
+      setIsLoading(true);
+      const username = userSession.loadUserData().username;
 
-    this.state = {
-      person: {
-        name() {
-          return "Anonymous";
-        },
-        avatarUrl() {
-          return avatarFallbackImage;
-        }
-      },
-      username: "",
-      email: "",
-      pubkeystored: "",
-      my_pairs: [],
-      statusIndex: 0,
-      isLoading: false
-    };
-  }
+      // Connect to the main pairs node instead of user-specific path
+      const pairsRef = gun.get("pairs");
 
-  // gets the stored data in the Blockstack user's list when the app launches
-  componentDidMount() {
-    this.fetchData();
-  }
+      // Subscribe to changes
+      pairsRef.map().on((data, key) => {
+        if (data && data.email_address && data.public_key) {
+          setPairs((prevPairs) => {
+            const existingPairIndex = prevPairs.findIndex((p) => p.id === key);
+            const newPair = {
+              id: key,
+              email_address: data.email_address,
+              public_key: data.public_key,
+              timestamp: data.timestamp || Date.now(),
+            };
 
-  // it will update the Blockstack userSession with the Blockstack user's data
-  componentWillMount() {
-    const { userSession } = this.props;
-    this.setState({
-      person: new Person(userSession.loadUserData().profile),
-      username: userSession.loadUserData().username
-    });
-  }
-
-  // functionality for each tab.. first it hides the tab's content, and when it clicks on it, it shows its content
-  chooseSecurityFeature(event, securityFeature) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(securityFeature).style.display = "block";
-    event.currentTarget.className += " active";
-  }
-
-  // function for the Delete Button: it deletes a pair from the personal list stored in Gaia Hub
-  deleteMyPair(e, id) {
-    const { userSession } = this.props;
-
-    // get the id of each pair
-    var index = this.state.my_pairs.findIndex(e => e.id == id);
-
-    // sets encryption of the file to false
-    const options = { encrypt: false };
-
-    // initializes an empty array and use slice and splice function to split the array by its index...
-    // then uses stringify function to read the newArray of pairs as a string and 
-    // put it in the 'my_pairs.json' file of the Blockstack usersession in Gaia hub by using the putFile function
-    let newArray = [];
-    newArray = this.state.my_pairs.slice();
-    newArray.splice(index, 1);
-    userSession
-      .putFile("my_pairs.json", JSON.stringify(newArray), options) // uses putFile to put the user's data to his userSession in gaia hub
-      .then(() => {
-        this.setState({
-          my_pairs: newArray
-        });
-      });
-  }
-
-  // removes all pairs from the personal list stored in Gaia Hub
-  deleteAll() {
-    const { userSession } = this.props;
-    const options = { encrypt: false };
-    let my_pairs = [];
-    my_pairs = this.state.my_pairs;
-    
-    // checks if there are already any pairs added in the user's list
-    if (
-      document.getElementById("pkey-peer") &&
-      document.getElementById("email-peer")
-    ) {
-      userSession
-        .deleteFile("my_pairs.json", JSON.stringify(my_pairs), options) // uses deleteFile to delete the user's data to his userSession in gaia hub
-        .then(() => {
-          this.setState({
-            my_pairs: my_pairs
-          });
-        });
-      alert("All your pairs are removed from the list! Please, refresh the page to apply the new changes!");
-    }
-    else {
-      alert("Error 404: File 'my_pairs' is empty! There are currently no pairs stored in your list! You need to add at least one pair!");
-    }
-  }
-
-  // gets the user profile's data, and his list of pairs either it's local account or not
-  fetchData() {
-    const { userSession } = this.props;
-
-    this.setState({ isLoading: true });
-
-    // checks if this is the user's profile or another user's profile
-    if (this.isLocal()) {
-
-      // set decryption to false for the file
-      const options = { decrypt: false };
-
-      userSession
-        .getFile("my_pairs.json", options)
-        .then(file => {
-          var my_pairs = JSON.parse(file || "[]");
-          this.setState({
-            person: new Person(userSession.loadUserData().profile),
-            username: userSession.loadUserData().username,
-            statusIndex: my_pairs.length,
-            my_pairs: my_pairs
-          });
-        })
-        .finally(() => {
-          this.setState({ isLoading: false });
-        });
-
-    } else {
-      const username = this.props.match.params.username;
-
-      // lookupProfile is required to go to other Blockstack profiles and fetch their data
-      lookupProfile(username)
-        .then(profile => {
-          this.setState({
-            person: new Person(profile),
-            username: username
-          });
-        })
-        .catch(error => {
-          console.log("Could not resolve Blockstack profile!");
-        });
-      const options = { username: username, decrypt: false };
-      userSession
-        .getFile("my_pairs.json", options) // uses getFile to get and read the user's data from his userSession in gaia hub
-        .then(file => {
-          var my_pairs = JSON.parse(file || "[]");
-          this.setState({
-            statusIndex: my_pairs.length,
-            my_pairs: my_pairs
-          });
-        })
-        .catch(error => {
-          console.log("Could not fetch the pairs!");
-        })
-        .finally(() => {
-          this.setState({ isLoading: false });
-        });
-    }
-  }
-
-  // checks if the peer's username is local or not; required for fetch the data from other users
-  isLocal() {
-    return this.props.match.params.username ? false : true;
-  }
-
-  render() {
-    const { handleSignOut, userSession } = this.props;
-    const { person } = this.state;
-    const { username } = this.state;
-
-    return !userSession.isSignInPending() && person ? (
-      <div className="container">
-        <div id="topNav">
-          <h1 className="landing-heading">DPKS</h1>
-          <h2 className="landing-heading-1">Decentralized database of pairs of email/public key for secure email communication</h2>
-
-          <div className="avatar-section">
-            <img
-              src={
-                person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage
-              }
-              className="img-rounded avatar"
-              id="avatar-image"
-            />
-          </div>
-          <div className="username">
-            <h1>
-              <span id="heading-name" className="heading-name">
-                {person.name() ? person.name() : "Nameless Person"}
-              </span>
-            </h1>
-            <span id="user" className="user">
-              {username}
-            </span>
-            {
-              <span>
-                &nbsp; | &nbsp;
-                <button
-                  className="btn btn-primary btn-lg"
-                  onClick={handleSignOut.bind(this)}
-                >
-                  Logout
-                </button>
-              </span>
+            if (existingPairIndex >= 0) {
+              const updatedPairs = [...prevPairs];
+              updatedPairs[existingPairIndex] = newPair;
+              return updatedPairs;
+            } else {
+              return [...prevPairs, newPair];
             }
-          </div>
+          });
+        }
+      });
+    } catch (error) {
+      console.error("Error loading pairs:", error);
+      setSnackbar({
+        open: true,
+        message: "Failed to load pairs",
+        severity: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [gun, userSession]);
 
-          <div className="tab">
-            <button
-              className="tablinks"
-              onClick={e => this.chooseSecurityFeature(e, "Generate Keys")}
-            >
-              Generate Keys
-            </button>
-            <button
-              className="tablinks"
-              onClick={e => this.chooseSecurityFeature(e, "DPK DB")}
-            >
-              DPK DB
-            </button>
-            <button
-              className="tablinks"
-              onClick={e =>
-                this.chooseSecurityFeature(
-                  e,
-                  "Send an email (Validation Process)"
-                )
-              }
-            >
-              Send an email (Validation Process)
-            </button>
-            <button
-              className="tablinks"
-              onClick={e => this.chooseSecurityFeature(e, "My pairs")}
-            >
-              My pairs
-            </button>
-          </div>
-        </div>
-       
-        <div className="row">
-          <div className="col-md-offset-3 col-md-6">
-            <div className="col-md-12">
-              <div id="My pairs" className="tabcontent">
-                <div className="col-sm-2 mypairs">
-                  <h3 className='validationTitle'>For Validation</h3>
-                  <h4>
-                    These pairs will be validated one by one, starting from the
-                    last one inserted (First one in the list)
-                  </h4>
-                  <br></br>
-                  <h4>
-                    <strong className="remove-notice">
-                      If one of your pairs is already stored in the DPK DB, please, remove it from your list!
-                    </strong>
-                  </h4>
-                  {this.state.isLoading && <span>Loading...</span>}
-                  <div id="pairs_blockstack">
-                    {Array.isArray(this.state.my_pairs) &&
-                      this.state.my_pairs.map((mypair, index) => (
-                        <li key={index} id="my_personal_pair" className="mypair">
-                          <p>
-                            <strong>email: </strong>
-                            <small id="email-peer" className="mypair_email" name="email-peer">
-                              {mypair.email_address}
-                            </small>
-                            <br></br>
-                            <strong>public_key: </strong>
-                            <small id="pkey-peer" className="mypair_pkey" name="pkey-peer">
-                              {mypair.public_key}</small>
-                            <br></br>
+  const handleDeleteClick = (pairId) => {
+    setDeleteDialog({
+      open: true,
+      pairId,
+    });
+  };
 
-                            <button
-                              className="btn-st"
-                              onClick={e => this.deleteMyPair(e, mypair.id)}
-                            >Remove</button>
-                          </p>
+  const handleDeleteConfirm = () => {
+    const pairId = deleteDialog.pairId;
+    const username = userSession.loadUserData().username;
 
-                        </li>
-                      ))}
-                    <br />
-                    <button
-                      className="btn-st"
-                      id="deleteAllPairs"
-                      onClick={e => this.deleteAll(e)}
-                    >Delete All
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ) : null;
-  }
-}
+    gun.get("users").get(username).get("pairs").get(pairId).put(null);
+    setPairs((prevPairs) => prevPairs.filter((pair) => pair.id !== pairId));
+
+    setSnackbar({
+      open: true,
+      message: "Pair deleted successfully",
+      severity: "success",
+    });
+    setDeleteDialog({ open: false, pairId: null });
+  };
+
+  const handleCopyPublicKey = async (publicKey) => {
+    const success = await copyToClipboard(publicKey);
+    setSnackbar({
+      open: true,
+      message: success
+        ? "Public key copied to clipboard"
+        : "Failed to copy public key",
+      severity: success ? "success" : "error",
+    });
+  };
+
+  return (
+    <Box sx={{ p: 4 }}>
+      <Paper
+        sx={{
+          backgroundColor: "rgba(38, 38, 38, 0.9)",
+          backdropFilter: "blur(10px)",
+          borderRadius: 3,
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          overflow: "hidden",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)",
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            p: 3,
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            background:
+              "linear-gradient(135deg, rgba(88, 86, 214, 0.15) 0%, rgba(155, 106, 222, 0.15) 100%)",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              fontWeight: 600,
+            }}
+          >
+            <KeyIcon sx={{ color: "#90caf9" }} />
+            My PGP Key Pairs
+          </Typography>
+        </Box>
+
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    backgroundColor: "rgba(38, 38, 38, 0.95)",
+                    color: "#fff",
+                    fontWeight: 600,
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <EmailIcon sx={{ color: "#90caf9" }} />
+                    Email
+                  </Box>
+                </TableCell>
+                <TableCell
+                  sx={{
+                    backgroundColor: "rgba(38, 38, 38, 0.95)",
+                    color: "#fff",
+                    fontWeight: 600,
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      maxWidth: 400,
+                    }}
+                  >
+                    <KeyIcon sx={{ color: "#90caf9" }} />
+                    Public Key
+                  </Box>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{
+                    backgroundColor: "rgba(38, 38, 38, 0.95)",
+                    color: "#fff",
+                    fontWeight: 600,
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                    width: "100px",
+                  }}
+                >
+                  Actions
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={3} sx={{ border: 0 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        p: 3,
+                        gap: 2,
+                      }}
+                    >
+                      <CircularProgress size={24} />
+                      <Typography sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                        Loading pairs...
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ) : pairs.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={3} sx={{ border: 0 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        p: 4,
+                        gap: 2,
+                        color: "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      <NoEncryptionIcon sx={{ fontSize: 48, opacity: 0.7 }} />
+                      <Typography>No key pairs found</Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                pairs.map((pair) => (
+                  <TableRow
+                    key={pair.id}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.03)",
+                      },
+                    }}
+                  >
+                    <TableCell
+                      sx={{
+                        color: "#fff",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                      }}
+                    >
+                      <Tooltip title={pair.email_address} placement="top">
+                        <span>{pair.email_address}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        color: "#fff",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                        fontFamily: "monospace",
+                        fontSize: "0.95rem",
+                        py: 2,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          maxWidth: "100%",
+                        }}
+                      >
+                        <Tooltip
+                          title={
+                            <Typography
+                              sx={{
+                                fontFamily: "monospace",
+                                whiteSpace: "pre-wrap",
+                              }}
+                            >
+                              {pair.public_key}
+                            </Typography>
+                          }
+                          placement="top"
+                        >
+                          <Box
+                            sx={{
+                              flex: 1,
+                              maxWidth: "750px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              backgroundColor: "rgba(0, 0, 0, 0.2)",
+                              padding: "8px 12px",
+                              borderRadius: "6px",
+                              border: "1px solid rgba(255, 255, 255, 0.1)",
+                            }}
+                          >
+                            {pair.public_key}
+                          </Box>
+                        </Tooltip>
+                        <Tooltip title={toolTip} placement="top">
+                          <IconButton
+                            onClick={() => handleCopyPublicKey(pair.public_key)}
+                            size="small"
+                            sx={{
+                              color: "rgba(255, 255, 255, 0.7)",
+                              "&:hover": {
+                                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                                color: "#90caf9",
+                              },
+                            }}
+                          >
+                            <ContentCopyIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                      }}
+                    >
+                      <IconButton
+                        onClick={() => handleDeleteClick(pair.id)}
+                        sx={{
+                          color: "#ef5350",
+                          "&:hover": {
+                            backgroundColor: "rgba(239, 83, 80, 0.1)",
+                          },
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+      <ConfirmationModal
+        open={deleteDialog.open}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this pair? This action cannot be undone."
+        confirmButtonText="Yes"
+        cancelButtonText="No"
+        onConfirm={handleDeleteConfirm}
+        onClose={() => setDeleteDialog({ open: false, pairId: null })}
+      />
+      <InfoMessage
+        open={snackbar.open}
+        autoHideDuration={6000}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        classes={{ width: "100%" }}
+        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+      />
+    </Box>
+  );
+};
+
 export default MyPairsList;
